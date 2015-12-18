@@ -861,7 +861,7 @@ public class EmailNotification {
 	            msg.setFrom(new InternetAddress(FROM));
 	            msg.setSubject("面试取消","UTF-8");
 	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-    					"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+    					"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
     					"面试名称："+interview.getInterviewSessionName()+"\n"+
     					"面试日期："+interviewDate+"\n"+
     					"活动开始时间："+startTime+"\n"+
