@@ -325,7 +325,7 @@ public class ImoUtilityData {
 							  Object [] objectBu = (Object []) ite.next();
 							  imoData = new ImoUtilityData();
 							  imoData.setCodeStr(SecurityAPI.encodeHTML((String)objectBu[0]));
-							  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[1]).trim());
+							  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[0])+"-"+SecurityAPI.encodeHTML((String)objectBu[1]).trim());
 							  
 							  listData.add(imoData);
 						  }
@@ -371,7 +371,7 @@ public class ImoUtilityData {
 								  Object [] objectBu = (Object []) ite.next();
 								  imoData = new ImoUtilityData();
 								  imoData.setCodeStr(SecurityAPI.encodeHTML((String)objectBu[0]));
-								  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[1]).trim());
+								  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[0])+" - "+SecurityAPI.encodeHTML((String)objectBu[1]).trim());
 								  listData.add(imoData);
 							  }
 						  }
