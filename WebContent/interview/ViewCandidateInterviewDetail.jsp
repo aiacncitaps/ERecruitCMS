@@ -229,6 +229,15 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                        	<td style="border: none;" width="25%" >		                                    				
 	                                    	<label ><%=localeObj.getTranslatedText("Servicing Agent")%>:</label>
                                     	</td>
+                                    	<%
+                                    		if(interviewCandidate.getServiceingAgentName()!=null){
+                                    			if(interviewCandidate.getServiceingAgentName().equals("null")){
+                                    				interviewCandidate.setServiceingAgentName("");
+                                    			}
+                                    		}else{
+                                    			interviewCandidate.setServiceingAgentName("");
+                                    		}
+                                    	%>
                                        <td style="border: none;" width="25%" >	
                                         	<input name="servingAgent" id="servingAgent" type="text" class="text" readonly="readonly" value="<%=interviewCandidate.getServicingAgent()==null?"":interviewCandidate.getServiceingAgentName() %>"  />
                                        	</td>                                     			   
@@ -407,7 +416,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 	                                    	<label ><%=localeObj.getTranslatedText("Results")%>:</label>
                                     	</td>
                                        <td style="border: none;" width="25%" >	
-                                        	<input name="completionDate" id="completionDate" type="text" class="text"  value="<%=candidateFirstInterview.getInterviewResult() %>" readonly="readonly" />
+                                        	<input name="completionDate" id="completionDate" type="text" class="text"  value="<%=localeObj.getTranslatedText(candidateFirstInterview.getInterviewResult()) %>" readonly="readonly" />
                                        	</td>  
                                        	<td style="border: none;" width="25%" >		                                    				
 	                                    	
@@ -543,7 +552,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
            <table style="border: none;width:100%"  >
             		<tr>
             			<td style="text-align:center">
-            				<a href="ContentManager?key=InterviewMaintenance" class="btn1" ><%=localeObj.getTranslatedText("Back")%></a>
+            				<a href="ContentManager?key=InterviewAttendanceDetails&interview_code=<%=iCode%>" class="btn1" ><%=localeObj.getTranslatedText("Back")%></a>
             				<%-- <a href="#" class="btn1"><%=localeObj.getTranslatedText("Cancel")%></a> --%>
             			</td>
             		</tr> 
@@ -661,9 +670,9 @@ $(document).ready(function() {
 						var inDate = iDate.getDate()+"-"+(iDate.getMonth()+1)+"-"+iDate.getFullYear();
 						var result = "";		
 						if(candidateList[i].interviewResult=="P")
-							result="PASS";
+							result="<%=localeObj.getTranslatedText("PASS") %>";
 						if(candidateList[i].interviewResult=="F")
-							result="FAIL";		
+							result="<%=localeObj.getTranslatedText("FAIL") %>";		
   
 						candidateCodesList +=  candidateList[i].candidateCode+"|";
 						var fileNameLink = 	"";
