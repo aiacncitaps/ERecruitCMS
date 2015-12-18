@@ -2683,6 +2683,42 @@ public class EopMaintenance {
 		
 		return false;
 	}
+	
+	public int getBranchNameBaseonCode(int eventCode) {
+		// TODO Auto-generated method stub
+		log.log(Level.INFO,"eventMaintenance ---> getBranchCode ");
+		 Session session = null;
+		 int code=0;
+			try{
+				session = HibernateFactory.openSession();
+				Event event = (Event) session.get(Event.class,eventCode) ;
+				if(event!=null){
+					 code=event.getBranchCode();
+				}
+				
+			}catch(Exception e)
+			{
+				log.log(Level.SEVERE, e.getMessage());
+				LogsMaintenance logsMain=new LogsMaintenance();e.printStackTrace();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
+			}finally{
+				try{
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+			}
+			
+			
+
+		return code;
+	}
+	
+	
 	public static final String EVENT_NAME_PARAM = "eventName";
 	public static final String EVENT_TYPE_PARAM = "eventType";
 	public static final String TOPIC_PARAM = "topic";
@@ -2755,4 +2791,5 @@ public class EopMaintenance {
 	}
 	
 	public static final SessionFactory clientSessionFactory = new Configuration().configure("client_hibernate.cfg.xml").buildSessionFactory();
+	
 }

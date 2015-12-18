@@ -55,6 +55,7 @@ import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.ExcelGenerator;
+import com.quix.aia.cn.imo.utilities.ImoUtilityData;
 import com.quix.aia.cn.imo.utilities.MsgObject;
 import com.quix.aia.cn.imo.utilities.Pager;
 /**
@@ -127,13 +128,18 @@ public class InterviewAttendanceMaintenance {
 		listAllCandidates = getAttendanceList(req,eventCode);
 		ExcelGenerator excelGenerator = new ExcelGenerator();
 		AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+		ImoUtilityData imoutill=new ImoUtilityData();
+		
+		
 		if(listAllCandidates!=null && listAllCandidates.size() > 0)
 		{
+			String branchName=imoutill.getBranchNameBaseonCode(interview.getBranchCode());
 			for(int i = 0; i < listAllCandidates.size(); i++)
 			{
 				candidate = new InterviewCandidate();
 				candidate = (InterviewCandidate)listAllCandidates.get(i);
-				  AamData aamData=aamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), null); 
+				
+				  AamData aamData=aamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), branchName); 
 	                //candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
 	                candidate.setAgentName(aamData.getAgentName()!=null ? aamData.getAgentName() : "");
 	                candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
@@ -346,11 +352,14 @@ public class InterviewAttendanceMaintenance {
 			crit.add(Restrictions.eq("status", true));
 //			crit.addOrder(Order.desc("candidateCode"));
 			attendanceList = (ArrayList)crit.list();
-			
+			InterviewMaintenance interviewMain=new InterviewMaintenance();
+			int branchCode=interviewMain.getBranchCode(interviewCode);
+			ImoUtilityData imoutill=new ImoUtilityData();
+			String branchName=imoutill.getBranchNameBaseonCode(branchCode);
 			if(attendanceList.size()>0)
 				interviewCandidate = (InterviewCandidate)attendanceList.get(0);
 			
-			AamData aamData = AamDataMaintenance.retrieveDataToModel(interviewCandidate.getServicingAgent(), null); 
+			AamData aamData = AamDataMaintenance.retrieveDataToModel(interviewCandidate.getServicingAgent(), branchName); 
 			interviewCandidate.setBuName(aamData.getBu());
 			interviewCandidate.setDistName(aamData.getDistrict());
 			interviewCandidate.setCityName(aamData.getCity());

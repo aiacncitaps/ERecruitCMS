@@ -2646,4 +2646,37 @@ public String getRegisteredCandidatesFor2ndInterviewSession(
 	return csvPath;
 
 }
+public int getBranchCode(int interviewCode) {
+	// TODO Auto-generated method stub
+	log.log(Level.INFO,"InterviewMaintenance --> getBranchCode");
+	Session session = null;
+	 int code=0;
+		try{
+			session = HibernateFactory.openSession();
+			Interview interview = (Interview) session.get(Interview.class,interviewCode) ;
+			if(interview!=null){
+				 code=interview.getBranchCode();
+			}
+			
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			LogsMaintenance logsMain=new LogsMaintenance();e.printStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("InterviewMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
+		
+
+	return code;
+}
 }

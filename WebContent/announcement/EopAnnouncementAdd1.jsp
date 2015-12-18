@@ -4,6 +4,9 @@
   - Copyright Notice:   Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.
   - Description:         Announcement Creation
 --%>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="java.io.StringWriter"%>
+<%@page import="com.quix.aia.cn.imo.mapper.LogsMaintenance"%>
 <%@page import="java.io.File"%>
 <%@page import="com.quix.aia.cn.imo.utilities.ImoUtilityData"%>
 <%@page import="com.quix.aia.cn.imo.data.user.User"%>
@@ -20,7 +23,9 @@
 <script type='text/javascript' src='dwr/interface/ImoUtilityData.js'></script>
 <script type='text/javascript' src='dwr/util.js'></script>
 <script src="js/imocn.js" type="text/javascript" charset="utf-8"></script>
-
+<%
+		try{
+%>
 <%
 LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LOCALE_OBJ);
 User userObj = (User)request.getSession().getAttribute("currUserObj");
@@ -492,5 +497,12 @@ function uploadMaterial(){
 					</div>
 				</div>
 			
+	<%}catch(Exception e){
+		e.printStackTrace();
+		LogsMaintenance logsMain=new LogsMaintenance();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		logsMain.insertLogs("EopAnnouncementAdd1 jsp page ","SEVERE"+"",errors.toString());
 		
+	} %>	
      

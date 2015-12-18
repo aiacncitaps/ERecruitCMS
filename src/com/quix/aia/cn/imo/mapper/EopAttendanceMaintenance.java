@@ -55,12 +55,14 @@ import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
 import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.event.EventCandidate;
+import com.quix.aia.cn.imo.data.event.EventMaterial;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.EmailNotification;
 import com.quix.aia.cn.imo.utilities.ErrorObject;
 import com.quix.aia.cn.imo.utilities.ExcelGenerator;
+import com.quix.aia.cn.imo.utilities.ImoUtilityData;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.MsgObject;
 import com.quix.aia.cn.imo.utilities.Pager;
@@ -283,6 +285,10 @@ public class EopAttendanceMaintenance {
 		 log.log(Level.INFO,"---EopMaintenance Creation--- ");
 		 User userObj = (User)requestParameters.getSession().getAttribute("currUserObj");
 		 MsgObject msgObj = null;
+		 EopMaintenance eventMain=new EopMaintenance();
+		 int branchCode=eventMain.getBranchNameBaseonCode(candidate.getEventCode());
+		 ImoUtilityData imoutill=new ImoUtilityData();
+		 String branchName=imoutill.getBranchNameBaseonCode(branchCode);
 		AddressBook addressBook = new AddressBook();
 		addressBook.setAgentId(candidate.getServicingAgent());
 		addressBook.setBirthDate(candidate.getDob());
@@ -294,11 +300,11 @@ public class EopAttendanceMaintenance {
 		addressBook.setWeChat(candidate.getWeChat());
 		addressBook.setNric(candidate.getNric());
 		addressBook.setMobilePhoneNo(candidate.getContactNumber());
-
+		addressBook.setCo(branchName);
 		AddressBook addressBookObj = new AddressBookMaintenance().insertAddressBook(addressBook,requestParameters);
 		candidate.setEventCandidateCode(""+addressBookObj.getAddressCode());
-		//
-		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),null); 
+		
+		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),branchName); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
 		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
 		candidate.setSscCode(aamData.getSscCode()+"");
@@ -584,7 +590,9 @@ public class EopAttendanceMaintenance {
             	  event.setAgentTeam("");
               }
 	    	req.getSession().setAttribute("EventObj", event);
-	    
+	    	EopMaintenance eventMain=new EopMaintenance();
+	    	ImoUtilityData imoutill=new ImoUtilityData();
+	
 		EventCandidate candidate = null;
 		listAllCandidates = getAttendanceList(req,event.getEvent_code());
 		LocaleObject localeObj = (LocaleObject)req.getSession().getAttribute(SessionAttributes.LOCALE_OBJ);
@@ -593,7 +601,9 @@ public class EopAttendanceMaintenance {
 			{
 				candidate = new EventCandidate();
 				candidate = (EventCandidate)listAllCandidates.get(i);
-                AamData aamData=aamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), null); 
+				 int branchCode=eventMain.getBranchNameBaseonCode(candidate.getEventCode());
+				 String branchName=imoutill.getBranchNameBaseonCode(branchCode);
+                AamData aamData=aamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), branchName); 
                 //candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
                 candidate.setAgentName(aamData.getAgentName()!=null ? aamData.getAgentName() : "");
                 candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
@@ -725,8 +735,11 @@ public class EopAttendanceMaintenance {
 
 		AddressBook addressBookObj = new AddressBookMaintenance().insertAddressBook(addressBook,requestParameters);
 		candidate.setEventCandidateCode(""+addressBookObj.getAddressCode());
-		//
-		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), null); 
+		EopMaintenance eventMain=new EopMaintenance();
+    	ImoUtilityData imoutill=new ImoUtilityData();
+		int branchCode=eventMain.getBranchNameBaseonCode(candidate.getEventCode());
+		 String branchName=imoutill.getBranchNameBaseonCode(branchCode);
+		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), branchName); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
 		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
 		candidate.setSscCode(aamData.getSsc());
