@@ -130,10 +130,10 @@ function confirmDelete(code){
 }
 
 function getAgentTeam1(){
-	var branch = $('#branch option:selected').html();
-	var city = $('#city option:selected').html();
-	var ssc = $('#ssc option:selected').html();
-	var office = $('#office option:selected').html();
+	var branch = $('#branch option:selected').val();
+	var city = $('#city option:selected').val();
+	var ssc = $('#ssc option:selected').val();
+	var office = $('#office option:selected').val();
 	getAgentTeam(city, ssc, branch,office);
 }
 

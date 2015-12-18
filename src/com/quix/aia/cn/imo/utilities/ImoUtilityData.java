@@ -409,8 +409,8 @@ public class ImoUtilityData {
 			Query query=session.createQuery("select branchName from Branch where branchCode=:code");
 			query.setParameter("code",Integer.parseInt(branch));
 			List list=query.list();
-			
-			
+			if(list.size()!=0){
+				
 			 query=session.createQuery("select teamcode,teamName from AgentTeam where co=:co and "
 					+ "city=:city and ssc=:ssc and office=:office ");
 			query.setParameter("co", list.get(0));
@@ -426,13 +426,13 @@ public class ImoUtilityData {
 						  Object [] objectBu = (Object []) ite.next();
 						  imoData = new ImoUtilityData();
 						  imoData.setCodeStr(SecurityAPI.encodeHTML((String)objectBu[0]));
-						  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[1]).trim());
+						  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[0]).trim()+"-"+SecurityAPI.encodeHTML((String)objectBu[1]).trim());
 						  listData.add(imoData);
 					  }
 				  }
 			}
 			
-
+		}
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());
 			e.printStackTrace();
