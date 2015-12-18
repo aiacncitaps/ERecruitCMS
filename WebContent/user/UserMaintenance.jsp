@@ -219,20 +219,20 @@ office=userObj.getOfficeCode();
 	                         				<td>                                   				
 	                          				<label ><%=localeObj.getTranslatedText("Branch")%></label>
 	                         				</td>
-	                             			<td>	
-	                             				<% if(userObj.getUserType().equals("AD") || userObj.isBranchLevel()){ %>
-                                        				<select name="branch" id="branch" class="comboObj"  onchange="getCity(this.value,'<%=city %>','E');"  >
+	                             			<td>
+                                        			<% if(userObj.getUserType().equals("AD") || userObj.isDistrictLevel() || userObj.isBuLevel()){ %>
+                                        				<select name="branch" id="branch" class="comboObj" onchange="getCity(this.value,'<%=city %>','E');"  >
                                        						<option value="0" ><%=localeObj.getTranslatedText("All") %></option>
                                        						                          	
                                        	 			   </select>
                                        	 			<%}else { %>
-                                       	 			
-                                       	 			<select name="district" id="district" class="comboObj"  >
+                                       	 		
+                                       	 		<select name="branch" id="branch" class="comboObj"   >
                                        						<option value="<%=userObj.getBranchCode() %>" ><%= imoUtilityDate.getBranchCode(userObj.getBranchCode()) %></option>
                                        						                          	
-                                       	 			   </select>
+                                       	 			   </select> 
                                        	 			<%} %>
-	                            	 	    </td>                                     			   
+                                       	 			</td>                                      			   
                            			    </tr>
                            			    
                            			    
