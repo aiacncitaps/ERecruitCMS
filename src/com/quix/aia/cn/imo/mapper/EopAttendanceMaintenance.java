@@ -381,6 +381,8 @@ public class EopAttendanceMaintenance {
 		candidate.setBranchCode(aamData.getBranchCode());
 		candidate.setDistrictCode(aamData.getDistrictCode());
 		candidate.setBuCode(aamData.getBuCode());
+		candidate.setEventCandidateCode(addressBookObj.getAddressCode()+"");
+		
 		int status = insertNewCandidate(candidate);
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		if(status !=0){
