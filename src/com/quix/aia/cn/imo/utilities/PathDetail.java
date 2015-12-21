@@ -120,7 +120,7 @@ public class PathDetail {
 	        
 	        pathDetail.add(new KeyObjPair("Message", new PageObj("Message", dir +"Message", jsp, "Message", ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
 	        pathDetail.add(new KeyObjPair(PageNames.CC_TEST_MAIN, new PageObj(FunctionNames.CC_TEST_MAINTENANCE, dir + "CCTest" + dir +"CCTestMaintenance", jsp, PageNames.CC_TEST_MAIN, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
-	        
+	        pathDetail.add(new KeyObjPair(PageNames.VIEW_EAPPLICATION_FORM, new PageObj(FunctionNames.VIEW_EAPPLICATION_FORM, dir + FolderNames.INTERVIEW_FOLDER + dir +"ViewEapplicationForm", jsp, PageNames.VIEW_EAPPLICATION_FORM, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
 	    }
 	 
 	  public PageObj getPageObj(Object key)

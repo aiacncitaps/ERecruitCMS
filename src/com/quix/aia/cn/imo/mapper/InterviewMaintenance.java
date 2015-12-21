@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,6 +72,7 @@ import org.hibernate.criterion.Restrictions;
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
+import com.quix.aia.cn.imo.data.addressbook.CandidateESignature;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.bu.Bu;
 import com.quix.aia.cn.imo.data.city.City;
@@ -2683,5 +2685,61 @@ public int getBranchCode(int interviewCode) {
 		
 
 	return code;
+}
+public   String  getmaterialFile(CandidateESignature candidateESignature,HttpServletRequest req)
+{
+	log.log(Level.INFO,"InterviewMaintenance ---> getmaterialFile ");
+	 Session session = null;
+	 CandidateESignature material=null;
+	 ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
+    String url  = msgProps.getString("APP_URL");
+	String path="#";
+	LogsMaintenance logsMain=new LogsMaintenance();
+	try{
+			 path=req.getRealPath("/");
+		     if(path.endsWith("/") || path.endsWith("\\")){
+		      path += "resources" + File.separator+ "material";
+		     }else{
+		      path += File.separator+ "resources" + File.separator+ "material";  
+		     }
+		     
+		     File  dir = new File(path);
+		     if(!dir.exists()){
+		    	 dir.mkdirs();
+			 }
+		     
+			 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			 Date d1=new Date();
+			 String time=(d1.getTime()+"").trim();
+			 String str=df.format(new Date())+time;
+		     path += File.separator + "signature_" + str + ".jpg";
+			 File file=new File(path);
+			 if(!file.exists()){
+				 file.createNewFile();
+			 }
+			 
+			 FileOutputStream stream = new FileOutputStream(path);
+			 stream.write(candidateESignature.geteSignaturePhoto());
+			 stream.close();
+			 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".jpg";;
+			 url = "resources/" +"material/"+"signature_" + str + ".jpg";;
+
+	}catch(Exception e)
+	{
+		log.log(Level.SEVERE, e.getMessage());
+		e.printStackTrace();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
+	}finally{
+		try{
+			HibernateFactory.close(session);
+			
+		}catch(Exception e){
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+		return url;
 }
 }

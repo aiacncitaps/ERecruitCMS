@@ -623,7 +623,7 @@ public class InterviewCandidate
 			 this.contactNumber = buf.toString();
 		}
 		String modifyLink = "ContentManager?key=ViewCandidateInterviewDetail&interviewCode=" + this.interviewCode +"&candidateCode=" + this.candidateCode;
-		String applicationFormLink="ContentManager?key=applicatonForm&interviewCode=" + this.interviewCode +"&candidateCode=" + this.candidateCode;
+		String applicationFormLink="ContentManager?key=ViewEapplicationForm&interviewCode=" + this.interviewCode +"&candidateCode=" + this.candidateCode;
 		//		String uploadLink = "FormManager?key=ViewCandidateInterviewDetail&type=MODIFY&interviewCode=" + this.interviewCode +"&candidateCode=" + this.candidateCode;
 		String uploadLink = "ContentManager?key=InterviewCandidateUpload&type=MODIFY&interviewCode=" + this.interviewCode +"&candidateCode=" + this.candidateCode;
 //		String deleteLink = "javascript:confirmDelete('" + candidateCode + "')";

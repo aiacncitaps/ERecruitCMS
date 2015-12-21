@@ -81,6 +81,7 @@ public class FunctionNames {
 		public static final String OFFICE = "OFFICE";
 		public static final String OFFICE_ADD = "OFFICEAdd";
 		public static final String CC_TEST_MAINTENANCE = "CCTestAdminister";
+		public static final String VIEW_EAPPLICATION_FORM = "ViewEapplicationForm";
 		
 	
 }

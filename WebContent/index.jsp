@@ -1,4 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="com.quix.aia.cn.imo.utilities.PageObj"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import='com.quix.aia.cn.imo.data.user.*' %>
 <%@ page import='java.util.*' %>
@@ -83,11 +84,13 @@ function noBack(){
 
 </script>
 </HEAD>
-<%User user = ((com.quix.aia.cn.imo.data.user.User)request.getSession().getAttribute(SessionAttributes.CURR_USER_OBJ));%>
+<%User user = ((com.quix.aia.cn.imo.data.user.User)request.getSession().getAttribute(SessionAttributes.CURR_USER_OBJ));
+PageObj pageObj = (PageObj)request.getSession().getAttribute("pageObj");
+%>
 <body  onload="noBack();"  oncontextmenu="return false;" onpageshow="if (event.persisted) noBack();" onunload=""  onkeydown="return (event.keyCode != 116)">
 
 	<div class="page-wrap" align="center">
-				<%if(user!=null){ %>
+					<%if(user!=null && pageObj != null &&!pageObj.getKey().equalsIgnoreCase("ViewEapplicationForm") ){ %>
 				<jsp:include page="/main/header.jsp" flush="false"></jsp:include>
 				<%} %>
 			

@@ -366,6 +366,7 @@ public class InterviewAttendanceMaintenance {
 			interviewCandidate.setSscName(aamData.getSsc());
 			interviewCandidate.setBranchName(aamData.getBranch());
 			interviewCandidate.setOfficeName(aamData.getOfficeName());
+			interviewCandidate.setServiceingAgentName(aamData.getAgentName());
 			
 			
 		}catch(Exception e)

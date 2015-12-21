@@ -83,5 +83,6 @@ public class PageNames {
 	public static final String GoalConfigAdd = "GoalConfig";
 	public static final String BRANCH_ADD = "BRANCHAdd";
 	public static final String CC_TEST_MAIN = "CCTestMaintenance";
+	public static final String VIEW_EAPPLICATION_FORM = "ViewEapplicationForm";
 
 }
