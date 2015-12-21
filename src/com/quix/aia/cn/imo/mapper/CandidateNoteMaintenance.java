@@ -382,7 +382,7 @@ public class CandidateNoteMaintenance {
 		candidateNote.setStatus(true);
 		candidateNote.setIsSystem(true);
 		
-		insertNewCandidateNote(candidateNote);
+		//insertNewCandidateNote(candidateNote);
 	}
 
 	public static final String Name = "name";

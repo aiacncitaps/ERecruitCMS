@@ -933,8 +933,8 @@ public class AnnouncementMaintenance {
 		log.log(Level.INFO,"AnnouncementMaintenance ---> getmaterialFile ");
 		 Session session = null;
 		AnnouncementMaterial material=null;
-		 ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
-	    String url  = msgProps.getString("APP_URL");
+		// ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
+	    String url  = "";//msgProps.getString("APP_URL");
 		String path="#";
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try{
