@@ -122,14 +122,19 @@ public class InterviewMaintenance {
 			interview = new Interview();
             return interview;
         }
-		if(requestParameters.getParameter("interviewName") == null || requestParameters.getParameter("interviewName") == "")
+		if(requestParameters.getParameter("interviewName") == null || requestParameters.getParameter("interviewName").equals("") )
 				return new ErrorObject("Interview Session Name", " field is required",localeObj);
-		 if(requestParameters.getParameter("interviewDate") == null || requestParameters.getParameter("interviewDate") == "")
+		
+		 if(requestParameters.getParameter("interviewDate") == null || requestParameters.getParameter("interviewDate").equals(""))
 			 	return new ErrorObject("Interview Date", " field is required",localeObj);
-		 if(requestParameters.getParameter("location") == null || requestParameters.getParameter("location") == "")
+		
+		 if(requestParameters.getParameter("location") == null || requestParameters.getParameter("location").equals(""))
 			   return new ErrorObject("Location", " field is required",localeObj);
-		 if(requestParameters.getParameter("interviewMaterial") == null || requestParameters.getParameter("interviewMaterial") == "")
+		 
+		 if(requestParameters.getParameter("interviewMaterial") == null || requestParameters.getParameter("interviewMaterial").equals(""))
 			  return new ErrorObject("Interview Material", " field is required",localeObj);
+		 
+		
 		if(requestParameters.getParameter("bu").equals("0"))
 				return new ErrorObject("BU", " field is required",localeObj);
 		if(requestParameters.getParameter("estCand")!=null && requestParameters.getParameter("estCand").length() > 0){
