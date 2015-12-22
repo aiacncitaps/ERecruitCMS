@@ -565,8 +565,13 @@ public Response insertCCTestResults(@Context HttpServletRequest request) {
 	String agentId = request.getParameter("agentId");
 	String candidateCode=request.getParameter("candidateCode");
 	String ccTestResult=request.getParameter("ccTestResult");
+	String ccTestResultDateStr = request.getParameter("ccTestResultDate");
 	AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
+	Date ccTestResultDate = new Date();
 	
+	if(null != ccTestResultDateStr && !"".equals(ccTestResultDateStr)){
+		ccTestResultDate = LMSUtil.convertDateToyyyymmddhhmmssDashed(ccTestResultDateStr);
+	}
 	try{
 		if(agentId!=null && candidateCode!=null && ccTestResult!=null){
 			
@@ -575,11 +580,10 @@ public Response insertCCTestResults(@Context HttpServletRequest request) {
 				beans.setMassage("CC Test Result Sould be Urgent,Normal,Caution");
 				return Response.status(500).entity(new Gson().toJson(beans)).build();
 			}else{
-				 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd");
 				AddressBookMaintenance addressBookMain=new AddressBookMaintenance();
 				AddressBook addressbook=addressBookMain.getaddressDataForCCTest(candidateCode);
 				addressbook.setCcTestResult(ccTestResult);
-				addressbook.setCcTestResultDate(sdf1.parse(sdf1.format(new Date())));
+				addressbook.setCcTestResultDate(ccTestResultDate);
 				addressBookMain.updateAddressBook(addressbook);
 				auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INSERT_CC_TEST, AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
 				beans.setCode("200");
