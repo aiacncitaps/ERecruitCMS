@@ -4,6 +4,9 @@
   - Copyright Notice:   Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.
   - Description:        Interview Candidate Registration
 --%>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="java.io.StringWriter"%>
+<%@page import="com.quix.aia.cn.imo.mapper.LogsMaintenance"%>
 <%@page import="java.io.File"%>
 <%@page import="com.quix.aia.cn.imo.constants.PagingInfo"%>
 <%@page import="com.quix.aia.cn.imo.interfaces.FormPageInterface"%>
@@ -17,7 +20,7 @@
 <%@ page import='com.quix.aia.cn.imo.constants.SessionAttributes'%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg" %> 
 
-
+<%try{ %>
 
 <%User user = ((User)request.getSession().getAttribute(SessionAttributes.CURR_USER_OBJ));
 LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LOCALE_OBJ);
@@ -290,6 +293,15 @@ function submitForm(){
 </div>
 </div>
 
-                     
+<%}catch(Exception e){
+	
+	
+	e.printStackTrace();
+	LogsMaintenance logsMain=new LogsMaintenance();
+	StringWriter errors = new StringWriter();
+	e.printStackTrace(new PrintWriter(errors));
+	logsMain.insertLogs("InterviewAttendanceDetails jsp page ","SEVERE"+"",errors.toString());
+	
+} %>          
     			<!--content end-->
     			
