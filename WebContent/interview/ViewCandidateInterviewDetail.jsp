@@ -62,7 +62,7 @@ if(address!=null){
 	
 }
 
-InterviewCandidateMaterial material=interviewMaintenance.getApplicationForm(Integer.parseInt(iCode),request,candidateCode);
+//InterviewCandidateMaterial material=interviewMaintenance.getApplicationForm(Integer.parseInt(iCode),request,candidateCode);
 
 
 String birthDate = "";
@@ -575,7 +575,8 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
            var m = '<%=localeObj.getTranslatedText("No Record Found")%>';
         function uploadFile()
         {
-        var candidateCodes = $("#allCandidateCode").val();
+       // var candidateCodes = $("#allCandidateCode").val();
+         var candidateCode = $("#candidateCode").val();
 		 $('#ajaxLoader').find(".lightbox").show();
 		 if($('input[type=file]').get(0).files[0] !=undefined){
 			var topicFile = $('input[type=file]').get(0).files[0];
@@ -599,7 +600,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 				   	processData: false,
 				   	contentType: false,
 				}).done(function(respond){
-					 InterviewAttendance.insertCandidateMaterialDWR(candidateCodes,fileName,materialDesc,{
+					 InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,{
 							callback : function(str) {
 								if((str-0)>0)
 								{

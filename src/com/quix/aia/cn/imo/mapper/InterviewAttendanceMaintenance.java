@@ -421,7 +421,7 @@ public class InterviewAttendanceMaintenance {
 	}
 	
 	
-	public  int insertCandidateMaterialDWR(String candidateCode, String materialName, String materialDesc)
+	public  int insertCandidateMaterialDWR(int candidateCode, String materialName, String materialDesc)
 	{
 		Integer key = 0;
 		Session session = null;
@@ -429,14 +429,19 @@ public class InterviewAttendanceMaintenance {
 		try{
 			session = HibernateFactory.openSession();
 			Transaction tx = session.beginTransaction();
-			StringTokenizer st = new StringTokenizer(candidateCode, "|");
+			/*StringTokenizer st = new StringTokenizer(candidateCode, "|");
 			while (st.hasMoreElements()) {
 						material = new InterviewCandidateMaterial();
 						material.setCandidateCode(Integer.parseInt((String)st.nextElement()));
 						material.setMaterialFileName(materialName);
 						material.setMaterialDescrption(materialDesc);
 						key = (Integer)session.save(material);
-			}
+			}*/
+			material = new InterviewCandidateMaterial();
+			material.setCandidateCode(candidateCode);
+			material.setMaterialFileName(materialName);
+			material.setMaterialDescrption(materialDesc);
+			key = (Integer)session.save(material);
 			tx.commit();
 			log.log(Level.INFO,"---New Candidate Material Saved Successfully--- ");
 		}catch(Exception e)
