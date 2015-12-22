@@ -426,7 +426,7 @@ public class AddressBookRest {
 			candidateAgentCode = null != candidateAgentCode ? candidateAgentCode:"";
 			
 			
-			String[] fetchFields={"branchCode","candidateAgentCode","recruitmentType","contractDate"};
+			String[] fetchFields={"branchCode","candidateAgentCode","recruitmentType","contractDate","addressCode"};
 			String[] conditionFieldName={"addressCode"};
 			String[] conditionFieldValue={candidateAgentCode};
 			List<Object []> list = addressBookMaintenance.getAddressBookSelectedField(fetchFields, conditionFieldName, conditionFieldValue);
@@ -438,10 +438,13 @@ public class AddressBookRest {
 				contractDetail.setCandidateAgentCode((String)obj[1]);
 				contractDetail.setRecruitmentType((String)obj[2]);
 				contractDetail.setContractDate((Date)obj[3]);
+				
+				String conditionFieldName1[]={"addressCode"};
+		        String conditionFieldValue1[]={""+(Integer)obj[4]};
+		        new AddressBookMaintenance().updateAddressBookStatus("9/9", conditionFieldName1, conditionFieldValue1);
 			}
 			// Convert the object to a JSON string
 			log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
-			
 			
 			jsonString = googleJson.toJson(contractDetail);
 

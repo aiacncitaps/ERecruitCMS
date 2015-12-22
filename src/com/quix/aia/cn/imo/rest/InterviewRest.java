@@ -349,7 +349,7 @@ public class InterviewRest {
 
 		        String conditionFieldName[]={"addressCode"};
 		        String conditionFieldValue[]={candidate.getInterviewCandidateCode()};
-		        new AddressBookMaintenance().updateAddressBookStatus("2/9", conditionFieldName, conditionFieldValue);
+		        new AddressBookMaintenance().updateAddressBookStatus("6/9", conditionFieldName, conditionFieldValue);
 		        new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidate.getInterviewCandidateCode()), "Interview Registration", "Candidate Registered in Interview");
 		        
 		        List<InterviewCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getInterviewCode());
