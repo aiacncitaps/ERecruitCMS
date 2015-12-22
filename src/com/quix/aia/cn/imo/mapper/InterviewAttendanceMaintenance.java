@@ -480,37 +480,6 @@ public class InterviewAttendanceMaintenance {
 //			crit.addOrder(Order.desc("candidateCode"));
 			attendanceList = (ArrayList)crit.list();
 			
-//			if(attendanceList.size()>0)
-//				interviewCandidate = (InterviewCandidate)attendanceList.get(0);
-//			for (Iterator iterator = attendanceList.iterator(); iterator.hasNext();) 
-			for (int i = 0; i < attendanceList.size(); i++) {
-				
-				InterviewCandidate candidate = (InterviewCandidate) attendanceList.get(i);
-				
-				materialList = getMaterailList(candidate.getCandidateCode());
-				String fileName = "";
-  				for (Iterator<InterviewCandidateMaterial> iterator2 = materialList.iterator(); iterator2.hasNext();) 
-				{
-   					InterviewCandidateMaterial material = (InterviewCandidateMaterial) iterator2.next();
- 					fileName +=material.getMaterialFileName()+"|";
-					
-				}
-				if(!fileName.equals(""))
-					attendanceList.get(i).setFileNameList(fileName.substring(0,fileName.length()-1));
-				
-				InterviewMaintenance main = new InterviewMaintenance();
-				interviewList.add(main.getInterviewBasedOnInterviewCode(candidate.getInterviewCode()));
-			}
-
-			/*for (Iterator iterator = interviewList.iterator(); iterator.hasNext();) 
-			{
-				InterviewCandidate candidate = (InterviewCandidate) iterator.next();
-				materialList = getMaterailList(candidate.getCandidateCode());
-			}*/
-			map.put("list", attendanceList);
-			map.put("interviewCandidateList", interviewList);
-//			map.put("materialList", materialList);
-			
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
@@ -528,6 +497,42 @@ public class InterviewAttendanceMaintenance {
 				e.printStackTrace();
 			}
 	}
+		
+//		if(attendanceList.size()>0)
+//			interviewCandidate = (InterviewCandidate)attendanceList.get(0);
+//		for (Iterator iterator = attendanceList.iterator(); iterator.hasNext();) 
+		Interview interview = null;
+		InterviewMaintenance main = new InterviewMaintenance();
+		for (int i = 0; i < attendanceList.size(); i++) {
+			
+			InterviewCandidate candidate = (InterviewCandidate) attendanceList.get(i);
+			
+			materialList = getMaterailList(candidate.getCandidateCode());
+			String fileName = "";
+				for (Iterator<InterviewCandidateMaterial> iterator2 = materialList.iterator(); iterator2.hasNext();) 
+			{
+					InterviewCandidateMaterial material = (InterviewCandidateMaterial) iterator2.next();
+					fileName +=material.getMaterialFileName()+"|";
+				
+			}
+			if(!fileName.equals(""))
+				attendanceList.get(i).setFileNameList(fileName.substring(0,fileName.length()-1));
+			
+			interview = main.getInterviewBasedOnInterviewCode(candidate.getInterviewCode());
+			if(null != interview && interview.isStatus()){
+				interviewList.add(interview);
+			}
+		}
+
+		/*for (Iterator iterator = interviewList.iterator(); iterator.hasNext();) 
+		{
+			InterviewCandidate candidate = (InterviewCandidate) iterator.next();
+			materialList = getMaterailList(candidate.getCandidateCode());
+		}*/
+		map.put("list", attendanceList);
+		map.put("interviewCandidateList", interviewList);
+//		map.put("materialList", materialList);
+		
 		return map;
 	}
 	

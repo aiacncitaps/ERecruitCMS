@@ -25,10 +25,12 @@ package com.quix.aia.cn.imo.data.interview;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.user.User;
+import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.InterviewAttendanceMaintenance;
 import com.quix.aia.cn.imo.utilities.KeyObjPair;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
@@ -630,8 +632,17 @@ public class InterviewCandidate
 		
 		String ur="",no="",pr="",se="";
 		
-		AddressBook addressObj=InterviewAttendanceMaintenance.getccTestResult(this.interviewCandidateCode);
-		this.ccTestResult=(addressObj.getCcTestResult()==null)?"":addressObj.getCcTestResult();
+		String[] fetchFields={"addressCode","ccTestResult"};
+		String[] conditionFieldName={"addressCode"};
+		String[] conditionFieldValue={interviewCandidateCode};
+		List<Object []> list = new AddressBookMaintenance().getAddressBookSelectedField(fetchFields, conditionFieldName, conditionFieldValue);
+		
+		if(null != list && !list.isEmpty()){
+			Object[] objs = list.get(0);
+			this.ccTestResult =(String) objs[1];
+		}
+		
+		this.ccTestResult=(null == this.ccTestResult)?"":this.ccTestResult;
 		if(this.ccTestResult.equals("Urgent"))
 			ur="selected";
 		if(this.ccTestResult.equals("Normal"))
