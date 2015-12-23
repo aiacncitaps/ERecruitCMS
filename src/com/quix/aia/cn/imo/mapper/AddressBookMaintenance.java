@@ -923,22 +923,31 @@ public class AddressBookMaintenance {
 		 Integer key = 0; 
 		try{
 			session = HibernateFactory.openSession();
-			String queryString = "select addressCode from AddressBook where name=:name and  gender=:gender and CONVERT(DATE, birthDate)=:birthDate and agentId=:agentId ";
+//			String queryString = "select addressCode from AddressBook where name=:name and  gender=:gender and CONVERT(DATE, birthDate)=:birthDate and agentId=:agentId ";
+			String queryString = "select addressCode,birthDate from AddressBook where name=:name and  gender=:gender and agentId=:agentId ";
 			if(null != addressBook.getCo() && !"".equals(addressBook.getCo())){
 				queryString +=" and co=:co";
 			}
 			Query query = session.createQuery(queryString);
 			query.setParameter("name",addressBook.getName());
 			query.setParameter("gender",addressBook.getGender());
-			query.setParameter("birthDate",addressBook.getBirthDate());
+//			query.setParameter("birthDate",addressBook.getBirthDate());
 			query.setParameter("agentId",addressBook.getAgentId());
 			if(null != addressBook.getCo() && !"".equals(addressBook.getCo())){
 				query.setParameter("co",addressBook.getCo());
 			}
 			
-		    List l = query.list();
+		    List<Object[]> l = query.list();
+		    Date date = new Date();
 		    if(l!=null && l.size() > 0){
-		    	key = (Integer)l.get(0);
+		    	for(Object[] objs: l){
+		    		date = (Date) objs[1];
+		    		
+		    		if(LMSUtil.dd_MM_yyyy.format(date).equals(LMSUtil.dd_MM_yyyy.format(addressBook.getBirthDate()))){
+		    			key = (Integer)objs[0];
+		    		}
+		    	}
+		    	
 		    }
 		  
 		}catch(Exception e)
