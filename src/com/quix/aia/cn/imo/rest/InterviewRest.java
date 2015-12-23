@@ -329,6 +329,8 @@ public class InterviewRest {
 	        candidate.setCityCode(aamData.getCity());
 	        candidate.setSscCode(aamData.getSsc());
 	        candidate.setOfficeCode(aamData.getOfficeCode());
+	        candidate.setBranchCode(aamData.getBranchCode());
+	        
 	        if(candidate.getStatusStr() != null && candidate.getStatusStr().equalsIgnoreCase("true"))
 	        	candidate.setStatus(true);
 	        else

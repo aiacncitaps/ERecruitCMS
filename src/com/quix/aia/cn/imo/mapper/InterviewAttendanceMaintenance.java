@@ -353,12 +353,13 @@ public class InterviewAttendanceMaintenance {
 //			crit.addOrder(Order.desc("candidateCode"));
 			attendanceList = (ArrayList)crit.list();
 			InterviewMaintenance interviewMain=new InterviewMaintenance();
-			int branchCode=interviewMain.getBranchCode(interviewCode);
+			//int branchCode=interviewMain.getBranchCode(interviewCode);
+			
 			ImoUtilityData imoutill=new ImoUtilityData();
-			String branchName=imoutill.getBranchNameBaseonCode(branchCode);
+			
 			if(attendanceList.size()>0)
 				interviewCandidate = (InterviewCandidate)attendanceList.get(0);
-			
+				String branchName=imoutill.getBranchNameBaseonCode(interviewCandidate.getBranchCode());
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(interviewCandidate.getServicingAgent(), branchName); 
 			interviewCandidate.setBuName(aamData.getBu());
 			interviewCandidate.setDistName(aamData.getDistrict());
