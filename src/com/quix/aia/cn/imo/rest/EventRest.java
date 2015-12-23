@@ -280,7 +280,7 @@ public class EventRest {
 	       
 	        for(Iterator<EventCandidate> itr = jsonObjList.iterator() ; itr.hasNext() ; ){
 	        	candidate = (EventCandidate) itr.next();
-			    objMaintenance.candidateAttendanceRest(candidate);
+			    objMaintenance.candidateAttendanceRest(candidate,request);
 	        }
 	        
 	        String conditionFieldName[]={"addressCode"};

@@ -1143,7 +1143,7 @@ public class EopAttendanceMaintenance {
 		 * @param candidate
 		 * @return
 		 */
-		public void candidateAttendanceRest(EventCandidate candidate){
+		public void candidateAttendanceRest(EventCandidate candidate, HttpServletRequest request){
 			Session session = null;
 			Transaction tx = null;
 			
@@ -1157,12 +1157,14 @@ public class EopAttendanceMaintenance {
 				addressBook.setBirthDate(candidate.getDob());
 				addressBook.setAgentId(candidate.getServicingAgent());
 				AddressBookMaintenance addressBookMaintenance=  new AddressBookMaintenance();
-				List<AddressBook> list = (List<AddressBook>) addressBookMaintenance.getAddressBook1(addressBook);
-				if(!list.isEmpty() && 0 < list.size()){
-					addressBook = list.get(0);
-				}else{
-					addressBookMaintenance.save(addressBook);
-				}
+//				List<AddressBook> list = (List<AddressBook>) addressBookMaintenance.getAddressBook1(addressBook);
+//				if(!list.isEmpty() && 0 < list.size()){
+//					addressBook = list.get(0);
+//				}else{
+//					addressBookMaintenance.save(addressBook);
+//				}
+				
+				addressBook = new AddressBookMaintenance().insertAddressBook(addressBook, request);
 				
 				candidate.setEventCandidateCode(""+addressBook.getAddressCode());
 				List<EventCandidate> list1 = checkDuplicateCandiadteReg1(""+candidate.getEventCode(), candidate.getServicingAgent(), candidate.getEventCandidateCode());
