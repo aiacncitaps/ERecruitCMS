@@ -286,7 +286,7 @@ public class AddressBook implements Serializable {
 	 * @return the gender
 	 */
 	public String getGender() {
-		return gender;
+		return null!=gender ? gender.trim() : gender;
 	}
 
 	/**
@@ -294,7 +294,7 @@ public class AddressBook implements Serializable {
 	 *            the gender to set
 	 */
 	public void setGender(String gender) {
-		this.gender = gender;
+		this.gender = null!=gender ? gender.trim() : gender;
 	}
 
 	/**

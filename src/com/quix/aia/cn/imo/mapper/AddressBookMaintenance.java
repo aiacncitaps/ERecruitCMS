@@ -853,9 +853,10 @@ public class AddressBookMaintenance {
 		Session session = null;
 		 User userObj = (User)requestParameters.getSession().getAttribute("currUserObj");
 		try{
+			Integer key =  getAddressBookIfExist(addressBook);
+			
 			session = HibernateFactory.openSession();
 			Transaction tx = session.beginTransaction();
-			Integer key =  getAddressBookIfExist(addressBook);
 			if(key == 0){
 				if(userObj!=null){
 					addressBook.setCreatedBy(userObj.getStaffLoginId());

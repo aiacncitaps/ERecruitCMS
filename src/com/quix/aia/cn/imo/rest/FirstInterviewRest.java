@@ -178,6 +178,10 @@ public class FirstInterviewRest {
 			
 			candidateFirstInterview = candidateFirstInterviewMaint.getCandidateFirstinterview(agentId, candidateCode);
 			
+			if(null == candidateFirstInterview){
+				candidateFirstInterview = new CandidateFirstInterview();
+			}
+			
 			candidateFirstInterview.setAgentId(null);
 			candidateFirstInterview.setCandidateCode(null);
 			candidateFirstInterview.setFirstInterviewCode(null);
