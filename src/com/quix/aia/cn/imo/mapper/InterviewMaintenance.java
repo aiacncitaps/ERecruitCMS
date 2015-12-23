@@ -2691,8 +2691,8 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 	log.log(Level.INFO,"InterviewMaintenance ---> getmaterialFile ");
 	 Session session = null;
 	 CandidateESignature material=null;
-	 ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
-    String url  = msgProps.getString("APP_URL");
+	// ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
+    String url  = "";//msgProps.getString("APP_URL");
 	String path="#";
 	LogsMaintenance logsMain=new LogsMaintenance();
 	try{
@@ -2719,10 +2719,16 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 			 }
 			 
 			 FileOutputStream stream = new FileOutputStream(path);
-			 stream.write(candidateESignature.geteSignaturePhoto());
-			 stream.close();
-			 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".jpg";;
-			 url = "resources/" +"material/"+"signature_" + str + ".jpg";;
+			 if(candidateESignature.geteSignaturePhoto()!=null){
+				 stream.write(candidateESignature.geteSignaturePhoto());
+				 stream.close();
+				 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".jpg";;
+				 url = "resources/" +"material/"+"signature_" + str + ".jpg";
+			 }else{
+				url="#"; 
+			 }
+			 
+			 
 
 	}catch(Exception e)
 	{
@@ -2730,7 +2736,7 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 		e.printStackTrace();
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
-		logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
+		logsMain.insertLogs("InterviewMaintenance",Level.SEVERE+"",errors.toString());
 	}finally{
 		try{
 			HibernateFactory.close(session);

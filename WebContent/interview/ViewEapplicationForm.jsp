@@ -4,6 +4,9 @@
   - Copyright Notice:   Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.
   - Description:        Adding  Eapplication form page
 --%>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="java.io.StringWriter"%>
+<%@page import="com.quix.aia.cn.imo.mapper.LogsMaintenance"%>
 <%@page import="com.quix.aia.cn.imo.mapper.InterviewAttendanceMaintenance"%>
 <%@page import="com.quix.aia.cn.imo.data.addressbook.CandidateEducation"%>
 <%@page import="com.quix.aia.cn.imo.data.addressbook.CandidateESignature"%>
@@ -19,8 +22,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
-
-
 <script type="text/javascript">
 $(document).ready(function(){
 });
@@ -29,6 +30,9 @@ $(function(){
 });
  
 </script>
+<%try{ %>
+
+
 <%
 AddressBookMaintenance addressMain=new AddressBookMaintenance();
 InterviewAttendanceMaintenance interviewMaint=new InterviewAttendanceMaintenance();
@@ -283,7 +287,7 @@ table{
 						<tr>
 						<td>Application Date:<br><%=esignature.getApplicationDate()!=null ? format.format(esignature.getApplicationDate()) : ""%>
 						</td>
-						<td>Applicant/Candidate Name :<br><%=esignature.getCandidateName() %></td>
+						<td>Applicant/Candidate Name :<br><%=esignature.getCandidateName()!=null?esignature.getCandidateName():"" %></td>
 					</tr>
 					
 					<tr>
@@ -292,12 +296,24 @@ table{
 						<td>
 						<%
 						String path = interviewMaintenance.getmaterialFile(esignature,request);
+							if(!path.equals("#")){
+							
 						%>
-						<img src=<%=path %> style="width:90px;" /></td>
+						<img src=<%=path %> style="width:90px;" />
+						<%} %>
+						</td>
 					</tr>
 				</table>
 				<br>
 			</form>
 		</div>
 	</div>
-
+<%}catch(Exception e){
+	
+	e.printStackTrace();
+	LogsMaintenance logsMain=new LogsMaintenance();
+	StringWriter errors = new StringWriter();
+	e.printStackTrace(new PrintWriter(errors));
+	logsMain.insertLogs("ViewEApplicationForm jsp page ","SEVERE"+"",errors.toString());
+	
+} %>
