@@ -132,6 +132,10 @@
             <column name="OFFICE"  />
         </property>
         
+        <property name="calendarServiceError" type="java.lang.Integer">
+            <column name="ICALENDAR_ERROR" />
+        </property>
+        
         
         <property name="buName" formula="(SELECT b.BU_NAME FROM T_BU b WHERE b.BU_CODE=BU) " update="false"></property>
         <property name="distName" formula="(SELECT b.DISTRICT_NAME FROM T_DISTRICT b WHERE b.DISTRICT_CODE=DISTRICT) " update="false"></property>

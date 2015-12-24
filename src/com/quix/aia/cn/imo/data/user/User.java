@@ -24,12 +24,9 @@
 package com.quix.aia.cn.imo.data.user;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.quix.aia.cn.imo.utilities.ImoUtilityData;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.SecurityAPI;
 
@@ -74,22 +71,7 @@ public class User {
 	private String branchName;
 	private String officeName;
 	private boolean cho;
-	
-	public int getBranchCode() {
-		return branchCode;
-	}
-
-	public void setBranchCode(int branchCode) {
-		this.branchCode = branchCode;
-	}
-
-	public String getBranchName() {
-		return branchName;
-	}
-
-	public void setBranchName(String branchName) {
-		this.branchName = branchName;
-	}
+	private String ssoSessionId;
 
 	private String buName;
 	private String distName;
@@ -168,6 +150,23 @@ public class User {
 		this.modifiedBy =user.getModifiedBy();
 		
 	}
+	
+	public int getBranchCode() {
+		return branchCode;
+	}
+
+	public void setBranchCode(int branchCode) {
+		this.branchCode = branchCode;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+	
 	/**
 	 * @return the DistName
 	 */
@@ -872,6 +871,21 @@ public class User {
 	public void setCreatedUserOfficeCode(int createdUserOfficeCode) {
 		this.createdUserOfficeCode = createdUserOfficeCode;
 	}
+
+	/**
+	 * @return the ssoSessionId
+	 */
+	public String getSsoSessionId() {
+		return ssoSessionId;
+	}
+
+	/**
+	 * @param ssoSessionId the ssoSessionId to set
+	 */
+	public void setSsoSessionId(String ssoSessionId) {
+		this.ssoSessionId = ssoSessionId;
+	}
+	
 	
 	
 

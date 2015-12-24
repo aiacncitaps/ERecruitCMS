@@ -85,6 +85,7 @@ public class Event {
 	private String officeCode;
 	private String officeName;
 	private String attendedStatus;
+	private Integer calendarServiceError;
 	
 	 public String getOfficeCode() {
 		return officeCode;
@@ -774,6 +775,28 @@ public class Event {
 		this.attendedStatus = attendedStatus;
 	}
 
+	public Boolean getIsRegistered() {
+		return isRegistered;
+	}
+
+	public void setIsRegistered(Boolean isRegistered) {
+		this.isRegistered = isRegistered;
+	}
+	
+	/**
+	 * @return the calendarServiceError
+	 */
+	public Integer getCalendarServiceError() {
+		return calendarServiceError;
+	}
+
+	/**
+	 * @param calendarServiceError the calendarServiceError to set
+	 */
+	public void setCalendarServiceError(Integer calendarServiceError) {
+		this.calendarServiceError = calendarServiceError;
+	}
+
 	@Override
    public String toString() {
 		
@@ -854,35 +877,40 @@ public class Event {
 		else
 			publicRegStatus = "No";
 		
-	    returnStr ="<tr> "+
-		 "<td>"+"<div align=center><a href=\"" + viewAttendanceLink + "\">"+SecurityAPI.encodeHTML(this.eventName)+"</a></div></td>"+
-		"<td>"+SecurityAPI.encodeHTML(this.eventType)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(eventDt)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.buName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.distName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.branchName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.cityName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.sscName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.officeName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(organiserValue)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(publicRegStatus)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(this.speaker)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(String.valueOf(this.registeredCount))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(String.valueOf(this.attendeeCount))+"</td>"+
-		"<td >"+SecurityAPI.encodeHTML(this.modifiedBy)+"</td>"+
-		"<td >" + date + "</div></td>" +
-		"<td><div align=center>"+modifyLink+"&nbsp;<a href=\"" + deleteLink + "\"><img src=images/delete.png border=0></a></div></td>"+
-		"</tr>";
-		return returnStr;
+		//* The action buttons
+        String actionLinks = modifyLink + "&nbsp;<a href=\"" + deleteLink + "\"><img src=images/delete.png border=0></a>";
+        if (this.status == false)
+        {
+            // deleted event do not have the edit and delete link
+            actionLinks = "";
+        }
+        
+        if (this.getCalendarServiceError() != null && this.getCalendarServiceError() > 0)
+        {
+            actionLinks += "&nbsp;<a href=\"FormManager?key=EopScheduleAdd&type=RESYNC&eventCode=" + this.getEvent_code() + "\"><img src=images/sync.png border=0></a>";
+        }
+        
+        returnStr = "<tr> "
+                + "<td>" + "<div align=center><a href=\"" + viewAttendanceLink + "\">" + SecurityAPI.encodeHTML(this.eventName) + "</a></div></td>"
+                + "<td>" + SecurityAPI.encodeHTML(this.eventType) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(eventDt) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.buName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.distName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.branchName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.cityName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.sscName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(this.officeName)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(organiserValue) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(publicRegStatus) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(this.speaker) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(String.valueOf(this.registeredCount)) + "</td>"
+                + "<td>" + SecurityAPI.encodeHTML(String.valueOf(this.attendeeCount)) + "</td>"
+                + "<td >" + SecurityAPI.encodeHTML(this.modifiedBy) + "</td>"
+                + "<td >" + date + "</div></td>"
+                + "<td><div align=center>" + actionLinks + "</div></td>"
+                + "</tr>";
+        return returnStr;
     }
-
-	public Boolean getIsRegistered() {
-		return isRegistered;
-	}
-
-	public void setIsRegistered(Boolean isRegistered) {
-		this.isRegistered = isRegistered;
-	}
 	 
 
 	

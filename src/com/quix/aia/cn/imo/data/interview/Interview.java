@@ -72,9 +72,25 @@ public class Interview {
 	private String branchName;
 	 private String officeCode;
 	  private String officeName;
+		private Integer calendarServiceError;
 	  
-	  
-	
+		
+	/**
+		 * @return the calendarServiceError
+		 */
+		public Integer getCalendarServiceError() {
+			return calendarServiceError;
+		}
+
+
+		/**
+		 * @param calendarServiceError the calendarServiceError to set
+		 */
+		public void setCalendarServiceError(Integer calendarServiceError) {
+			this.calendarServiceError = calendarServiceError;
+		}
+
+
 	public String getOfficeCode() {
 		return officeCode;
 	}
@@ -572,12 +588,11 @@ public class Interview {
 	 
 		SimpleDateFormat ra = new SimpleDateFormat("HH:mm a");
 		
-	   	String modifyLink = "";
+//	   	String modifyLink = "";
 	   	Date todayDate = new Date();  
-        modifyLink = "<a href=\" FormManager?key=InterviewAdd&type=MODIFY&interview_code=" + this.interview_code + "\"><img src=images/edit.png border=0></a>"; 
-        		//"<a href=\"" + FormManager?key=InterviewAdd&type=MODIFY&interview_code=" + interview_code + "\"><img src=images/edit.png border=0></a>";
-       
+	   	String modifyLink = "<a href=\" FormManager?key=InterviewAdd&type=MODIFY&interview_code=" + this.interview_code + "\"><img src=images/edit.png border=0></a>";
         String deleteLink = "<a href=\"javascript:confirmDelete('" + interview_code + "')\"><img src=images/delete.png border=0></a>";
+        String resyncLink = "<a href=\"FormManager?key=InterviewAdd&type=RESYNC&interview_code=" + this.interview_code + "\"><img src=images/sync.png border=0></a>";
         String viewAttendanceLink = "ContentManager?key=InterviewAttendanceDetails&interview_code=" + interview_code;
         String returnStr = "";
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -626,27 +641,37 @@ public class Interview {
 			if(this.modificationDate!=null)
 				date = LMSUtil.convertDateToString(this.modificationDate);
 			
+			String actionLinks = modifyLink + "&nbsp;" + deleteLink;
+	        if (this.isStatus() == false)
+	        {
+	            // deleted interview do not have any update or delete actions
+	            actionLinks = "";
+	        }
+	        
+	        if (this.getCalendarServiceError()!= null && this.getCalendarServiceError() > 0)
+	        {
+	            actionLinks += "&nbsp;" + resyncLink;
+	        }
 			
-        returnStr ="<tr>"+
-        "<td>"+"<div align=center><a href=\"" + viewAttendanceLink + "\">"+SecurityAPI.encodeHTML(interviewSessionName)+"</a></div></td>"+
-        "<td>"+SecurityAPI.encodeHTML(localeObj.getTranslatedText(interviewType+" Interview"))+"</td>"+
-        "<td>"+"<div align=center><a href=\"" + viewAttendanceLink + "\">"+SecurityAPI.encodeHTML(interview_date)+"</a></div></td>"+
-        "<td>"+SecurityAPI.encodeHTML(time1)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(time2)+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(buName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(distName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(branchName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(cityName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(sscName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(LMSUtil.blankIfNull(officeName))+"</td>"+
-		"<td>"+SecurityAPI.encodeHTML(this.modifiedBy)+"</td>"+
-		"<td >" + date + "</div></td>" +
-        "<td>"+"<div align=center>"+SecurityAPI.encodeHTML(String.valueOf(this.registeredCount))+"</div></td>"+
-     //  "<td>"+"<div align=center><a href=\"" + viewAttendanceLink + "\">"+"1"+"</a></div></td>"+
-        "<td>"+"<div align=center>"+SecurityAPI.encodeHTML(String.valueOf(this.attendeeCount))+"</div></td>"+
-        "<td>"+"<div align=center>"+modifyLink+"&nbsp;"+deleteLink+"</div></td>"+
-       
-        "</tr>";
+			
+	        returnStr = "<tr>"
+	                + "<td>" + "<div align=center><a href=\"" + viewAttendanceLink + "\">" + SecurityAPI.encodeHTML(interviewSessionName) + "</a></div></td>"
+	                + "<td>" + SecurityAPI.encodeHTML(localeObj.getTranslatedText(interviewType + " Interview")) + "</td>"
+	                + "<td>" + "<div align=center><a href=\"" + viewAttendanceLink + "\">" + SecurityAPI.encodeHTML(interview_date) + "</a></div></td>"
+	                + "<td>" + SecurityAPI.encodeHTML(time1) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(time2) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(buName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(distName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(branchName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(cityName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(sscName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(LMSUtil.blankIfNull(officeName)) + "</td>"
+	                + "<td>" + SecurityAPI.encodeHTML(this.modifiedBy) + "</td>"
+	                + "<td >" + date + "</div></td>"
+	                + "<td>" + "<div align=center>" + SecurityAPI.encodeHTML(String.valueOf(this.registeredCount)) + "</div></td>"
+	                + "<td>" + "<div align=center>" + SecurityAPI.encodeHTML(String.valueOf(this.attendeeCount)) + "</div></td>"
+	                + "<td>" + "<div align=center>" + actionLinks + "</div></td>"
+	                + "</tr>";
         
         return returnStr;
     }

@@ -6,7 +6,13 @@
 		<!-- <property name="connection.datasource">jdbc/IMOCN</property> -->
 			<property name="hibernate.connection.url">jdbc:sqlserver://202.150.218.108:1433;databaseName=DEMOIMOCN2;instanceName=MSSQLSERVER;</property>
 		    <property name="hibernate.connection.username">sa</property>
-		      <property name="hibernate.connection.password">5!ngap0re</property>
+		      <property name="hibernate.connection.password">5!ngap0re</property> 
+                
+<!--
+			<property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=aia_icalendar;instanceName=MSSQLSERVER;</property>
+		    <property name="hibernate.connection.username">sa</property>
+		      <property name="hibernate.connection.password">abc123.</property>
+-->
     <property name="show_sql">true</property>
     <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
  			    <mapping resource="com/quix/aia/cn/imo/data/hbm/AamData.hbm.xml" />

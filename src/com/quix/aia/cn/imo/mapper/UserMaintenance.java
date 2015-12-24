@@ -39,12 +39,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,7 +49,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.poi.hssf.model.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -60,7 +56,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.JSONObject;
 
+import com.archerlogic.aia.cn.helpers.common.JSONHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -71,7 +69,6 @@ import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.RequestAttributes;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
-import com.quix.aia.cn.imo.data.common.AamData;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.data.user.UserRest;
@@ -88,7 +85,6 @@ import com.quix.aia.cn.imo.utilities.MsgObject;
 import com.quix.aia.cn.imo.utilities.Pager;
 import com.quix.aia.cn.imo.utilities.PasswordHashing;
 import com.quix.aia.cn.imo.utilities.PathDetail;
-import com.sun.org.apache.xml.internal.serializer.ToUnknownStream;
 
 import cn.aia.tools.security.AESPasswordManager;
 
@@ -231,227 +227,277 @@ public class UserMaintenance {
 			 user.setUser_no(0);
 			 user.setUserType("AD");
 			 user.setCho(true);
+	            user.setSsoSessionId("adminSSO");
 			 log.log(Level.INFO,"authenticateUser Successfully ................. ");
-		 }else{
-			 GsonBuilder builder = new GsonBuilder();
-			HttpClient httpClient = new DefaultHttpClient();
-				try {
-						
-						String co="";
-//						userID="NSNP306";
-//						password="A111111A";
-						AamData aamData = new AamData();
-						co=branch;
-//						co="0986";
-						Map<String, String> map =(Map<String, String>) context.getAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP);
-//						String userAuthUrl  = ResourceBundle.getBundle("configurations").getString("userAuthUrl");
-//						String userAuthUrl = map.get("userAuthUrl");
-						String userAuthUrlFinal = "";
-//						String userAuthEnvironment = map.get("userAuthEnvironment");
-//						String userAuthEnvironment = context.getInitParameter("userAuthEnvironment");
-						Context envEntryContext = (Context) new InitialContext().lookup("java:comp/env");
-						String userAuthEnvironment = (String)envEntryContext.lookup("userAuthEnvironment");
-						if("internet".equalsIgnoreCase(userAuthEnvironment)){
-							userAuthUrlFinal=map.get("userAuthUrlInternet")+"&co="+co+"&account="+userID+"&password="+password;
-							
-						}else{
-							userAuthUrlFinal=map.get("userAuthUrl")+"&co="+co+"&account="+userID+"&password="+password;
-						}
-						log.log(Level.INFO, "UserAuthUrl : "+userAuthUrlFinal+" :- userAuthEnvironment : "+userAuthEnvironment, "");
-						HttpGet getRequest = new HttpGet(userAuthUrlFinal);
-						getRequest.addHeader("accept", "application/json");
-						HttpResponse response = httpClient.execute(getRequest);
-	
-						if (response.getStatusLine().getStatusCode() != 200) {
-						throw new RuntimeException("Failed : HTTP error code : "+ response.getStatusLine().getStatusCode());
-					}
+		 }else
+		        {
+		            user = _authenticateUserISP(userID, password, branch, context);
 
-					BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+		            if (user == null)
+		            {
+		                // failed to authenticate from ISP
+		                return null;
+		            }
 
-					  String output;
-					  log.log(Level.INFO,"UserMaintenance --> Output from Server ....  ");
-					 // System.out.println("Output from Server .... \n");
-					  if ((output = br.readLine()) != null) {
-						  //System.out.println(output);
-						Gson googleJson = new Gson();
-						  userAuth = googleJson.fromJson(output,UserAuthResponds.class);
-						  System.out.println("Success "+userAuth.getSuccess());
-						  if(userAuth.getSuccess().equals("1")){
-							  
-							  String content= userAuth.getContent();
-							  
-							  content=AESPasswordManager.getInstance().decryptPassword(content);
-							  
-							  builder.registerTypeAdapter(Date.class,
-										new JsonDeserializer<Date>() {
-											@Override
-											public Date deserialize(JsonElement json, Type typeOfT,
-													JsonDeserializationContext context)
-													throws JsonParseException {
-												return LMSUtil.convertDateToyyyy_mm_dd(json.getAsString());
-											}
-										});
-							  
-							  googleJson = builder.create();
-							  
-//							  content="{\"BRANCH\":\"0986\",\"CITY\":NULL,\"SSC\":NULL,\"USERTYPE\":NULL,\"USERID\":\"000015710\",\"USERNAME\":\"张雯燕                        \",\"USERSTATUS\":\"A\",\"TEAMCODE\":\"G00000060\",\"TEAMNAME\":\"孙海峰                        \",\"OFFICECODE\":\"YA01\",\"OFFICENAME\":\"进德一处                      \",\"CERTIID\":\"310110198008080808  \",\"DATEOFBIRTH\":\"1980-08-08\",\"GENDER\":\"F \",\"CONTRACTEDDATE\":\"2002-10-01 12:00:00.0\",\"TITLE\":\"L3\",\"DTLEADER\":NULL}";
-							  
-							userRest=googleJson.fromJson(content,UserRest.class);
-							
-							if("STAFF".equalsIgnoreCase(userRest.getUSERTYPE())){
-//							
-//							aamData = AamDataMaintenance.retrieveDataToModel(userID);
-//							
-//							
-//							user = new User();
-//							if(aamData.getBranchCode()==null){
-//								user.setBranchCode(0);
-//							}else{
-//								user.setBranchCode(aamData.getBranchCode());
-//							}
-//							
-//							if(aamData.getOfficeCode()==null){
-//								user.setOfficeCode(0);
-//							}else{
-//								user.setOfficeCode(Integer.parseInt(aamData.getOfficeCode()));
-//							}
-//							
-//							if(aamData.getDistrictCode()==null){
-//								user.setDistrict(0);
-//							}else{
-//								user.setDistrict(aamData.getDistrictCode());
-//							}
-//							
-//							if(aamData.getCityCode()==null){
-//								user.setCityCode(0);
-//							}else{
-//								user.setCityCode(aamData.getCityCode());
-//							}
-//							
-//							if(aamData.getBuCode()==null){
-//								user.setBuCode(0);
-//							}else{
-//								user.setBuCode(aamData.getBuCode());
-//							}
-//							if(aamData.getSscCode()==null){
-//								user.setSscCode(0);
-//							}else{
-//								user.setSscCode(aamData.getSscCode());
-//							}
-//							
-//							user.setStaffLoginId(aamData.getAgentCode());
-//						
-//							user.setUserType(userRest.getUSERTYPE());
-//							if(userRest.getUSERSTATUS()!=null){
-//								if(userRest.getUSERSTATUS().equalsIgnoreCase("A")){
-//									user.setStatus(true);
-//								}else{
-//									user.setStatus(false);
-//								}
-//							}else{
-//								user.setStatus(false);
-//							}
-//							
-//							if(aamData.getAgentName()==null){
-//								user.setStaffName("");
-//							}else{
-//								user.setStaffName(aamData.getAgentName());
-//							}
-//							
-//							if(user.getOfficeCode() > 0)
-//								user.setOfficeLevel(true);
-//							if(user.getSscCode() > 0)
-//								user.setSscLevel(true);
-//							
-//							else if(user.getCityCode() > 0)
-//								user.setCityLevel(true);
-//							else if(user.getBranchCode() > 0)
-//								user.setBranchLevel(true);
-//							else if(user.getDistrict() > 0)
-//								user.setDistrictLevel(true);
-//							else if(user.getBuCode() > 0)
-//								user.setBuLevel(true);
+		            log.log(Level.INFO, "Getting session id from SSO...");
+		            String sessionId = _authenticateUserSSO(userID, password, branch, context);
+		            log.log(Level.INFO, "Session id = " + sessionId);
 
-								 
-								session = HibernateFactory.openSession();
-								tx= session.beginTransaction();
-								//String psw=PasswordHashing.EncryptBySHA2(password);
-								 query = session.createQuery(" from User where status = 1 and staffLoginId=:LoginId ");
-								query.setParameter("LoginId",userID.toUpperCase());
-								//query.setParameter("psw",psw );
-								
-								list=(ArrayList<User>) query.list();
-								
-								if(list.size()==0){
-//									query = session.createQuery(" from User where status = 1 and staffLoginId=:LoginId   ");
-//									query.setParameter("LoginId",userID.toUpperCase());
-//									list=(ArrayList<User>) query.list();
-//									User tempUser=new User();
-//									if(list.size()!=0){
-//										tempUser=list.get(0);
-//										query = session.createQuery("UPDATE User SET faildLogin=:failLogin where status = 1 and user_no=:userno  ");
-//										query.setParameter("failLogin", new Date());
-//										query.setParameter("userno", tempUser.getUser_no());
-//										query.executeUpdate();
-//										tx.commit();
-//										
-//									}
-//									
-									return user;
-								}else{
-									user = new User();
-									user = list.get(0);
-									
-									if(!user.getOfficeCode().trim().equals("0"))
-										user.setOfficeLevel(true);
-									else if(!user.getSscCode().trim().equals("0"))
-										user.setSscLevel(true);
-									else if(!user.getCityCode().trim().equals("0"))
-										user.setCityLevel(true);
-									else if(user.getBranchCode() > 0)
-										user.setBranchLevel(true);
-									else if(user.getDistrict() > 0)
-										user.setDistrictLevel(true);
-									else if(user.getBuCode() > 0)
-										user.setBuLevel(true);
-								}
-								
-								query = session.createQuery("UPDATE User SET lastLogIn=:lastLogin where status = 1 and user_no=:userno  ");
-								query.setParameter("lastLogin", new Date());
-								query.setParameter("userno", user.getUser_no());
-								query.executeUpdate();
-								tx.commit();
-								
-							
-							 log.log(Level.INFO,"authenticateUser Successfully ................. ");
-							 
-						  }else{
-							  log.log(Level.INFO,"Login Failed............");
-						  }
-						  
-						  }else{
-							  log.log(Level.INFO,"Login Failed............");
-							 
-						  }
-						  
-					  }
+		            if (sessionId == null || sessionId.isEmpty())
+		            {
+		                // failed to authenticate from SSO
+		                return null;
+		            }
+		            
+		            user.setSsoSessionId(sessionId);
 
-					  
-					   } catch (Exception e) {
-						   log.log(Level.SEVERE, e.getMessage());
-						   e.printStackTrace();
-						   LogsMaintenance logsMain=new LogsMaintenance();
-							StringWriter errors = new StringWriter();
-							e.printStackTrace(new PrintWriter(errors));
-							logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
-					   } finally {
-							  httpClient.getConnectionManager().shutdown();
-							  HibernateFactory.close(session);
-					}
-		 }
-				return user;
-			}
-				
+		            log.log(Level.INFO, "Updating user last login timestamp.");
+		            _updateUserLastLogin(user.getUser_no(), new Date());
+		        }
+		        
+		        return user;
+		    }
+
+		    private User _authenticateUserISP(String userID, String password, String branch, ServletContext context)
+		    {
+		        GsonBuilder builder = new GsonBuilder();
+		        HttpClient httpClient = new DefaultHttpClient();
+
+		        Session session = null;
+		        User user = null;
+
+		        try
+		        {
+		            String co = branch;
+
+		            Map<String, String> map = (Map<String, String>) context.getAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP);
+
+		            String userAuthUrlFinal = "";
+		            String userAuthEnvironment = (String) map.get("userAuthEnvironment");
+
+		            if ("internet".equalsIgnoreCase(userAuthEnvironment))
+		            {
+		                userAuthUrlFinal = map.get("userAuthUrlInternet") + "&co=" + co + "&account=" + userID + "&password=" + password;
+		            }
+		            else
+		            {
+		                userAuthUrlFinal = map.get("userAuthUrl") + "&co=" + co + "&account=" + userID + "&password=" + password;
+		            }
+		            log.log(Level.INFO, "UserAuthUrl : " + userAuthUrlFinal + " :- userAuthEnvironment : " + userAuthEnvironment, "");
+		            HttpGet getRequest = new HttpGet(userAuthUrlFinal);
+		            getRequest.addHeader("accept", "application/json");
+		            HttpResponse response = httpClient.execute(getRequest);
+
+		            if (response.getStatusLine().getStatusCode() != 200)
+		            {
+		                throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+		            }
+
+		            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+
+		            String output;
+		            log.log(Level.INFO, "UserMaintenance --> Output from Server ....  ");
+		            if ((output = br.readLine()) != null)
+		            {
+		                Gson googleJson = new Gson();
+		                UserAuthResponds userAuth = googleJson.fromJson(output, UserAuthResponds.class);
+		                System.out.println("Success " + userAuth.getSuccess());
+		                if (userAuth.getSuccess().equals("1"))
+		                {
+		                    String content = userAuth.getContent();
+		                    content = AESPasswordManager.getInstance().decryptPassword(content);
+		                    System.out.println("RAW: " + content);
+
+		                    builder.registerTypeAdapter(Date.class,
+		                            new JsonDeserializer<Date>()
+		                            {
+		                                @Override
+		                                public Date deserialize(JsonElement json, Type typeOfT,
+		                                        JsonDeserializationContext context)
+		                                throws JsonParseException
+		                                {
+		                                    if (json.getAsString() == null || json.getAsString().isEmpty())
+		                                    {
+		                                        return null;
+		                                    }
+		                                    else
+		                                    {
+		                                        return LMSUtil.convertDateToyyyy_mm_dd(json.getAsString());
+		                                    }
+		                                }
+		                            });
+
+		                    googleJson = builder.create();
+		                    UserRest userRest = googleJson.fromJson(content, UserRest.class);
+
+		                    if ("STAFF".equalsIgnoreCase(userRest.getUSERTYPE()))
+		                    {
+		                        session = HibernateFactory.openSession();
+		                        Transaction tx = session.beginTransaction();
+		                        Query query = session.createQuery(" from User where status = 1 and staffLoginId=:LoginId ");
+		                        query.setParameter("LoginId", userID.toUpperCase());
+
+		                        ArrayList<User> list = (ArrayList<User>) query.list();
+
+		                        if (list.size() == 0)
+		                        {
+		                            return null;
+		                        }
+		                        else
+		                        {
+		                            user = new User();
+		                            user = list.get(0);
+
+		                            if (!user.getOfficeCode().trim().equals("0"))
+		                            {
+		                                user.setOfficeLevel(true);
+		                            }
+		                            else if (!user.getSscCode().trim().equals("0"))
+		                            {
+		                                user.setSscLevel(true);
+		                            }
+		                            else if (!user.getCityCode().trim().equals("0"))
+		                            {
+		                                user.setCityLevel(true);
+		                            }
+		                            else if (user.getBranchCode() > 0)
+		                            {
+		                                user.setBranchLevel(true);
+		                            }
+		                            else if (user.getDistrict() > 0)
+		                            {
+		                                user.setDistrictLevel(true);
+		                            }
+		                            else if (user.getBuCode() > 0)
+		                            {
+		                                user.setBuLevel(true);
+		                            }
+		                        }
+
+		                        tx.commit();
+		                        session.close();
+
+		                        log.log(Level.INFO, "authenticateUser Successfully ................. ");
+		                    }
+		                    else
+		                    {
+		                        // user type is not STAFF
+		                        log.log(Level.INFO, "Login Failed............");
+		                    }
+		                }
+		                else
+		                {
+		                    // user auth failed
+		                    log.log(Level.INFO, "Login Failed............");
+		                }
+		            }
+		        }
+		        catch (Exception e)
+		        {
+		            log.log(Level.SEVERE, e.getMessage());
+		            e.printStackTrace();
+		            LogsMaintenance logsMain = new LogsMaintenance();
+		            StringWriter errors = new StringWriter();
+		            e.printStackTrace(new PrintWriter(errors));
+		            logsMain.insertLogs("UserMaintenance", Level.SEVERE + "", errors.toString());
+		        }
+		        finally
+		        {
+		            httpClient.getConnectionManager().shutdown();
+		            HibernateFactory.close(session);
+		        }
+
+		        return user;
+		    }
+
+		    private String _authenticateUserSSO(String userID, String password, String branch, ServletContext context)
+		    {
+		        String sessionId = null;
+
+		        try
+		        {
+		            Map<String, String> configMap = (Map<String, String>) context.getAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP);
+		            
+		            // the config is: http://211.144.219.243/SSO/loginAction.do
+		            // full URL sample: http://211.144.219.243/SSO/loginAction.do?companyId=0986&password=11111111&userId=NTRN093&requestFrom=ios&handleSessionTable=&resultFlag=json
+		            String ssoUrl = configMap.get("ssoUserAuthUrl");
+		            ssoUrl += "?companyId=" + branch;
+		            ssoUrl += "&password=" + password;
+		            ssoUrl += "&userId=" + userID;
+		            ssoUrl += "&requestFrom=ios&handleSessionTable=&resultFlag=json";
+		            
+		            JSONObject ssoResult = JSONHelper.readJsonFromUrl(ssoUrl);
+
+		            if (ssoResult == null)
+		            {
+		                sessionId = null;
+		            }
+		            else
+		            {
+		                /*
+		                 * here are 2 samples of the json result from SSO
+
+		                 EG1:
+		                 {"loginResult":"successed",
+		                 "errorCode":"",
+		                 "errorMessage":"",
+		                 "gotoURL":"http://shadcuwapp03/SSO/ssoAppLogin.do?sessionId=0986IAwUgB8kA70neZIFystu8XU&amp;requestFrom=ios&amp;ssoUrl=http://shadcuwapp03/SSO",
+		                 "sessionID":"0986IAwUgB8kA70neZIFystu8XU",
+		                 "agentChannel":""}
+		            
+		                 EG2:
+		                 {"loginResult":"failed",
+		                 "errorCode":"SSO001",
+		                 "errorMessage":"è¯·æ³¨æ„ï¼šå¯†ç è¾“é”™3æ¬¡ï¼Œæ‚¨çš„å¸å·ä¼šè¢«é”å®š60åˆ†é’Ÿ!æ‚¨å·²è¾“é”™1æ¬¡.",
+		                 "gotoURL":"",
+		                 "sessionID":"",
+		                 "agentChannel":""}
+		                 */
+		                
+		                // we just need to check whether the session id exists in the json result
+		                // when login failed, the session id will always be empty
+		                sessionId = ssoResult.getString("sessionID");
+		                
+		            }
+		        }
+		        catch (Exception ex)
+		        {
+		            ex.printStackTrace();
+		            sessionId = null;
+		        }
+
+		        return sessionId;
+		    }
+
+		    private void _updateUserLastLogin(int userNo, Date date)
+		    {
+		        Session session = null;
+
+		        try
+		        {
+		            session = HibernateFactory.openSession();
+		            Transaction tx = session.beginTransaction();
+
+		            Query query = session.createQuery("UPDATE User SET lastLogIn=:lastLogin where status = 1 and user_no=:userno  ");
+		            query.setParameter("lastLogin", new Date());
+		            query.setParameter("userno", userNo);
+		            query.executeUpdate();
+
+		            tx.commit();
+		            session.close();
+		        }
+		        catch (Exception ex)
+		        {
+		            ex.printStackTrace();
+		        }
+		        finally
+		        {
+		            if (session != null)
+		            {
+		                session.close();
+		            }
+		        }
+		    }
 	
 
 

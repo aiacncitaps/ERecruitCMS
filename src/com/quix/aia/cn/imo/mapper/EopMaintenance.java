@@ -64,6 +64,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
+import com.archerlogic.aia.cn.helpers.iCalendar.iCalendarEOPHelper;
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
@@ -574,7 +575,11 @@ public class EopMaintenance {
 				crit.add(Restrictions.eq("sscCode", ssc));
 			if(agentTeam!=null && Integer.parseInt(agentTeam) !=0)
 				crit.add(Restrictions.eq("agentTeam", agentTeam));
-			crit.add(Restrictions.eq("status", true));
+
+			// get all events that are not deleted or have sync errors
+            crit.add(Restrictions.or(
+                    Restrictions.eq("status", true),
+                    Restrictions.gt("calendarServiceError", 0)));
 			
 			eventList = (ArrayList)crit.list();
 			
@@ -617,7 +622,12 @@ public class EopMaintenance {
 			Criteria crit = session.createCriteria(Event.class);
 			crit.add(Restrictions.sqlRestriction("MONTH(EVENT_DATE)=?", month,Hibernate.INTEGER));
 			crit.add(Restrictions.sqlRestriction("YEAR(EVENT_DATE)=?",year,Hibernate.INTEGER));
-			crit.add(Restrictions.eq("status", true));
+			
+			// get all that are not deleted, or those that have sync errors
+            crit.add(Restrictions.or(
+                    Restrictions.eq("status", true),
+                    Restrictions.gt("calendarServiceError", 0))
+            );
 			
 			if(userObj.isBuLevel() && userObj.getBuCode()!=0){
 				crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
@@ -844,6 +854,10 @@ public class EopMaintenance {
 			tx.commit();
 			status = "Y";
 			EmailNotification.sendEopUpdateEmailNotification(event,requestParameters);
+
+            // call iCalendar web service to update the EOP
+            iCalendarEOPHelper iCalHelper = new iCalendarEOPHelper();
+            iCalHelper.updateEOP(event.getEvent_code(), userObj.getSsoSessionId());
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
@@ -902,6 +916,10 @@ public class EopMaintenance {
 		tx.commit();
 		status = "Y";
 		EmailNotification.sendEopDeleteEmailNotification(event,requestParameters);
+
+        // call iCalendar web service to update the EOP
+        iCalendarEOPHelper iCalHelper = new iCalendarEOPHelper();
+        iCalHelper.deleteEOP(event.getEvent_code(), userObj.getSsoSessionId());
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
@@ -2791,5 +2809,61 @@ public class EopMaintenance {
 	}
 	
 	public static final SessionFactory clientSessionFactory = new Configuration().configure("client_hibernate.cfg.xml").buildSessionFactory();
+	
+	//* ------------------------------------------------------------------------
+    public void resyncEvent(int eventCode, HttpServletRequest requestParameters)
+    {
+        Session session = null;
+        User userObj = (User) requestParameters.getSession().getAttribute("currUserObj");
+
+        // get the event object to get the status
+        boolean success = false;
+        try
+        {
+            session = HibernateFactory.openSession();
+            Event eop = (Event) session.load(Event.class, eventCode);
+
+            if (eop != null)
+            {
+                if (eop.isStatus() == true)
+                {
+                    iCalendarEOPHelper helper = new iCalendarEOPHelper();
+                    success = helper.updateEOP(eventCode, userObj.getSsoSessionId());
+                }
+                else
+                {
+                    iCalendarEOPHelper helper = new iCalendarEOPHelper();
+                    success = helper.deleteEOP(eventCode, userObj.getSsoSessionId());
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.close();
+            }
+        }
+
+        MsgObject msgObj = null;
+        if (success)
+        {
+            msgObj = new MsgObject("Event Resynchronized to iCalendar");
+        }
+        else
+        {
+            msgObj = new MsgObject("Event Resynchronization Failed");
+        }
+
+        requestParameters.setAttribute("messageObject", msgObj);
+        requestParameters.setAttribute("CacheName", "EOP");
+        Pager pager = eventListing(requestParameters);
+        requestParameters.setAttribute("pager", pager);
+        requestParameters.getSession().setAttribute("pager", pager);
+    }
 	
 }

@@ -50,7 +50,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +68,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import com.archerlogic.aia.cn.helpers.iCalendar.iCalendarInterviewHelper;
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
@@ -446,7 +446,7 @@ public  ArrayList getAllInterview(HttpServletRequest req) {
 		    			"I.officeName,I.interviewDate,I.StartTime,I.EndTime,I.modifiedBy,I.modificationDate,I.registeredCount,I.attendeeCount from  " +
 		    			"Interview I,InterviewCandidate IC  where I.interview_code = IC.interviewCode and MONTH(I.interviewDate) =:month and  YEAR(I.interviewDate)=:year and I.status = 1 and IC.status = 1";
 		    else	
-		    	query = " FROM Interview  I where MONTH(I.interviewDate) =:month and  YEAR(I.interviewDate)=:year and I.status = 1";
+		    	query = " FROM Interview  I where MONTH(I.interviewDate) =:month and  YEAR(I.interviewDate)=:year and (I.status = 1 or I.calendarServiceError > 0)";
 		    
 			if(candidateName!=null && candidateName.length() > 0){
 					sqlCond += " and IC.candidateName LIKE :candidateName";
@@ -605,7 +605,12 @@ public  ArrayList getInterview(HttpServletRequest req) {
 		    Criteria criteria = session.createCriteria(Interview.class);
 		    criteria.add(Restrictions.sqlRestriction("MONTH(INTERVIEW_DATE)=?",month,Hibernate.INTEGER));
 		    criteria.add(Restrictions.sqlRestriction("YEAR(INTERVIEW_DATE)=?", year,Hibernate.INTEGER));
-			criteria.add(Restrictions.eq("status", true));
+			
+		 // get all the interviews that are not deleted, or those with sync errors
+            criteria.add(Restrictions.or(
+                    Restrictions.eq("status", true),
+                    Restrictions.gt("calendarServiceError", 0))
+            );
 			
 			if(userObj.isBuLevel() && userObj.getBuCode()!=0){
 				criteria.add(Restrictions.eq("buCode", userObj.getBuCode()));
@@ -822,6 +827,10 @@ public Object updateInterview(Interview interview, HttpServletRequest req) {
 	}
 	else{
 		msgObj = new MsgObject("The Interview has not been updated");	
+		
+		// send web service to iCalendar
+        iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
+        helper.updateInterview(interview.getInterview_code(), userObj.getSsoSessionId());
 	}
 	req.setAttribute("messageObject", msgObj);
 	 req.setAttribute("CacheName", "Interview");
@@ -926,6 +935,10 @@ public void deleteInterview(int interview_code,HttpServletRequest req) {
 		
 		if(record_deleted>0){
 			msgObj = new MsgObject("The Interview has been successfully deleted");
+			
+			// call the iCalendar web service to delete interview
+            iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
+            helper.deleteInterview(interview_code, userObj.getSsoSessionId());
 		}
 		else{
 			msgObj = new MsgObject("The Interview has not been deleted");
@@ -2747,5 +2760,50 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 		}
 	}
 		return url;
+}
+
+//* ------------------------------------------------------------------------
+public void resyncInterview(int interview_code, HttpServletRequest req)
+{
+    log.log(Level.INFO, "Interview Maintenance --> Resync Interview");
+
+    MsgObject msgObj = null;
+    User userObj = (User) req.getSession().getAttribute("currUserObj");
+
+    Interview interview = getInterviewBasedOnInterviewCode(interview_code);
+
+    boolean success = false;
+
+    if (interview != null)
+    {
+        if (interview.isStatus() == true)
+        {
+            // is not deleted, re-update to iCalendar
+            iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
+            success = helper.updateInterview(interview_code, userObj.getSsoSessionId());
+        }
+        else
+        {
+            // is deleted, re-delete from iCalendar
+            iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
+            success = helper.deleteInterview(interview_code, userObj.getSsoSessionId());
+        }
+    }
+
+    if (success)
+    {
+        msgObj = new MsgObject("Interview Resynchronized to iCalendar");
+    }
+    else
+    {
+        msgObj = new MsgObject("Interview Resynchronization Failed.");
+    }
+
+    // Codes copied from delete interview, is to redisplay the interview maintenance table
+    req.setAttribute("messageObject", msgObj);
+    req.setAttribute("CacheName", "Interview");
+    Pager pager = getAllinterview(req);
+    req.getSession().setAttribute("pager", pager);
+    req.setAttribute("pager", pager);
 }
 }

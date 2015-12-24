@@ -614,6 +614,8 @@ public class FormActionController {
 		              } else
 		                  if(objToBeMapped == null && formObj.getFormType().equals("DELETE"))
 		                	  eopMaintenance.deleteEvent(Integer.parseInt(req.getParameter("eventCode")),req);
+		                  else if (objToBeMapped == null && formObj.getFormType().equals("RESYNC"))
+		                      eopMaintenance.resyncEvent(Integer.parseInt(req.getParameter("eventCode")), req);                
 		              else
 		              if(formObj.isCanCreate())
 		              {
