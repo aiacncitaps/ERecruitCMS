@@ -97,9 +97,9 @@ table{
 						<%
 						String gen = "";
 						if("M".equalsIgnoreCase( addressbook.getGender()))
-							gen = "Male";
+							gen = "男";
 						else if("F".equalsIgnoreCase( addressbook.getGender()))
-							gen = "Female";
+							gen = "女";
 						%>
 						<%=gen %>
 						<br>性别:<span style="color: #ec2028;">(*) </span> </label></td>
@@ -127,10 +127,39 @@ table{
 						<td><label>Registered Address:<%=addressbook.getRegisteredAddress1()+","+addressbook.getRegisteredAddress2()+","+addressbook.getRegisteredAddress3()%><br>户籍地址:</label></td>
 					</tr>
 					<tr>
-						<td> <label>Education:<%=addressbook.getEducation()!=null ? addressbook.getEducation() : ""%><br>教育经历:<span style="color: #ec2028;">(*)</span></label>
-						</td>
+					<%
+							String education="";
+						if(addressbook.getEducation().equalsIgnoreCase("1")){
+							education="初中或以下";
+						}else if(addressbook.getEducation().equalsIgnoreCase("2")){
+							education="大专";
+						}else if(addressbook.getEducation().equalsIgnoreCase("3")){
+							education="中专或高中";
+						}else if(addressbook.getEducation().equalsIgnoreCase("4")){
+							education="大学";
+						}else if(addressbook.getEducation().equalsIgnoreCase("5")){
+							education="研究生或以上";
+						}else if(addressbook.getEducation().equalsIgnoreCase("6")){
+							education="不详";
+						}
+					%>
 					
-						<td><label>Maritial Status:<%=addressbook.getMarritalStatus()!=null ?  addressbook.getMarritalStatus() : ""%><br>未婚:<span style="color: #ec2028;">(*) </span></label></td>
+						<td> <label>Education:<%=education!=null ? education : ""%><br>教育经历:<span style="color: #ec2028;">(*)</span></label>
+						</td>
+					<%
+						String marStatus="";
+					if(addressbook.getMarritalStatus().equalsIgnoreCase("s")){
+						marStatus="未婚";
+					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("m")){
+						marStatus="已婚";
+					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("se")){
+						marStatus="离异";
+					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("w")){
+						marStatus="丧偶";
+					}
+					
+					%>
+						<td><label>Maritial Status:<%=marStatus!=null ?  marStatus : ""%><br>未婚:<span style="color: #ec2028;">(*) </span></label></td>
 					</tr>
 
 					<tr>
