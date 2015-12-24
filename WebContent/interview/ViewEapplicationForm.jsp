@@ -152,7 +152,7 @@ table{
 						marStatus="未婚";
 					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("m")){
 						marStatus="已婚";
-					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("se")){
+					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("p")){
 						marStatus="离异";
 					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("w")){
 						marStatus="丧偶";
