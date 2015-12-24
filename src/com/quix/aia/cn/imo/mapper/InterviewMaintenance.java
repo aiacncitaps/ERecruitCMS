@@ -824,13 +824,13 @@ public Object updateInterview(Interview interview, HttpServletRequest req) {
 	    auditTrailMaintenance.insertAuditTrail(new AuditTrail(userObj.getStaffLoginId()+"",AuditTrail.MODULE_INTERVIEW,AuditTrail.FUNCTION_UPDATE,interview.toString()));
 		msgObj = new MsgObject("The Interview has been successfully updated");	
 		EmailNotification.sendInterviewUpdateEmailNotification(interview,req);
-	}
-	else{
-		msgObj = new MsgObject("The Interview has not been updated");	
 		
 		// send web service to iCalendar
         iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
         helper.updateInterview(interview.getInterview_code(), userObj.getSsoSessionId());
+	}
+	else{
+		msgObj = new MsgObject("The Interview has not been updated");	
 	}
 	req.setAttribute("messageObject", msgObj);
 	 req.setAttribute("CacheName", "Interview");
