@@ -4,6 +4,7 @@
   - Copyright Notice:   Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.
   - Description:        Adding  Eapplication form page
 --%>
+<%@page import="java.util.Calendar"%>
 <%@page import="java.io.PrintWriter"%>
 <%@page import="java.io.StringWriter"%>
 <%@page import="com.quix.aia.cn.imo.mapper.LogsMaintenance"%>
@@ -42,6 +43,11 @@ addressbook.setAddressCode(Integer.parseInt(interviewCandidateCode));
 addressbook=addressMain.getAddressBook(addressbook);
 SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
 InterviewMaintenance interviewMaintenance = new InterviewMaintenance();
+
+int years = 0;
+int months = 0;
+int days = 0;
+
 %>
 <style>
 /* td{
@@ -85,7 +91,7 @@ table{
 						<td><label>NRIC:<%=addressbook.getNric() %><br>证件号码:<span style="color: #ec2028;">(*)</span></label> </td>
 					</tr>
 					<tr>
-						<td><label>Date of Birth:<%=addressbook.getBirthDate()!=null ? "" : format.format(addressbook.getBirthDate())%><br>出生日期:<span style="color: #ec2028;">(*) </span> </label>
+						<td><label>Date of Birth:<%=addressbook.getBirthDate()!=null ? format.format(addressbook.getBirthDate()) : "" %><br>出生日期:<span style="color: #ec2028;">(*) </span> </label>
 						</td>
 						<td><label>Gender:
 						<%
@@ -100,12 +106,28 @@ table{
 					</tr>
 
 					<tr>
-						<td><label>Age:<%=addressbook.getAge()!=null ? addressbook.getAge()!=null : "" %><br>年龄:<span style="color: #ec2028;">(*)</span> </label>
+						<td>
+						<%
+						int age = 0;
+						if(addressbook.getBirthDate()!=null){
+							Calendar dob = Calendar.getInstance();  
+							dob.setTime(addressbook.getBirthDate());  
+							Calendar today = Calendar.getInstance();  
+							 age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);  
+							if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+							  age--;  
+							} else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+							    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+							  age--;  
+							}
+						}
+						%>
+						<label>Age:<%=age==0 ? "":age%><br>年龄:<span style="color: #ec2028;">(*)</span> </label>
 						</td>
-						<td><label>Registered Address:<%=addressbook.getRegisteredAddress2()+","+addressbook.getRegisteredAddress3()%><br>注册地址:</label></td>
+						<td><label>Registered Address:<%=addressbook.getRegisteredAddress1()+","+addressbook.getRegisteredAddress2()+","+addressbook.getRegisteredAddress3()%><br>户籍地址:</label></td>
 					</tr>
 					<tr>
-						<td> <label>Education:<%=addressbook.getEducation()!=null ? addressbook.getEducation() : ""%><br>最高学历<span style="color: #ec2028;">(*)</span></label>
+						<td> <label>Education:<%=addressbook.getEducation()!=null ? addressbook.getEducation() : ""%><br>教育经历:<span style="color: #ec2028;">(*)</span></label>
 						</td>
 					
 						<td><label>Maritial Status:<%=addressbook.getMarritalStatus()!=null ?  addressbook.getMarritalStatus() : ""%><br>未婚:<span style="color: #ec2028;">(*) </span></label></td>
@@ -114,7 +136,7 @@ table{
 					<tr>
 						<td > <label>Annual Income:<%=addressbook.getYearlyIncome()!=null ? addressbook.getYearlyIncome() : "" %><br>年收入:<span style="color: #ec2028;">(*) </span></label>
 						</td>
-						<td> <label>Work Experience:<%=addressbook.getWorkingYearExperience()!=null ?  addressbook.getWorkingYearExperience() : ""%><br>本地工作时间:<span style="color: #ec2028;">(*) </span></label></td>
+						<td> <label>Work Experience:<%=addressbook.getWorkingYearExperience()!=null ?  addressbook.getWorkingYearExperience() : ""%><br>工作经历:<span style="color: #ec2028;">(*) </span></label></td>
 					</tr>
 
 					<tr>
@@ -149,19 +171,19 @@ table{
 					<%for(Iterator itr  = addressbook.getCandidateFamilyInfos().iterator() ; itr.hasNext() ; ){
 				     CandidateFamilyInfo candidateFamilyInfo = (CandidateFamilyInfo) itr.next();%>
 					<tr>
-						<td><label>Name:<%=candidateFamilyInfo.getName()!=null ? candidateFamilyInfo.getName() : ""%><br>名字:</label>
+						<td><label>Name:<%=candidateFamilyInfo.getName()!=null ? candidateFamilyInfo.getName() : ""%><br>家庭成员:</label>
 						</td>
-						<td><label>Unit:<%=candidateFamilyInfo.getUnit()!=null ?  candidateFamilyInfo.getUnit() : ""%><br>单元:</label>
+						<td><label>Unit:<%=candidateFamilyInfo.getUnit()!=null ?  candidateFamilyInfo.getUnit() : ""%><br>单位:</label>
 						</td>
 					</tr>
 					<tr>
-						<td><label>Position:<%=candidateFamilyInfo.getPosition()!=null ? candidateFamilyInfo.getPosition()  : "" %><br>位置:</label>
+						<td><label>Position:<%=candidateFamilyInfo.getPosition()!=null ? candidateFamilyInfo.getPosition()  : "" %><br>职位:</label>
 						</td>
 						<td><label>Relationship:<%=candidateFamilyInfo.getRelationship()!=null? candidateFamilyInfo.getRelationship() : ""%><br>关系:</label>
 						</td>
 					</tr>
 				 	 <tr>
-						<td><label>Occupation:<%=candidateFamilyInfo.getOccupation()!=null ? candidateFamilyInfo.getOccupation() : ""%><br>占用:</label>
+						<td><label>Occupation:<%=candidateFamilyInfo.getOccupation()!=null ? candidateFamilyInfo.getOccupation() : ""%><br>职业:</label>
 						</td>
 						<td><label>Phone:<%=candidateFamilyInfo.getPhoneNo()!=null ? candidateFamilyInfo.getPhoneNo() : ""%><br>电话:</label>
 						</td>
@@ -172,7 +194,7 @@ table{
 					</tr>
 					<tr>
 						<!-- <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>WORK EXPERIENCE</label></td> -->
-						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>工作经验</label></td>
+						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>工作经历</label></td>
 					</tr>
 					<%for(Iterator itr  = addressbook.getCandidateWorkExperiences().iterator() ; itr.hasNext() ; ){
 						CandidateWorkExperience candidateWorkExp=(CandidateWorkExperience)itr.next();%>
@@ -183,16 +205,16 @@ table{
 						</td>
 					</tr>
 					<tr>
-					<td><label>Witness:<%=candidateWorkExp.getWitness()!=null ? candidateWorkExp.getWitness() : ""%><br>见证:</label></td>
-					<td><label>Unit:<%=candidateWorkExp.getUnit()!=null ? candidateWorkExp.getUnit() : "" %><br>单元:</label></td>
+					<td><label>Witness:<%=candidateWorkExp.getWitness()!=null ? candidateWorkExp.getWitness() : ""%><br>证明人:</label></td>
+					<td><label>Unit:<%=candidateWorkExp.getUnit()!=null ? candidateWorkExp.getUnit() : "" %><br>单位:</label></td>
 					</tr>
 				  <tr>
-						<td><label>Occupation:<%=candidateWorkExp.getOccupation()!=null ? candidateWorkExp.getOccupation() : ""%><br>占用:</label></td>
-						<td><label>Witness Contact Number :<%=candidateWorkExp.getWitnessContactNo()!=null ? candidateWorkExp.getWitnessContactNo() : "" %><br>见证 联系 号码:</label>	</td>
+						<td><label>Occupation:<%=candidateWorkExp.getOccupation()!=null ? candidateWorkExp.getOccupation() : ""%><br>职业:</label></td>
+						<td><label>Witness Contact Number :<%=candidateWorkExp.getWitnessContactNo()!=null ? candidateWorkExp.getWitnessContactNo() : "" %><br>证明人电话:</label>	</td>
 					</tr>
 					  <tr>
 						<td><label>Income:<%=candidateWorkExp.getIncome()!=null ? candidateWorkExp.getIncome() : ""%><br>收入:</label></td>
-						<td><label>Position:<%=candidateWorkExp.getPosition()!=null ? candidateWorkExp.getPosition() : ""%><br>位置:</label></td>
+						<td><label>Position:<%=candidateWorkExp.getPosition()!=null ? candidateWorkExp.getPosition() : ""%><br>职位:</label></td>
 						
 					</tr>
 					<%} %>
@@ -200,8 +222,36 @@ table{
 						<td colspan="2"></td>
 					</tr>
 					<tr>
+						<!-- <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>EDUCATION</label></td> -->
+						 <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>教育经历</label></td>
+					</tr>
+					<%	for(Iterator itr  = addressbook.getCandidateEducations().iterator(); itr.hasNext() ; ){
+						CandidateEducation candidateEducation= (CandidateEducation)itr.next();%>
+					<tr>
+						<td><label>Start Date:<%=candidateEducation.getStartDate()!=null? format.format(candidateEducation.getStartDate()):""%><br>开始 日期:</label>
+						</td>
+						<td><label>End Date:<%=candidateEducation.getEndDate()!=null ? format.format(candidateEducation.getEndDate()) : ""%><br>结束  日期:</label>
+						</td>
+					</tr>
+					<tr>
+					<td><label>Witness:<%=candidateEducation.getWitness()!=null ? candidateEducation.getWitness() : ""%><br>证明人:</label></td>
+					<td><label>Education:<%=candidateEducation.getEducation()!=null ? candidateEducation.getEducation() : ""%><br>学历:</label></td>
+					</tr>
+					<tr>
+					<td><label>Education Level:<%=candidateEducation.getEducationLevel()!=null ? candidateEducation.getEducationLevel() : ""%><br>学位:</label></td>
+					<td><label>School:<%=candidateEducation.getSchool()!=null ? candidateEducation.getSchool() : ""%><br>学校:</label></td>
+					</tr>
+					<tr>
+					<td><label>Witness Contact Number:<%=candidateEducation.getWitnessContactNo()!=null ? candidateEducation.getWitnessContactNo() : ""%><br>证明人电话:</label></td>
+					<td></td>
+					</tr>
+					<%} %>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
 						<!-- <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>PERSONAL CERTIFICATION</label></td> -->
-						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>个人认证</label></td>
+						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>专业认证</label></td>
 					</tr>
 					<%	for(Iterator itr  = addressbook.getCandidateProfessionalCertifications().iterator() ; itr.hasNext() ; ){
 						CandidateProfessionalCertification procertification=(CandidateProfessionalCertification)itr.next();%>
@@ -221,36 +271,8 @@ table{
 						<td colspan="2"></td>
 					</tr>
 					<tr>
-						<!-- <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>EDUCATION</label></td> -->
-						 <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>学历</label></td>
-					</tr>
-					<%	for(Iterator itr  = addressbook.getCandidateEducations().iterator(); itr.hasNext() ; ){
-						CandidateEducation candidateEducation= (CandidateEducation)itr.next();%>
-					<tr>
-						<td><label>Start Date:<%=candidateEducation.getStartDate()!=null? format.format(candidateEducation.getStartDate()):""%><br>开始 日期:</label>
-						</td>
-						<td><label>End Date:<%=candidateEducation.getEndDate()!=null ? format.format(candidateEducation.getEndDate()) : ""%><br>结束  日期:</label>
-						</td>
-					</tr>
-					<tr>
-					<td><label>Witness:<%=candidateEducation.getWitness()!=null ? candidateEducation.getWitness() : ""%><br>见证:</label></td>
-					<td><label>Education:<%=candidateEducation.getEducation()!=null ? candidateEducation.getEducation() : ""%><br>学历:</label></td>
-					</tr>
-					<tr>
-					<td><label>Education Level:<%=candidateEducation.getEducationLevel()!=null ? candidateEducation.getEducationLevel() : ""%><br>教育程度:</label></td>
-					<td><label>School:<%=candidateEducation.getSchool()!=null ? candidateEducation.getSchool() : ""%><br>学校:</label></td>
-					</tr>
-					<tr>
-					<td><label>Witness Contact Number:<%=candidateEducation.getWitnessContactNo()!=null ? candidateEducation.getWitnessContactNo() : ""%><br>见证 联系 号码:</label></td>
-					<td></td>
-					</tr>
-					<%} %>
-					<tr>
-						<td colspan="2"></td>
-					</tr>
-					<tr>
 						<!-- <td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>E-singnature</label></td> -->
-						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>E- singnature</label></td>
+						<td colspan="2" style=" border: 1px solid gray;background-color:lightgrey;"><label>电子签名</label></td>
 					</tr>
 					<%
 					CandidateESignature esignature=new CandidateESignature();
@@ -259,50 +281,66 @@ table{
 			 			esignature=(CandidateESignature)itr.next();
 			 		}%>
 					<tr>
-						<td><label>Branch:<%=esignature.getBranch()%><br>支公司:</label>
+						<td><label>Branch:<%=esignature.getBranch()%><br>分公司:</label>
 						</td>
-						<td><label>Servicing Department:<%=esignature.getServiceDepartment()!=null ? esignature.getServiceDepartment() : ""%><br>维修部:</label>
+						<td><label>Servicing Department:<%=esignature.getServiceDepartment()!=null ? esignature.getServiceDepartment() : ""%><br>服务部:</label>
 						</td>
 					</tr>
 					<tr>
-						<td><label>City:<%=esignature.getCity()!=null ? esignature.getCity() : ""%><br>市:</label>
+						<td><label>City:<%=esignature.getCity()!=null ? esignature.getCity() : ""%><br>城市:</label>
 						</td>
-						<td><label>Agent Code:<%=esignature.getAgentId()!=null ? esignature.getAgentId() : ""%><br>代理 代码:</label>
+						<td><label>Agent Code:<%=esignature.getAgentId()!=null ? esignature.getAgentId() : ""%><br>代码:</label>
 						</td>
 					</tr>
 						<tr>
+						<%
+						String ins = "";
+						if(esignature.getAtachedWithInsuranceCo()!=null && esignature.getAtachedWithInsuranceCo())
+							ins = "是";
+						else
+							ins = "否";
+						%>
 						<!-- <td colspan="2">Presently attached with another insurance Company ? Yes No</td> -->
-						<td colspan="2">目前连接与另一家保险公司 ? 是  没有</td>
+						<td colspan="2">目前是否同时与其他保险公司联络？(<%=ins %>)</td>
 						<td></td>
 					</tr>
 					<tr>
+					<%if(esignature.getContactWithAia()!=null && esignature.getContactWithAia())
+							ins = "是";
+						else
+							ins = "否";
+						%>
 						<!-- <td colspan="2">Presently in contact with any other AIA'S servicing Department ? Yes No</td> -->
-						<td colspan="2">目前与任何其他友邦保险的维修部联系 ? 是  没有</td>
+						<td colspan="2">目前是否正同时与友邦保险其他业务主管接洽？（若是，请写明姓名) (<%=ins %>)</td>
 						<td></td>
 					</tr>
 					<tr>
+					<%if(esignature.getTakenPspTest()!=null && esignature.getTakenPspTest())
+							ins = "是";
+						else
+							ins = "否";
+						%>
 						<!-- <td colspan="2">Taken LOMBRA occupational test or PSP test in the past ? If Yes, Yes No</td> -->
-						<td colspan="2">在过去采取LOMBRA职业测试或PSP测试 ? 如是，是  没有</td>
+						<td colspan="2">过去是否增经接受过LIMRA职业选择（CC）测评或个人风格（PSP）测评？（若是，请写明结果) (<%=ins %>)</td>
 						<td></td>
 					</tr>
-						<tr>
-						<!-- <td colspan="2">Please provide the result.</td> -->
+					<!-- 	<tr>
+						 <td colspan="2">Please provide the result.</td>
 						<td colspan="2">请提供结果.</td>
 						<td></td>
-					</tr>
+					</tr> -->
 					<tr>
-						<td colspan="2">Applicant's Declaration<br>申请人的声明</td>
+						<td colspan="2">Applicant's Declaration<br>申请人声明</td>
 						<td></td>
 					</tr>
 						<tr>
-						<td>Application Date:<br>申请日期:<br><%=esignature.getApplicationDate()!=null ? format.format(esignature.getApplicationDate()) : ""%>
+						<td>Application Date:<%=esignature.getApplicationDate()!=null ? format.format(esignature.getApplicationDate()) : ""%><br>申请日期:
 						</td>
-						<td>Applicant/Candidate Name:<br>您的姓名:<br><%=esignature.getCandidateName()!=null?esignature.getCandidateName():"" %></td>
+						<td>Applicant/Candidate Name:<%=esignature.getCandidateName()!=null?esignature.getCandidateName():"" %><br>申请人:</td>
 					</tr>
 					
 					<tr>
-						<td>E-Signature :
-						</td>
+						<td>E-Signature:<br>电子签名:</td>
 						<td>
 						<%
 						String path = interviewMaintenance.getmaterialFile(esignature,request);
