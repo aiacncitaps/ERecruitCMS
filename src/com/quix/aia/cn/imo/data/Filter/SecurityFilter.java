@@ -82,6 +82,7 @@ public class SecurityFilter implements Filter {
 				httpResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0
 				httpResponse.setHeader("Expires", "0"); // Proxies.
 				httpRequest.setCharacterEncoding("UTF-8");
+				httpResponse.setHeader("X-Content-Type-Options", "");
 			}
 
 			// It can be done JBoss or web.xml. In this project we have done in web.xml
