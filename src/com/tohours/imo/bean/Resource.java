@@ -1,14 +1,24 @@
 package com.tohours.imo.bean;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.EL;
+import org.nutz.dao.entity.annotation.Many;
+import org.nutz.dao.entity.annotation.Name;
+import org.nutz.dao.entity.annotation.Prev;
 import org.nutz.dao.entity.annotation.Table;
 
 @Table("attract_resource")
 public class Resource extends BasePojo {
 
-	@Id
-	private int id;
+	public  String uuid(){
+        return UUID.randomUUID().toString();
+    }
+	@Name
+	@Prev(els={@EL("$me.uuid()")})
+	private String id;
 	@Column
 	private String title;
 	@Column
@@ -29,12 +39,14 @@ public class Resource extends BasePojo {
 	private Boolean deleteFlag;
 	@Column
 	private String fileIds;
-	
-	
-	public int getId() {
+	@Many(target=Children.class,field="resourceId")
+	List<Children> chilerenList;
+	@Column
+	private Integer squence;
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getTitle() {
@@ -96,6 +108,18 @@ public class Resource extends BasePojo {
 	}
 	public void setFileIds(String fileIds) {
 		this.fileIds = fileIds;
+	}
+	public List<Children> getChilerenList() {
+		return chilerenList;
+	}
+	public void setChilerenList(List<Children> chilerenList) {
+		this.chilerenList = chilerenList;
+	}
+	public Integer getSquence() {
+		return squence;
+	}
+	public void setSquence(Integer squence) {
+		this.squence = squence;
 	}
 	
 	

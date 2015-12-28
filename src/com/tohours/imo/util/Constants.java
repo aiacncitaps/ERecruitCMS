@@ -1,31 +1,10 @@
-/*******************************************************************************
-* -----------------------------------------------------------------------------
-* <br>
-* <p><b>Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.</b> 
-* <br>
-* <br>
-* This SOURCE CODE FILE, which has been provided by Quix as part
-* of a Quix Creations product for use ONLY by licensed users of the product,
-* includes CONFIDENTIAL and PROPRIETARY information of Quix Creations.
-* <br>
-* USE OF THIS SOFTWARE IS GOVERNED BY THE TERMS AND CONDITIONS
-* OF THE LICENSE STATEMENT AND LIMITED WARRANTY FURNISHED WITH
-* THE PRODUCT.<br>
-* <br>
-* </p>
-* -----------------------------------------------------------------------------
-* <br>
-* <br>
-* Modification History:
-* Date              Developer          Change Description
-* 07-May-2015       Jay          
-* 
-****************************************** *********************************** */
 package com.tohours.imo.util;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 public class Constants {
@@ -36,6 +15,7 @@ public class Constants {
 	public static final Long RESOURCE_TYPE_GUIDE=3L;//引导页资源
 	public static final Long RESOURCE_TYPE_OBJECTIVE_ELEMENTS=4L;//十大要素
 	public static final Long RESOURCE_TYPE_AIA_ELEMENTS=5L;//友邦十大要素
+	private static final String API_ISP_URL = "/isp/rest/index.do?isAjax=true&account=%s&co=%s&password=%s&sys=wechat&type=0";
 	
 	public static final String FILE_PATH = "/attract/uploads";
 	
@@ -46,7 +26,7 @@ public class Constants {
 	static{
 		RESOURCE_TYPE.put(RESOURCE_TYPE_INDEX, "首页资源");
 		RESOURCE_TYPE.put(RESOURCE_TYPE_TEST, "测试资源");
-		RESOURCE_TYPE.put(RESOURCE_TYPE_OBJECTIVE_ELEMENTS, "十大要素");
+		RESOURCE_TYPE.put(RESOURCE_TYPE_OBJECTIVE_ELEMENTS, "理想事业");
 		RESOURCE_TYPE.put(RESOURCE_TYPE_GUIDE, "引导页资源");
 		RESOURCE_TYPE.put(RESOURCE_TYPE_AIA_ELEMENTS, "友邦十大要素");
 	}
@@ -56,6 +36,22 @@ public class Constants {
 		return keys.contains(resourceType);
 	}
 	
+	public static String ispUrl(HttpServletRequest request){
+		String host = request.getHeader("Host");
+		if(isNotEmpty(host) && host.indexOf("uat.aia.com.cn") >= 0){
+			return  "http://10.64.55.68" + API_ISP_URL;
+ 		} else if(isNotEmpty(host) && host.indexOf("aes.aia.com.cn") >= 0){
+			return  "https://aes.aia.com.cn" + API_ISP_URL;
+ 		} else {
+			return "http://211.144.219.243" + API_ISP_URL;
+		}
+	}
+	private static Boolean isNotEmpty(String str){
+		if(str != null && !"".equals(str)){
+			return true;
+		}
+		return false;
+	}
 	public static final Boolean isTest = true;
 }
 

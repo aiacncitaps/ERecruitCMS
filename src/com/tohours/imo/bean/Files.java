@@ -1,14 +1,22 @@
 package com.tohours.imo.bean;
 
+import java.util.UUID;
+
 import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.EL;
+import org.nutz.dao.entity.annotation.Name;
+import org.nutz.dao.entity.annotation.Prev;
 import org.nutz.dao.entity.annotation.Table;
 
 @Table("attract_files")
 public class Files extends BasePojo {
 
-	@Id
-	private int id;
+	public  String uuid(){
+        return UUID.randomUUID().toString();
+    }
+	@Name
+	@Prev(els={@EL("$me.uuid()")})
+	private String id;
 	@Column
 	private String name;
 	@Column
@@ -18,12 +26,12 @@ public class Files extends BasePojo {
 	@Column
 	private byte[] data;
 	@Column
-	private int resourceId;
+	private String resourceId;
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -44,10 +52,10 @@ public class Files extends BasePojo {
 	public void setData(byte[] data) {
 		this.data = data;
 	}
-	public int getResourceId() {
+	public String getResourceId() {
 		return resourceId;
 	}
-	public void setResourceId(int resourceId) {
+	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
 	}
 	public String getContentType() {

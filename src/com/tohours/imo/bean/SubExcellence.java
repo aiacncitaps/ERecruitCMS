@@ -1,15 +1,22 @@
 package com.tohours.imo.bean;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.EL;
 import org.nutz.dao.entity.annotation.Many;
+import org.nutz.dao.entity.annotation.Name;
+import org.nutz.dao.entity.annotation.Prev;
 import org.nutz.dao.entity.annotation.Table;
 @Table("attract_sub_excellence")
 public class SubExcellence extends BasePojo{
-	@Id
-	private int id;
+	public  String uuid(){
+        return UUID.randomUUID().toString();
+    }
+	@Name
+	@Prev(els={@EL("$me.uuid()")})
+	private String id;
 	@Column
 	private String name;
 	@Column
@@ -27,9 +34,12 @@ public class SubExcellence extends BasePojo{
 	@Many(target = Peoples.class,field="sub_excel_id")
 	private List<Peoples> peoplesList;
 	@Column
-	private int top_excel_id;
+	private String top_excel_id;
 	@Column
 	private Boolean deleteFlag;
+	@Column
+	private Integer squence;//序列号
+	
 	public String getName() {
 		return name;
 	}
@@ -72,10 +82,10 @@ public class SubExcellence extends BasePojo{
 	public void setFileIds(String fileIds) {
 		this.fileIds = fileIds;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public List<Peoples> getPeoplesList() {
@@ -84,10 +94,10 @@ public class SubExcellence extends BasePojo{
 	public void setPeoplesList(List<Peoples> peoplesList) {
 		this.peoplesList = peoplesList;
 	}
-	public int getTop_excel_id() {
+	public String getTop_excel_id() {
 		return top_excel_id;
 	}
-	public void setTop_excel_id(int top_excel_id) {
+	public void setTop_excel_id(String top_excel_id) {
 		this.top_excel_id = top_excel_id;
 	}
 	public Boolean getDeleteFlag() {
@@ -96,5 +106,10 @@ public class SubExcellence extends BasePojo{
 	public void setDeleteFlag(Boolean deleteFlag) {
 		this.deleteFlag = deleteFlag;
 	}
-	
+	public Integer getSquence() {
+		return squence;
+	}
+	public void setSquence(Integer squence) {
+		this.squence = squence;
+	}
 }

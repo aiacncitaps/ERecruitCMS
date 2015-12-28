@@ -21,15 +21,55 @@
 	</div>
 </form></section>
 <section class="table">
+<input type="button" value="排序" class="paixu" onclick="squence();">
 <ul class="table_list">
 	<li class="cf title">
-		<p class="column1"><span>名字</span></p>
-		<p class="column2"><span>加入时间</span></p>
-		<p class="column3"><span>资源</span></p>
-		<p class="column4"><span>编辑</span></p>
+		<p class="column1" style="width:10%"><span>名字</span></p>
+		<p class="column2" style="width:20%"><span>加入时间</span></p>
+		<p class="column3" style="width:30%"><span>资源</span></p>
+		<p class="column4" style="width:20%"><span>序号</span></p>
+		<p class="column4" style="width:20%"><span>编辑</span></p>
 	</li>
 </ul></section>
 <script type="text/javascript">
+function squence(){
+	var arrSqu = new Array();
+	var arrPeoplesId = new Array();
+	var index='';
+	$('ul').find(".squ").each(function(i){
+		var reg=/^[0-9]+$/;
+		arrSqu[i]=$(this).val();
+	   if(arrSqu[i] != ''){
+		   if(!reg.test(arrSqu[i].trim())){
+			   //alert("第"+(i+1)+"个不是数字"+arr[i].trim());
+			   index+=i+1+',';
+		   }
+	   }else{
+		   arrSqu[i]='-';
+	   }
+	});
+	$('ul').find(".peoplesId").each(function(i){
+		arrPeoplesId[i]=$(this).val();
+	});
+	//alert(arrTopId.join('')+"/"+arrSqu.join(''));
+	if(index != ''){
+		alert('第'+index+'不是数字，请重新输入');
+	}else{
+		//alert(arrSqu.length+"/"+arrTopId.length);
+		$.ajax({
+			url : 'updateSqu',
+			data : 'id='+arrPeoplesId.join(',')+'&squence='+arrSqu.join(',')+'&type=peoples',
+			dataType : "json",
+			success : function(data) {
+				if(data.success){
+					alert("更新成功");
+				}
+			}
+		});
+		listReload();
+		window.location.reload();
+	}
+}
 	function listReload(){
 		showLoading('加载中...');
 		$.ajax({
@@ -51,16 +91,28 @@
 				for(var i = 0;i<list.length;i++){
 					var bean = list[i];
 					var name = bean.name == null || bean.name == "undefined" ? "":bean.name;
+					console.log('name is :'+name);
 					var joinDate = bean.joinDate == null || bean.joinDate == "undefined" ? "":bean.joinDate;
 					var fileId = bean.fileId == null || bean.fileId == "undefined" ? "":bean.fileId;
 					
 					var light = 'data-lightbox="example-{0}"'.format(fileId);
 					
-					html=html+"<li class=\"cf\"><p class=\"column1\"><span>"+name+"</span></p><p class=\"column2\"><span>"+joinDate+"</span></p>";
-					html += '<p class="column3"><span>';
+					html=html+"<li class=\"cf\"><p class=\"column1\" style=\"width:9.8%\"><span>"+name+"</span></p><p class=\"column2\" style=\"width:20%\"><span>"+joinDate+"</span></p>";
+					html += '<p class="column3" style="width:30%"><span>';
 					html += '<a class="file-icon" href="resourceFile?id={0}" {1} title="{3}"><img src="static/images/{2}-icon.jpg"/></a>'.format(bean.fileId, light, "img", bean.fileName);
 					html += '</span></p>';
-					html += '<p class="column4"><span>';
+					html += '<p class="column4" style="width:20%;"><span>';
+					var squ=bean.squence;
+					var reg=/^[0-9]+$/;
+					if(!reg.test(squ)){
+						squ='';
+					}
+					if(bean.squence == null){
+						squ='';
+					}
+					html += '<input type="text" value="{0}" class="inp squ"></span></p>.'.format(squ);
+					html += '<p class="column4" style="width:19.5%"><span>';
+					html +='	<input type="hidden" value="{0}" class="peoplesId">'.format(bean.id);
 					html += '	<a class="edit" href="javascript:;" onclick="edit(\'{0}\',\'{1}\');"></a>'.format(bean.id,bean.sub_excel_id);
 					html += '	<a class="delete" href="javascript:;" onclick="del(\'{0}\');"></a>'.format(bean.id);
 					html += '</span></p>';

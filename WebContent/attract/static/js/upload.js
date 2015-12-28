@@ -5,17 +5,17 @@
 			secureuri: false,
 			fileElementId: id,
 			dataType: 'text',
-			beforeSend: function() {
+			beforeSend: function(data) {
 			},
 			complete: function() {
 			},
 			success: function(data, status) {
 				closeLoading();
-				console.log(data);
 				data = data.replace(/<[^>]*>/ig, '');
 				data = tohours.parseJSON(data);
 				if(data && data.ok){
 					addToForm(id, data.path, data.name, data.contentType);
+					console.log(id+'--'+data.path+'--'+ data.name+'--'+ data.contentType);
 					//新增的start
 					addTopeoples(id,data.path, data.name, data.contentType);
 					//end
@@ -42,7 +42,8 @@
 		parent.find('input[name="fileNames"]').val(name);
 		parent.find('input[name="contentTypes"]').val(contentType);
 		parent.find('input[name="fileIds"]').val(fileId ? fileId : '');
-		
+		console.log('filePaths is :'+parent.find('input[name="filePaths"]').val());
+		console.log('fileIds is :'+parent.find('input[name="fileIds"]').val());
 
 //		var isImg = contentType.indexOf('image') >= 0;
 //		var icon = isImg ? 'img':'file';
