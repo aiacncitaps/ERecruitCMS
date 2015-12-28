@@ -30,7 +30,7 @@ function submitForm()
 
 </head>
 
-<body>
+<body onload="dwr.engine.setActiveReverseAjax(true);">
 <%
 String version = "";
 session.removeAttribute(SessionAttributes.CURR_USER_OBJ);
@@ -130,7 +130,7 @@ if(application.getAttribute(ApplicationAttribute.LATEST_JS_CSS_VERSION)!=null)
 							 <div class="grid_12 MT25">
 						<div style="float:right;">
 						 <a  style="color: white; font-size: 12px; text-decoration: none; " href="Terms&Condition/Tearms.docx">条款与条件</a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color: white; font-size: 12px; text-decoration: none;" href="Terms&Condition/Preivacy.docx">隐私声明</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						Version : 1.11</div> Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. 
+						Version : 1.16</div> Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. 
 					</div> <%-- <%=version %> --%>
 				</div>
 	 </div>

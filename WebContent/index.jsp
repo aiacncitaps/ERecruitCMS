@@ -87,7 +87,7 @@ function noBack(){
 <%User user = ((com.quix.aia.cn.imo.data.user.User)request.getSession().getAttribute(SessionAttributes.CURR_USER_OBJ));
 PageObj pageObj = (PageObj)request.getSession().getAttribute("pageObj");
 %>
-<body  onload="noBack();"  oncontextmenu="return false;" onpageshow="if (event.persisted) noBack();" onunload=""  onkeydown="return (event.keyCode != 116)">
+<body  onload="dwr.engine.setActiveReverseAjax(true);noBack();"  oncontextmenu="return false;" onpageshow="if (event.persisted) noBack();" onunload=""  onkeydown="return (event.keyCode != 116)">
 
 	<div class="page-wrap" align="center">
 					<%if(user!=null && pageObj != null &&!pageObj.getKey().equalsIgnoreCase("ViewEapplicationForm") ){ %>

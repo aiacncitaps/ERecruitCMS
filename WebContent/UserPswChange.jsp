@@ -72,7 +72,7 @@ else{
 </script>
 </head>
 
-<body>
+<body onload="dwr.engine.setActiveReverseAjax(true);"  >
 
 <div class="page-wrap" >
 					<div id="header" >

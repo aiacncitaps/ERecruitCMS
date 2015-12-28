@@ -1,4 +1,3 @@
-
 function getBU(bucode,txt){
   
 	$('#ajaxLoader').find(".lightbox").show();
