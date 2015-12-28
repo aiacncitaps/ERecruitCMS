@@ -1,12 +1,20 @@
 package com.tohours.imo.bean;
 
+import java.util.UUID;
+
 import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.EL;
+import org.nutz.dao.entity.annotation.Name;
+import org.nutz.dao.entity.annotation.Prev;
 import org.nutz.dao.entity.annotation.Table;
 @Table("attract_peoples")
 public class Peoples extends BasePojo{
-	@Id
-	private int id;
+	public  String uuid(){
+        return UUID.randomUUID().toString();
+    }
+	@Name
+	@Prev(els={@EL("$me.uuid()")})
+	private String id;
 	@Column
 	private String name;
 	@Column("join_date")
@@ -30,13 +38,19 @@ public class Peoples extends BasePojo{
 	@Column("new_mark")
 	private String newMark;
 	@Column
-	private int sub_excel_id;
+	private String sub_excel_id;
 	@Column
 	private Boolean deleteFlag;
-	public int getId() {
+	@Column("sub_company")
+	private String subCompany;
+	@Column
+	private String marks;
+	@Column
+	private Integer squence;//序列号
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -105,10 +119,10 @@ public class Peoples extends BasePojo{
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	public int getSub_excel_id() {
+	public String getSub_excel_id() {
 		return sub_excel_id;
 	}
-	public void setSub_excel_id(int sub_excel_id) {
+	public void setSub_excel_id(String sub_excel_id) {
 		this.sub_excel_id = sub_excel_id;
 	}
 	public Boolean getDeleteFlag() {
@@ -116,6 +130,24 @@ public class Peoples extends BasePojo{
 	}
 	public void setDeleteFlag(Boolean deleteFlag) {
 		this.deleteFlag = deleteFlag;
+	}
+	public String getSubCompany() {
+		return subCompany;
+	}
+	public void setSubCompany(String subCompany) {
+		this.subCompany = subCompany;
+	}
+	public String getMarks() {
+		return marks;
+	}
+	public void setMarks(String marks) {
+		this.marks = marks;
+	}
+	public Integer getSquence() {
+		return squence;
+	}
+	public void setSquence(Integer squence) {
+		this.squence = squence;
 	}
 	
 }

@@ -18,10 +18,14 @@
 <section class="table">
 <ul class="table_list">
 	<li class="cf title">
-		<p class="column1"><span>用户</span></p>
-		<p class="column2"><span>名字</span></p>
-		<p class="column3"><span>性别</span></p>
-		<p class="column4"><span>生日</span></p>
+		<p class="column1" style="width:15%"><span>分公司</span></p>
+		<p class="column1" style="width:15%"><span>营销员编号</span></p>
+		<p class="column1" style="width:15%"><span>营销员名称</span></p>
+		<p class="column2" style="width:10%"><span>面谈对象姓名</span></p>
+		<p class="column3" style="width:10%"><span>面谈对象性别</span></p>
+		<p class="column4" style="width:10%"><span>面谈对象生日</span></p>
+		<p class="column4" style="width:15%"><span>职业评估报告</span></p>
+		<p class="column4" style="width:10%"><span>报告生成日期</span></p>
 	</li>
 </ul></section>
 <script type="text/javascript">
@@ -45,12 +49,31 @@
 				var html="";
 				for(var i = 0;i<list.length;i++){
 					var bean = list[i];
-					var userId = bean.userId == null || bean.userId == "undefined" ? "":bean.userId;
+					var agentName = bean.agentName == null || bean.agentName == "undefined" ? "":bean.agentName;
+					var subCompanyId = bean.subCompanyId == null || bean.subCompanyId == "undefined" ? "":bean.subCompanyId;
 					var name = bean.name == null || bean.name == "undefined" ? "":bean.name;
-					var sex = bean.sex == null || bean.sex == "undefined" ? "":bean.sex;
+					var sex = bean.sex == null || bean.sex == "undefined" ? "":bean.sex==1?"男":"女";
 					var birthday = bean.birthday == null || bean.birthday == "undefined" ? "":bean.birthday;
-					
-					html=html+"<li class=\"cf\"><p class=\"column1\"><span>"+userId+"</span></p><p class=\"column2\"><span>"+name+"</span></p>\<p class=\"column3\"><span>"+sex+"</span></p>\<p class=\"column4\"><span>"+birthday+"</span></p>\</li>";
+					var agentCode=bean.agentCode == null || bean.agentCode == "undefined" ? "":bean.agentCode;
+					var insertTime = bean.insertTime == null || bean.insertTime == "undefined" ? "":bean.insertTime;
+					var reportId = bean.reportId;
+					var reportFileName=bean.reportFileName;
+					var resource='';
+					if(reportId != null){
+						var icon = 'img';
+						var light ='data-lightbox="example-{0}"'.format(reportId);
+						resource="<a class=\"file-icon\" href=\"reportFile?id={0}\" {1} title=\"{3}\"><img src=\"static/images/{2}-icon.jpg\"/></a>".format(reportId, light, icon, reportFileName);
+					}
+					html=html+"<li class=\"cf\">"+
+					"<p class=\"column1\" style=\"width:15%;\"><span style=\"text-align:center;\">"+subCompanyId+"</span></p>"+
+					"<p class=\"column1\" style=\"width:15%\"><span style=\"text-align:center;\">"+agentCode+"</span></p>"+
+					"<p class=\"column1\" style=\"width:14.8%;\"><span style=\"text-align:center;\">"+agentName+"</span></p>"+
+					"<p class=\"column2\" style=\"width:10%\"><span style=\"text-align:center;\">"+name+"</span></p>"+
+					"<p class=\"column3\" style=\"width:10%\"><span style=\"text-align:center;\">"+sex+"</span></p>"+
+					"<p class=\"column4\" style=\"width:10%\"><span style=\"text-align:center;\">"+birthday+"</span></p>"+
+					"<p class=\"column4\" style=\"width:15%\"><span>"+resource+"</span></p>"+
+					"<p class=\"column4\" style=\"width:10%;text-align:center;\"><span style=\"text-align:center;\">"+insertTime+"</span></p>"+
+					"</li>";
 				}
 				$('.table_list').append(html);
 				if(list.length == 0){

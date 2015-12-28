@@ -3,13 +3,14 @@
 <%@ page import="com.tohours.imo.util.TohoursUtils" %>
 <%
 	Resource resource = (Resource)request.getAttribute("obj");
-	int id = resource.getId();
+	String id = resource.getId();
 	Long type = resource.getType();
 	String title = TohoursUtils.dealNull(resource.getTitle());
 	String content = TohoursUtils.dealNull(resource.getContent());
 	String fileNames = TohoursUtils.dealNull(resource.getFileNames());
 	String filePaths = TohoursUtils.dealNull(resource.getFilePaths());
 %>
+
 
 <%@ include file="inc-top.jsp" %>
 <h2 class="page_title">管理首页资源</h2>

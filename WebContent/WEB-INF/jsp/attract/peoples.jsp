@@ -6,8 +6,8 @@
 <%@ include file="inc-top.jsp" %>
 <%
 	Peoples peoples = (Peoples)obj.get("peoples");
-
 	String name = "";
+	String subCompany="";
 	String joinDate = "";
 	String oldJob = "";
 	String fileName = "";
@@ -18,9 +18,11 @@
 	String id = "";
 	String oldMark="";
 	String newMark="";
+	String marks="";
 	if(peoples != null){
 		 id = TohoursUtils.dealNull(peoples.getId() + "");
 		 name = TohoursUtils.dealNull(peoples.getName());
+		 subCompany=TohoursUtils.dealNull(peoples.getSubCompany());
 		 oldJob = TohoursUtils.dealNull(peoples.getOldJob());
 		 joinDate = TohoursUtils.dealNull(peoples.getJoinDate());
 		 shareWord = TohoursUtils.dealNull(peoples.getShareWord());
@@ -30,6 +32,7 @@
 		 fileId = TohoursUtils.dealNull(peoples.getFileId()+"");
 		 oldMark=TohoursUtils.dealNull(peoples.getOldMark());
 		 newMark=TohoursUtils.dealNull(peoples.getNewMark());
+		 marks=TohoursUtils.dealNull(peoples.getMarks());
 	} 
 %>
 
@@ -43,6 +46,10 @@
 		<div class="input_box">
 			<label class="label">姓名：</label>
 			<div class="input_border radius"><input type="text" name="name" value="<%=name%>"></div>
+		</div>
+		<div class="input_box">
+			<label class="label">分公司名称：</label>
+			<div class="input_border radius"><input type="text" name="subCompany" value="<%=subCompany%>"></div>
 		</div>
 			<div class="input_box">
 			<label class="label">入司时间：</label>
@@ -74,7 +81,7 @@
 		<div style="width:900px;height:50px;border:1px solid gray;text-align:center;line-height:50px;margin-bottom:17px;margin-left:-300px;">
 			昨日与今日
 		</div>
-		
+		<!-- --------------------------------------------- -->
 		<div class="input_box">
 			<label class="label">名称1</label>
 			<div class="input_border radius"><input type="text" name="markName" value=""></div>
@@ -89,8 +96,11 @@
 			<label class="label">新评分</label>
 			<div class="input_border radius"><input type="text" name="newMark" value=""></div>
 		</div>
-		
-		
+		<div class="input_box">
+			<label class="label">描述</label>
+			<div class="input_border radius"><input type="text" name="desc" value=""></div>
+		</div>
+		<!-- --------------------------------------------- -->
 		<div class="input_box">
 			<label class="label">名称2</label>
 			<div class="input_border radius"><input type="text" name="markName" value=""></div>
@@ -105,7 +115,11 @@
 			<label class="label">新评分</label>
 			<div class="input_border radius"><input type="text" name="newMark" value=""></div>
 		</div>
-		
+		<div class="input_box">
+			<label class="label">描述</label>
+			<div class="input_border radius"><input type="text" name="desc" value=""></div>
+		</div>
+		<!-- --------------------------------------------- -->
 		<div class="input_box">
 			<label class="label">名称3</label>
 			<div class="input_border radius"><input type="text" name="markName" value=""></div>
@@ -121,6 +135,11 @@
 			<div class="input_border radius"><input type="text" name="newMark" value=""></div>
 		</div>
 		<div class="input_box">
+			<label class="label">描述</label>
+			<div class="input_border radius"><input type="text" name="desc" value=""></div>
+		</div>
+		<!-- --------------------------------------------- -->
+		<div class="input_box">
 			<label class="label">名称4</label>
 			<div class="input_border radius"><input type="text" name="markName" value=""></div>
 		</div>
@@ -135,6 +154,11 @@
 			<div class="input_border radius"><input type="text" name="newMark" value=""></div>
 		</div>
 		<div class="input_box">
+			<label class="label">描述</label>
+			<div class="input_border radius"><input type="text" name="desc" value=""></div>
+		</div>
+		<!-- --------------------------------------------- -->
+		<div class="input_box">
 			<label class="label">名称5</label>
 			<div class="input_border radius"><input type="text" name="markName" value=""></div>
 		</div>
@@ -148,6 +172,11 @@
 			<label class="label">新评分</label>
 			<div class="input_border radius"><input type="text" name="newMark" value=""></div>
 		</div>
+		<div class="input_box">
+			<label class="label">描述</label>
+			<div class="input_border radius"><input type="text" name="desc" value=""></div>
+		</div>
+		<!-- --------------------------------------------- -->
 		<div class="input_box btn_box cf">
 			<div class="input_border submit_border"><input type="button" id="btnSubmit"></div>
 		</div>
@@ -159,17 +188,17 @@
 		var filePath = '<%=filePath%>';
 		var contentType = '<%=contentType%>';
 		var fileId = '<%=fileId%>';
-		<% if("".equals(oldMark) == false){%>
+		
+		<% if("".equals(marks) == false){%>
 			var oldMark=<%=oldMark%>;
 			var newMark=<%=newMark%>;
+			var marks=<%=marks%>;
 			if(oldMark && newMark){
-				for (var i = 0; i < oldMark.length; i++) {
-					$('input[name="markName"]').eq(i).val(oldMark[i].name);
-					$('input[name="oldMark"]').eq(i).val(oldMark[i].mark);
-				}
-				
-				for (var i = 0; i < newMark.length; i++) {
-					$('input[name="newMark"]').eq(i).val(newMark[i].mark);
+				for (var i = 0; i < marks.length; i++) {
+					$('input[name="markName"]').eq(i).val(marks[i].name);
+					$('input[name="oldMark"]').eq(i).val(marks[i].old_mark);
+					$('input[name="newMark"]').eq(i).val(marks[i].new_mark);
+					$('input[name="desc"]').eq(i).val(marks[i].desc);
 				}
 			}
 		<%}%>

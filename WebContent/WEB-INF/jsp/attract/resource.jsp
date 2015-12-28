@@ -329,6 +329,7 @@
 		}
 		$('#btnSubmit').click(function(){
 			var data = $('#myForm').serialize();
+			console.log('文件大小'+data);
 			//alert(data);
 			showLoading('正在提交...');
 			$.ajax({
@@ -347,8 +348,29 @@
 				}
 			});
 		});
-		
+		//上传文件大小  start
+		var isIE = /msie/i.test(navigator.userAgent) && !window.opera;         
+		  function fileChange(target) {     
+		      
+		    var fileSize = 0;          
+		    if (isIE && !target.files) {      
+		      var filePath = target.value;      
+		      var fileSystem = new ActiveXObject("Scripting.FileSystemObject");         
+		      var file = fileSystem.GetFile (filePath);      
+		      fileSize = file.Size;     
+		    } else {     
+		     fileSize = target.files[0].size;      
+		     }    
+		     var size = fileSize / 1024; 
+		     console.log(size);
+		     if(size>10000){   
+		      alert("附件不能大于10M");   
+		     }   
+		}
+		  
+		 //end 
 		$('input[name="file"]').change(function(){
+			fileChange(this);
 			ajaxUpload('upload', $(this).attr('id'));
 		});
 		

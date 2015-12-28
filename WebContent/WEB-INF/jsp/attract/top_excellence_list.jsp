@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" href="static/css/lightbox.css">
 <script type="text/javascript" src="static/js/lightbox.js"></script>
-<h2 class="page_title"></h2>
+<h2 class="page_title">topExcellence</h2>
 <section class="form">
 <form id="queryForm">
 		<input type="hidden" name="pageNumber" id="pageNumber" value="1">
@@ -18,14 +18,54 @@
 	</div>
 </form></section>
 <section class="table">
+<input type="button" value="排序" class="paixu" onclick="squence();">
 <ul class="table_list">
 		<li class="cf title">
 			<p class="column1" style="width:30%;"><span>标题</span></p>
-			<p class="column3" style="width:50%;"><span>资源</span></p>
-			<p class="column2" style="width:20%;"><span>编辑</span></p>
+			<p class="column2" style="width:30%;"><span>资源</span></p>
+			<p class="column3" style="width:20%;"><span>序号</span></p>
+			<p class="column4" style="width:20%;"><span>编辑</span></p>
 		</li>
 </ul></section>
 <script type="text/javascript">
+	function squence(){
+		var arrSqu = new Array();
+		var arrTopId = new Array();
+		var index='';
+		$('ul').find(".squ").each(function(i){
+			var reg=/^[0-9]+$/;
+			arrSqu[i]=$(this).val();
+		   if(arrSqu[i] != ''){
+			   if(!reg.test(arrSqu[i].trim())){
+				   //alert("第"+(i+1)+"个不是数字"+arr[i].trim());
+				   index+=i+1+',';
+			   }
+		   }else{
+			   arrSqu[i]='-';
+		   }
+		});
+		$('ul').find(".topId").each(function(i){
+			arrTopId[i]=$(this).val();
+		});
+		//alert(arrTopId.join('')+"/"+arrSqu.join(''));
+		if(index != ''){
+			alert('第'+index+'不是数字，请重新输入');
+		}else{
+			//alert(arrSqu.length+"/"+arrTopId.length);
+			$.ajax({
+				url : 'updateSqu',
+				data : 'id='+arrTopId.join(',')+'&squence='+arrSqu.join(',')+'&type=top',
+				dataType : "json",
+				success : function(data) {
+					if(data.success){
+						alert("更新成功");
+					}
+				}
+			});
+			listReload();
+			window.location.reload();
+		}
+	}
 	function listReload(){
 		showLoading('加载中...');
 		$.ajax({
@@ -52,16 +92,26 @@
 					
 					var tr = '';
 						tr += '		<li class="cf">';
-						tr += '		<p class="column1" style="width:30%;"><span>{0}</span></p>'.format(bean.name);
-						tr += '		<p class="column3" style="width:50%;"><span>';
+						tr += '		<p class="column1" style="width:29.8%;"><span>{0}</span></p>'.format(bean.name);
+						tr += '		<p class="column2" style="width:30%;"><span>';
 						for(var j = 0;j<bean.fileCounts;j++){
 							var isImg = contentTypes[j].indexOf('image') >= 0;
 							var icon = isImg ? 'img':'file';
 							var light = isImg ?'data-lightbox="example-{0}"'.format(fileIds[j]):'';
 							tr += '	<a class="file-icon" href="resourceFile?id={0}" {1} title="{3}"><img src="static/images/{2}-icon.jpg"/></a>'.format(fileIds[j], light, icon, fileNames[j]);
 						}
-						tr += '		</span></p>';
-						tr += '		<p class="column2" style="width:20%;"><span>';
+						tr += '		<p class="column3" style="width:20%;"><span>';
+						var squ=bean.squence;
+						var reg=/^[0-9]+$/;
+						if(!reg.test(squ)){
+							squ='';
+						}
+						if(bean.squence == null){
+							squ='';
+						}
+						tr += '		<input type="text" value="{0}" class="inp squ"></span></p>.'.format(squ);
+						tr += '		<p class="column4" style="width:19.5%;"><span>';
+						tr +='		<input type="hidden" value="{0}" class="topId">'.format(bean.id);
 						tr += '			<a class="next" href="javascript:;" title=\"下一个\"onclick="subExcellence(\'{0}\');"></a>'.format(bean.id);
 						tr += '			<a class="edit" href="javascript:;" onclick="edit(\'{0}\');"></a>'.format(bean.id);
 						tr += '			<a class="delete" href="javascript:void(0);" onclick="del(\'{0}\');"></a>'.format(bean.id);
