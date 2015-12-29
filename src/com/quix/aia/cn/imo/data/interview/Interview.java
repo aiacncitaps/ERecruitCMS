@@ -70,9 +70,10 @@ public class Interview {
 	private int attendeeCount;
 	private int branchCode;
 	private String branchName;
-	 private String officeCode;
-	  private String officeName;
-		private Integer calendarServiceError;
+	private String officeCode;
+	private String officeName;
+	private Integer calendarServiceError;
+	private String tempFilePath;
 	  
 		
 	/**
@@ -685,4 +686,23 @@ public class Interview {
 	public void setIsRegistered(Boolean isRegistered) {
 		this.isRegistered = isRegistered;
 	}
+
+
+	/**
+	 * @return the tempFilePath
+	 */
+	public String getTempFilePath() {
+		return tempFilePath;
+	}
+
+
+	/**
+	 * @param tempFilePath the tempFilePath to set
+	 */
+	public void setTempFilePath(String tempFilePath) {
+		this.tempFilePath = tempFilePath;
+	}
+
+
+
 }

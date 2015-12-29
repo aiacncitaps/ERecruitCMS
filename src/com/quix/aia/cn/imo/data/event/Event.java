@@ -86,6 +86,7 @@ public class Event {
 	private String officeName;
 	private String attendedStatus;
 	private Integer calendarServiceError;
+	private String tempFilePath;
 	
 	 public String getOfficeCode() {
 		return officeCode;
@@ -795,6 +796,21 @@ public class Event {
 	 */
 	public void setCalendarServiceError(Integer calendarServiceError) {
 		this.calendarServiceError = calendarServiceError;
+	}
+	
+
+	/**
+	 * @return the tempFilePath
+	 */
+	public String getTempFilePath() {
+		return tempFilePath;
+	}
+
+	/**
+	 * @param tempFilePath the tempFilePath to set
+	 */
+	public void setTempFilePath(String tempFilePath) {
+		this.tempFilePath = tempFilePath;
 	}
 
 	@Override

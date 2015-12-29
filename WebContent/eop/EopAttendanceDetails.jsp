@@ -326,7 +326,7 @@ $(function(){
 			     		 <tr>                         
                    			<td colspan="17" class="MT30 MB30" style="text-align:center;padding-top:20px">
                    				<a href="#" class="btn1" onclick="submitForm();" ><%=localeObj.getTranslatedText("Update")%></a>
-       		 					<a href="<%=request.getAttribute("EopExcelPath") %>" class="ML10 btn1"><%=localeObj.getTranslatedText("Download into Excel")%></a> 
+       		 					<a href="<%=event.getTempFilePath()%>" class="ML10 btn1"><%=localeObj.getTranslatedText("Download into Excel")%></a> 
        		 					<a href="ContentManager?key=EopMaintenance" class="ML10 btn1"><%=localeObj.getTranslatedText("Back")%></a> 
                   	 		</td>                                     			   
                    		 </tr>
