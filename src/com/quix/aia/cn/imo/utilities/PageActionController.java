@@ -236,6 +236,7 @@ public class PageActionController {
 					 return egreetingMaintenance.eGreetingListing(requestParamters);
 			  }
 			  
+			  
 			 if(requestParamters.getSession().getAttribute("HOL_SEARCH_OBJ")!=null)
 				 requestParamters.getSession().removeAttribute("HOL_SEARCH_OBJ");
 			 if(requestParamters.getSession().getAttribute("INT_SEARCH_OBJ")!=null)
@@ -388,7 +389,18 @@ public class PageActionController {
 	        }
 		  if(pageObj.getKey().equals("InterviewAttendanceDetails"))
 	        {
-			  InterviewAttendanceMaintenance attendanecMaintenance = new InterviewAttendanceMaintenance();
+			   InterviewAttendanceMaintenance attendanecMaintenance = new InterviewAttendanceMaintenance();
+			   return attendanecMaintenance.updateCandidateCompleteStatus(requestParamters);
+	            
+	        }
+		  if(pageObj.getKey().equals("ViewEapplicationForm"))
+	        {
+			    PathDetail pathDetail = new PathDetail();
+			     
+		        pageObj = pathDetail.getPageObj("InterviewAttendanceDetails");
+		        requestParamters.getSession().setAttribute("pageObj", pageObj);
+		        requestParamters.setAttribute("contentPage", pageObj);
+			    InterviewAttendanceMaintenance attendanecMaintenance = new InterviewAttendanceMaintenance();
 			   return attendanecMaintenance.updateCandidateCompleteStatus(requestParamters);
 	            
 	        }

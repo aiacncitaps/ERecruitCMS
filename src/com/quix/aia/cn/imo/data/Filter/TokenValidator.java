@@ -88,8 +88,14 @@ public class TokenValidator implements Filter {
 		       }
 			  else
 			  {
-				  String token=LMSUtil.getRendomToken(); 
-              	 request.getSession().setAttribute("Token", token);
+				  if(request.getParameter("key")!=null && request.getParameter("key").equals("ViewEapplicationForm")){
+					  String token = (String)request.getSession().getAttribute("Token");
+					  request.getSession().setAttribute("Token", token);
+					  
+				  }else{
+					  String token=LMSUtil.getRendomToken(); 
+              	 	request.getSession().setAttribute("Token", token);
+				  }
 				  chain.doFilter(request1, response1);
 			  }
 			  

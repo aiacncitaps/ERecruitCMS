@@ -129,6 +129,7 @@ table{
 					<tr>
 					<%
 							String education="";
+					if(addressbook.getEducation()!=null){
 						if(addressbook.getEducation().equalsIgnoreCase("1")){
 							education="初中或以下";
 						}else if(addressbook.getEducation().equalsIgnoreCase("2")){
@@ -142,20 +143,23 @@ table{
 						}else if(addressbook.getEducation().equalsIgnoreCase("6")){
 							education="不详";
 						}
+					}
 					%>
 					
 						<td> <label>Education:<%=education!=null ? education : ""%><br>教育经历:<span style="color: #ec2028;">(*)</span></label>
 						</td>
 					<%
 						String marStatus="";
-					if(addressbook.getMarritalStatus().equalsIgnoreCase("s")){
-						marStatus="未婚";
-					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("m")){
-						marStatus="已婚";
-					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("p")){
-						marStatus="离异";
-					}else if(addressbook.getMarritalStatus().equalsIgnoreCase("w")){
-						marStatus="丧偶";
+					if(addressbook.getMarritalStatus()!=null){
+						if(addressbook.getMarritalStatus().equalsIgnoreCase("s")){
+							marStatus="未婚";
+						}else if(addressbook.getMarritalStatus().equalsIgnoreCase("m")){
+							marStatus="已婚";
+						}else if(addressbook.getMarritalStatus().equalsIgnoreCase("p")){
+							marStatus="离异";
+						}else if(addressbook.getMarritalStatus().equalsIgnoreCase("w")){
+							marStatus="丧偶";
+						}
 					}
 					
 					%>
