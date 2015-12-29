@@ -50,6 +50,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
@@ -178,6 +179,7 @@ public class FirstInterviewRest {
 			
 			candidateFirstInterview = candidateFirstInterviewMaint.getCandidateFirstinterview(agentId, candidateCode);
 			
+			
 			if(null == candidateFirstInterview){
 				candidateFirstInterview = new CandidateFirstInterview();
 			}
@@ -185,6 +187,16 @@ public class FirstInterviewRest {
 			candidateFirstInterview.setAgentId(null);
 			candidateFirstInterview.setCandidateCode(null);
 			candidateFirstInterview.setFirstInterviewCode(null);
+			
+			if(candidateFirstInterview.getInterviewResult().equalsIgnoreCase("Pass")){
+				candidateFirstInterview.setInterviewResult("TRUE");
+			}else if(candidateFirstInterview.getInterviewResult().equalsIgnoreCase("Fail")){
+				candidateFirstInterview.setInterviewResult("FALSE");
+			}else{
+				candidateFirstInterview.setInterviewResult("");
+			}
+			
+			
 			//candidateFirstInterview.setRecruitmentPlan(null);
 			//candidateFirstInterview.setRemarks(null);
 			
