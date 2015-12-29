@@ -2426,7 +2426,7 @@ public class EopMaintenance {
 					
 					+ "( (buCode=:bucode  and district=0) "
 					+ "or (district=:distcode and  branchCode=0)"
-					+ "or (branchCode =:branchCode and  cityCode='0')"
+					+ "or (branchCode =:branchCode)"
 					+ " )");
 			
 			query.setParameter("bucode",dist.getBuCode());
