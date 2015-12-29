@@ -628,26 +628,38 @@ public class EopMaintenance {
                     Restrictions.eq("status", true),
                     Restrictions.gt("calendarServiceError", 0))
             );
+            System.out.println("*****************************************");
+            System.out.println("*****************************************");
+			System.out.println("bu code "+userObj.getBuCode());
+			System.out.println("dist code "+userObj.getDistrict());
+			System.out.println("branh code "+userObj.getBranchCode());
+			System.out.println("city code "+userObj.getCityCode());
+			System.out.println("ssc code "+userObj.getSscCode());
+			System.out.println("office code "+userObj.getOfficeCode());
+			System.out.println("*****************************************");
+	         System.out.println("*****************************************");
 			
-			if(userObj.isBuLevel() && userObj.getBuCode()!=0){
-				crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
-			}
-			if(userObj.isDistrictLevel()){
-				crit.add(Restrictions.eq("district", userObj.getDistrict()));
-			}
-			if(userObj.isBranchLevel()){
-				crit.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
-			}
-			if(userObj.isCityLevel()){
-				crit.add(Restrictions.eq("cityCode", userObj.getCityCode()));
-			}
-			if(userObj.isSscLevel()){
-				crit.add(Restrictions.eq("sscCode", userObj.getSscCode()));
-			}
-			if(userObj.isOfficeLevel()){
-				crit.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
-			}
-			
+	        if(!userObj.getUserType().equalsIgnoreCase("AD")){
+	        	
+				if(userObj.isBuLevel() && userObj.getBuCode()!=0){
+					crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
+				}
+				if(userObj.isDistrictLevel()){
+					crit.add(Restrictions.eq("district", userObj.getDistrict()));
+				}
+				if(userObj.isBranchLevel()){
+					crit.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
+				}
+				if(userObj.isCityLevel()){
+					crit.add(Restrictions.eq("cityCode", userObj.getCityCode()));
+				}
+				if(userObj.isSscLevel()){
+					crit.add(Restrictions.eq("sscCode", userObj.getSscCode()));
+				}
+				if(userObj.isOfficeLevel()){
+					crit.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
+				}
+	        } 
 			eventList = (ArrayList)crit.list();
 			
 		  
@@ -658,6 +670,7 @@ public class EopMaintenance {
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
+				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"","bu code : "+userObj.getBuCode()+"dist code : "+ userObj.getDistrict()+"branch code : "+userObj.getBranchCode()+"city code : "+ userObj.getCityCode()+"ssc code : "+ userObj.getSscCode()+"office code : "+userObj.getOfficeCode());
 			}finally{
 				try{
 					HibernateFactory.close(session);
