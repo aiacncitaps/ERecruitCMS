@@ -30,6 +30,7 @@ package com.quix.aia.cn.imo.utilities;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -58,6 +59,7 @@ import com.quix.aia.cn.imo.data.interview.Interview;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidate;
 import com.quix.aia.cn.imo.data.interview.InterviewMaterial;
 import com.quix.aia.cn.imo.data.user.User;
+import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.EopMaintenance;
 import com.quix.aia.cn.imo.mapper.InterviewMaintenance;
@@ -327,35 +329,35 @@ public class EmailNotification {
 			
 			String gender = "";
 			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
+				gender = "å°å§";
 			else
-				gender="先生";
+				gender="å…ˆç”Ÿ";
 			
 			String genderAgent = "";
 			if("F".equalsIgnoreCase(aamData.getAgentSex()))
-				genderAgent = "小姐";
+				genderAgent = "å°å§";
 			else
-				genderAgent="先生";
+				genderAgent="å…ˆç”Ÿ";
 			 	Session session = null;
 	            session = getProps();
 	            MimeMessage msg = new MimeMessage(session);
 		          
 	            msg.setFrom(new InternetAddress(FROM));
 	        
-	            msg.setSubject("EOP 注册成功","UTF-8");
-	            emailMsg ="尊敬的  " +candidate.getCandidateName() + gender+","+"\n\n"+
-    					"恭喜您报名成功我们的精彩活动，不见不散哦！\n\n"+
-    					"活动名称："+event.getEventName()+"\n"+
-    					"活动日期："+eventDate+"\n"+
-    					"活动开始时间："+startTime+"\n"+
-    					//"结束 时间:"+endTime+"\n"+
-    					"主讲人：" +event.getSpeaker()+"\n"+
-    					"地点：" + event.getLocation()+"\n"+
-    					"描述：" + event.getEopDescription()+"\n"+
-    					"附件："+ pFileName + ", " + tFileName +"\n\n"+
-//    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
-    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
-						"祝您：身体健康 万事如意"+"\n\n"
+	            msg.setSubject("EOP æ³¨å†ŒæˆåŠŸ","UTF-8");
+	            emailMsg ="å°Šæ•¬çš„  " +candidate.getCandidateName() + gender+","+"\n\n"+
+    					"æ­å–œæ‚¨æŠ¥åæˆåŠŸæˆ‘ä»¬çš„ç²¾å½©æ´»åŠ¨ï¼Œä¸è§ä¸æ•£å“¦ï¼\n\n"+
+    					"æ´»åŠ¨åç§°ï¼š"+event.getEventName()+"\n"+
+    					"æ´»åŠ¨æ—¥æœŸï¼š"+eventDate+"\n"+
+    					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+    					//"ç»“æŸ æ—¶é—´:"+endTime+"\n"+
+    					"ä¸»è®²äººï¼š" +event.getSpeaker()+"\n"+
+    					"åœ°ç‚¹ï¼š" + event.getLocation()+"\n"+
+    					"æè¿°ï¼š" + event.getEopDescription()+"\n"+
+    					"é™„ä»¶ï¼š"+ pFileName + ", " + tFileName +"\n\n"+
+//    					"æŠ¥åçš„ : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
+    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚è‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
+						"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"
 						+ "AIA CHINA" ; 
 	            log.log(Level.INFO, "Mail Text : "+emailMsg);
 
@@ -430,27 +432,27 @@ public class EmailNotification {
 			 }
 			String gender = "";
 			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
+				gender = "å°å§";
 			else
-				gender="先生";
+				gender="å…ˆç”Ÿ";
 			 	Session session = null;
 	            session = getProps();
 	            MimeMessage msg = new MimeMessage(session);
 		          
 	            msg.setFrom(new InternetAddress(FROM));
 	         
-	            msg.setSubject("面试注册成功","UTF-8");
-	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	            					"恭喜您报名成功我们的公司面试，不见不散哦！\n\n"+
-	            					"面试名称："+interview.getInterviewSessionName()+"\n"+
-	            					"面试日期："+interviewDate+"\n"+
-	            					"活动开始时间："+startTime+"\n"+
-	            					//"结束 时间:"+endTime+"\n"+
-	            					"地点：" + interview.getLocation()+"\n"+
-	            					"面试资料："+interview.getInterviewType()+"\n"+
-	            					"附件："+ fname+"\n\n"+
-	            					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
-	        						"祝您：身体健康 万事如意"+"\n\n"
+	            msg.setSubject("é¢è¯•æ³¨å†ŒæˆåŠŸ","UTF-8");
+	            emailMsg ="å°Šæ•¬çš„ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+	            					"æ­å–œæ‚¨æŠ¥åæˆåŠŸæˆ‘ä»¬çš„å…¬å¸é¢è¯•ï¼Œä¸è§ä¸æ•£å“¦ï¼\n\n"+
+	            					"é¢è¯•åç§°ï¼š"+interview.getInterviewSessionName()+"\n"+
+	            					"é¢è¯•æ—¥æœŸï¼š"+interviewDate+"\n"+
+	            					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+	            					//"ç»“æŸ æ—¶é—´:"+endTime+"\n"+
+	            					"åœ°ç‚¹ï¼š" + interview.getLocation()+"\n"+
+	            					"é¢è¯•èµ„æ–™ï¼š"+interview.getInterviewType()+"\n"+
+	            					"é™„ä»¶ï¼š"+ fname+"\n\n"+
+	            					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚è‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+	        						"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"
 	        						+ "AIA CHINA" ;
 	        	            log.log(Level.INFO, "Mail Text : "+emailMsg);
 
@@ -503,12 +505,6 @@ public class EmailNotification {
 			String startTime = event.getStartTime()!=null?LMSUtil.converDateIntoHHMMAMPM(event.getStartTime()):"";
 			//String endTime = event.getEndTime()!=null?LMSUtil.converDateIntoHHMMAMPM(event.getEndTime()):"";
 			
-			EventCandidate candidate=eopMaintenance.getEopCandidateCode(event.getEvent_code());
-			AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
-			AddressBook addressBook = new AddressBook();
-			addressBook.setAddressCode(Integer.parseInt(candidate.getEventCandidateCode()));
-			addressBook = addressBookMaintenance.getAddressBook(addressBook);
-			
 			String pFileName = "",tFileName="";
 			if(event.getProfilePath()!=null && event.getProfilePath().length() > 0){
 				pFileName = event.getProfilePath().substring(event.getProfilePath().lastIndexOf('/') + 1);
@@ -516,47 +512,58 @@ public class EmailNotification {
 			if(event.getTopicPath()!=null && event.getTopicPath().length() > 0){
 				tFileName = event.getTopicPath().substring(event.getTopicPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
-			 String emailAddr = "";
+			List<Object[]> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
+			 String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-		            for(int i = 0; i < mailIds.size(); i++)
-		            {
-		            	if(i==0)
-		            		 emailAddr = mailIds.get(i);
-		            	else
-		                    emailAddr = emailAddr + ", " + mailIds.get(i);
-		            }
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[5];
 		            
-		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
 		            String gender = "";
-					if("F".equalsIgnoreCase(candidate.getGender()))
-						gender = "小姐";
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
+						gender = "å°å§";
 					else
-						gender="先生";
-					
-					
+						gender="å…ˆç”Ÿ";
 					
 				 	Session session = null;
 		            session = getProps();
 		            MimeMessage msg = new MimeMessage(session);
 			          
 		            msg.setFrom(new InternetAddress(FROM));
-		            msg.setSubject("EOP更新","UTF-8");
+		            msg.setSubject("EOPæ›´æ–°","UTF-8");
 									
-		            emailMsg ="尊敬的  " +candidate.getCandidateName() + gender+","+"\n\n"+
-	          		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+candidate.getAgentName() + gender+","+"\n\n"+
-	    					"活动名称："+event.getEventName()+"\n"+
-	    					"活动日期："+eventDate+"\n"+
-	    					"活动开始时间："+startTime+"\n"+
-	    					//"结束 时间:"+endTime+"\n"+
-	    					"主讲人：" +event.getSpeaker()+"\n"+
-	    					"地点：" + event.getLocation()+"\n"+
-	    					"描述：" + event.getEopDescription()+"\n"+
-	    					"附件："+ pFileName + ", " + tFileName +"\n\n"+
-//	    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
-	    					"此为系统邮件，请勿直接回复。 \n\n"+
-							"祝您：身体健康 万事如意"+"\n\n"
+		            emailMsg ="å°Šæ•¬çš„  " +candidateName + gender+","+"\n\n"+
+		            		"æ‚¨æŠ¥åçš„é¢è¯•è¿›è¡Œäº†æ›´æ–°ï¼Œè¯·é‡æ–°æŸ¥çœ‹é¢è¯•ä¿¡æ¯ï¼Œè‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜  "+candidateName + gender+","+"\n\n"+
+	    					"æ´»åŠ¨åç§°ï¼š"+event.getEventName()+"\n"+
+	    					"æ´»åŠ¨æ—¥æœŸï¼š"+eventDate+"\n"+
+	    					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+	    					//"ç»“æŸ æ—¶é—´:"+endTime+"\n"+
+	    					"ä¸»è®²äººï¼š" +event.getSpeaker()+"\n"+
+	    					"åœ°ç‚¹ï¼š" + event.getLocation()+"\n"+
+	    					"æè¿°ï¼š" + event.getEopDescription()+"\n"+
+	    					"é™„ä»¶ï¼š"+ pFileName + ", " + tFileName +"\n\n"+
+//	    					"æŠ¥åçš„ : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
+	    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚ \n\n"+
+	    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚è‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+							"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"
 							+ "AIA CHINA" ;
 		            
 		            
@@ -578,19 +585,20 @@ public class EmailNotification {
 		 				multipart.addBodyPart(attachmentPart);
 		            	}
 		            }
-		            if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-						DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
+		            if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
 						MimeBodyPart attachmentPart = new MimeBodyPart();
 						attachmentPart.setDataHandler(new DataHandler(source));
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
 				    
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
+		        }
 		          
-		            log.log(Level.INFO, "sending succesfull"); 
+	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{
 		
 				  log.log(Level.INFO, "No Recipient Email Address Found"); 
@@ -630,9 +638,9 @@ public class EmailNotification {
 			
 			String gender = "";
 			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
+				gender = "å°å§";
 			else
-				gender="先生";
+				gender="å…ˆç”Ÿ";
 			
 			
 			String fname = ""; 
@@ -654,17 +662,17 @@ public class EmailNotification {
 	            MimeMessage msg = new MimeMessage(session);
 		          
 	            msg.setFrom(new InternetAddress(FROM));
-	            msg.setSubject("面试更新","UTF-8");
-	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	            					"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	            					"面试名称："+interview.getInterviewSessionName()+"\n"+
-	            					"面试日期："+interviewDate+"\n"+
-	            					"活动开始时间："+startTime+"\n"+
-	            					"地点：" + interview.getLocation()+"\n"+
-	            					"面试资料："+interview.getInterviewType()+"\n"+
-	            					"附件："+ fname+"\n\n"+
-	            					"此为系统邮件，请勿直接回复。 \n\n"+
-	    							"祝您：身体健康 万事如意"+"\n\n"
+	            msg.setSubject("é¢è¯•æ›´æ–°","UTF-8");
+	            emailMsg ="å°Šæ•¬çš„ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+	            					"æ‚¨æŠ¥åçš„é¢è¯•è¿›è¡Œäº†æ›´æ–°ï¼Œè¯·é‡æ–°æŸ¥çœ‹é¢è¯•ä¿¡æ¯ï¼Œè‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+	            					"é¢è¯•åç§°ï¼š"+interview.getInterviewSessionName()+"\n"+
+	            					"é¢è¯•æ—¥æœŸï¼š"+interviewDate+"\n"+
+	            					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+	            					"åœ°ç‚¹ï¼š" + interview.getLocation()+"\n"+
+	            					"é¢è¯•èµ„æ–™ï¼š"+interview.getInterviewType()+"\n"+
+	            					"é™„ä»¶ï¼š"+ fname+"\n\n"+
+	            					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚ \n\n"+
+	    							"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"
 	    							+ "AIA CHINA" ;
 	            
 	            
@@ -731,47 +739,61 @@ public class EmailNotification {
 			if(event.getTopicPath()!=null && event.getTopicPath().length() > 0){
 				tFileName = event.getTopicPath().substring(event.getTopicPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
-			 String emailAddr = "";
+			
+			List<Object[]> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
+			 String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-		            for(int i = 0; i < mailIds.size(); i++)
-		            {
-		            	if(i==0)
-		            		 emailAddr = mailIds.get(i);
-		            	else
-		                    emailAddr = emailAddr + ", " + mailIds.get(i);
-		            }
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[5];
+		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
 		            String gender = "";
-					if("F".equalsIgnoreCase(candidate.getGender()))
-						gender = "小姐";
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
+						gender = "å°å§";
 					else
-						gender="先生";
-					
+						gender="å…ˆç”Ÿ";
 					
 				 	Session session = null;
 		            session = getProps();
 		            MimeMessage msg = new MimeMessage(session);
 			          
 		            msg.setFrom(new InternetAddress(FROM));
-		            msg.setSubject("EOP 取消","UTF-8");
+		            msg.setSubject("EOP å–æ¶ˆ","UTF-8");
 		            
-		            emailMsg ="尊敬的 " +candidate.getCandidateName()+" "+ gender+","+"\n\n"+
-		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	    					"活动名称："+event.getEventName()+"\n"+
-	    					"活动日期："+eventDate+"\n"+
-	    					"活动开始时间："+startTime+"\n"+
-	    					//"结束 时间:"+endTime+"\n"+
-	    					"主讲人：" +event.getSpeaker()+"\n"+
-	    					"地点：" + event.getLocation()+"\n"+
-	    					"描述：" + event.getEopDescription()+"\n"+
-	    					"附件："+ pFileName + "," + tFileName +"\n\n"+
-//	    					"报名的 : \n\n\n"+
-	    					//"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+  aamData.getAgentName()+ "\n\n"+
-	    					"此为系统邮件，请勿直接回复。 \n\n"+
-							"祝您：身体健康 万事如意"+"\n\n"
-							+ "AIA CHINA" ;
-										
+		            emailMsg ="å°Šæ•¬çš„ " +candidate.getCandidateName()+" "+ gender+","+"\n\n"+
+		            		"æ‚¨æŠ¥åçš„æ´»åŠ¨å·²ç»å–æ¶ˆï¼Œç»™æ‚¨é€ æˆä¸ä¾¿æ•¬è¯·è°…è§£ï¼Œè‹¥æœ‰éœ€æ±‚è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+	    					"æ´»åŠ¨åç§°ï¼š"+event.getEventName()+"\n"+
+	    					"æ´»åŠ¨æ—¥æœŸï¼š"+eventDate+"\n"+
+	    					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+	    					//"ç»“æŸ æ—¶é—´:"+endTime+"\n"+
+	    					"ä¸»è®²äººï¼š" +event.getSpeaker()+"\n"+
+	    					"åœ°ç‚¹ï¼š" + event.getLocation()+"\n"+
+	    					"æè¿°ï¼š" + event.getEopDescription()+"\n"+
+	    					"é™„ä»¶ï¼š"+ pFileName + "," + tFileName +"\n\n"+
+//	    					"æŠ¥åçš„ : \n\n\n"+
+	    					//"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚è‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ "+  aamData.getAgentName()+ "\n\n"+
+	    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚ \n\n"+
+	    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚è‹¥æœ‰éœ€è¦è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+							"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"	;	            
+		            
 		            ArrayList<EventMaterial> list=new ArrayList<EventMaterial>();
 		            
 		            list=eopMaintenance.getMaterialForMail(event.getEvent_code());
@@ -790,18 +812,20 @@ public class EmailNotification {
 		 				multipart.addBodyPart(attachmentPart);
 		            	}
 		            }
-		            if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-						DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
+		            if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
 						MimeBodyPart attachmentPart = new MimeBodyPart();
 						attachmentPart.setDataHandler(new DataHandler(source));
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
+				    
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
+		        }
 		          
-		            log.log(Level.INFO, "sending succesfull"); 
+	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{
 				 
 				  log.log(Level.INFO, "No Recipient Email Address Found"); 
@@ -839,9 +863,9 @@ public class EmailNotification {
 			
 			String gender = "";
 			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
+				gender = "å°å§";
 			else
-				gender="先生";
+				gender="å…ˆç”Ÿ";
 			
 			
 			
@@ -865,17 +889,17 @@ public class EmailNotification {
 	            MimeMessage msg = new MimeMessage(session);
 		          
 	            msg.setFrom(new InternetAddress(FROM));
-	            msg.setSubject("面试取消","UTF-8");
-	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-    					"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-    					"面试名称："+interview.getInterviewSessionName()+"\n"+
-    					"面试日期："+interviewDate+"\n"+
-    					"活动开始时间："+startTime+"\n"+
-    					"地点：" + interview.getLocation()+"\n"+
-    					"面试资料："+interview.getInterviewType()+"\n"+
-    					"附件："+ fname+"\n\n"+
-    					"此为系统邮件，请勿直接回复。 \n\n"+
-						"祝您：身体健康 万事如意"+"\n\n"
+	            msg.setSubject("é¢è¯•å–æ¶ˆ","UTF-8");
+	            emailMsg ="å°Šæ•¬çš„ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+    					"æ‚¨æŠ¥åçš„æ´»åŠ¨å·²ç»å–æ¶ˆï¼Œç»™æ‚¨é€ æˆä¸ä¾¿æ•¬è¯·è°…è§£ï¼Œè‹¥æœ‰éœ€æ±‚è¯·è”ç³»æ‚¨çš„è¥é”€å‘˜ " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
+    					"é¢è¯•åç§°ï¼š"+interview.getInterviewSessionName()+"\n"+
+    					"é¢è¯•æ—¥æœŸï¼š"+interviewDate+"\n"+
+    					"æ´»åŠ¨å¼€å§‹æ—¶é—´ï¼š"+startTime+"\n"+
+    					"åœ°ç‚¹ï¼š" + interview.getLocation()+"\n"+
+    					"é¢è¯•èµ„æ–™ï¼š"+interview.getInterviewType()+"\n"+
+    					"é™„ä»¶ï¼š"+ fname+"\n\n"+
+    					"æ­¤ä¸ºç³»ç»Ÿé‚®ä»¶ï¼Œè¯·å‹¿ç›´æŽ¥å›žå¤ã€‚ \n\n"+
+						"ç¥æ‚¨ï¼šèº«ä½“å¥åº· ä¸‡äº‹å¦‚æ„"+"\n\n"
 						+ "AIA CHINA" ;
 	            
 	            MimeBodyPart messageBodyPart =  new MimeBodyPart();
