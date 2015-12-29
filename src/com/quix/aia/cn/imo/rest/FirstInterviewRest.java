@@ -189,9 +189,9 @@ public class FirstInterviewRest {
 			candidateFirstInterview.setFirstInterviewCode(null);
 			
 			if(candidateFirstInterview.getInterviewResult().equalsIgnoreCase("Pass")){
-				candidateFirstInterview.setInterviewResult("TRUE");
+				candidateFirstInterview.setInterviewResult("Pass");
 			}else if(candidateFirstInterview.getInterviewResult().equalsIgnoreCase("Fail")){
-				candidateFirstInterview.setInterviewResult("FALSE");
+				candidateFirstInterview.setInterviewResult("Fail");
 			}else{
 				candidateFirstInterview.setInterviewResult("");
 			}

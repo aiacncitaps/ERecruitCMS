@@ -332,6 +332,12 @@ public class EmailNotification {
 				gender = "小姐";
 			else
 				gender="先生";
+			
+			String genderAgent = "";
+			if("F".equalsIgnoreCase(aamData.getAgentSex()))
+				genderAgent = "小姐";
+			else
+				genderAgent="先生";
 			 	Session session = null;
 	            session = getProps();
 	            MimeMessage msg = new MimeMessage(session);
@@ -350,9 +356,9 @@ public class EmailNotification {
     					"描述：" + event.getEopDescription()+"\n"+
     					"附件："+ pFileName + ", " + tFileName +"\n\n"+
 //    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
-    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
 						"祝您：身体健康 万事如意"+"\n\n"
-						+ "AIA CHINA" ;
+						+ "AIA CHINA" ; 
 	            log.log(Level.INFO, "Mail Text : "+emailMsg);
 
 				// create the message part 
@@ -770,7 +776,7 @@ public class EmailNotification {
 		            MimeMessage msg = new MimeMessage(session);
 			          
 		            msg.setFrom(new InternetAddress(FROM));
-		            msg.setSubject("EOP更新","UTF-8");
+		            msg.setSubject("EOP 取消","UTF-8");
 		            
 		            emailMsg ="尊敬的 " +candidate.getCandidateName()+" "+ gender+","+"\n\n"+
 		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+

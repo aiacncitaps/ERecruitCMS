@@ -718,7 +718,12 @@ public class InterviewCandidate
 		
 		ccResult = ccResult==null?"":ccResult;
 		String name="";
-		name=userObj.getStaffName();
+		if(this.interviwer_name.length()>0){
+			name=this.interviwer_name;
+		}else{
+			name=userObj.getStaffName();
+		}
+		
 		String sourcOfRefereal=InterviewAttendanceMaintenance.SOURCE_0F_REFERRAL(this.sourceOfReferal);
 		if(sourcOfRefereal!=null){
 			sourcOfRefereal=localeObj.getTranslatedText(sourcOfRefereal);

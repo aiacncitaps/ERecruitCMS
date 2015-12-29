@@ -176,9 +176,15 @@ public class ContentManager extends HttpServlet {
 					 else
 		                if(request.getAttribute("pager") == null)
 		                {
-		                    pager = PageActionController.dataListing(pageObj, request);
-		                    request.setAttribute("pager", pager);
-		                    request.getSession().setAttribute("pager", pager);
+		                	if(key.equalsIgnoreCase("ViewEapplicationForm")){
+		                		pager = (Pager)request.getSession().getAttribute("pager");
+			                    request.setAttribute("pager", pager);
+			                    request.getSession().setAttribute("pager", pager);
+		                	}else{
+			                    pager = PageActionController.dataListing(pageObj, request);
+			                    request.setAttribute("pager", pager);
+			                    request.getSession().setAttribute("pager", pager);
+		                	}
 		                    if(request.getAttribute("pageObj") != null)
 		                        pageObj = (PageObj)request.getSession().getAttribute("pageObj");
 		                }

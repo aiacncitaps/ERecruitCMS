@@ -51,6 +51,7 @@ String sourcOfRefereal=InterviewAttendanceMaintenance.SOURCE_0F_REFERRAL(intervi
 Interview interview = interviewMaintenance.getInterviewBasedOnInterviewCode(Integer.parseInt(iCode));
 AddressBook address=interviewMaintenance.getInterviewCandidateCCTest(interview,Integer.parseInt(candidateCode));
 String ccResult="",ccDate="";
+User userObj = (User)request.getSession().getAttribute("currUserObj");
 if(address!=null){
 	if(address.getCcTestResult()==null){
 		ccResult="";
@@ -188,6 +189,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                        	<td style="border: none;" width="25%" >		                                    				
 	                                    	<label ><%=localeObj.getTranslatedText("Interviewer")%>:</label>
                                     	</td>
+                                    	
                                        <td style="border: none;" width="25%" >	
                                         	<input name="interviewer" id="interviewer" type="text" class="text" readonly="readonly" value="<%=interviewCandidate.getInterviwer_name()==null?"":interviewCandidate.getInterviwer_name()%>"  />
                                        	</td>                                     			   
