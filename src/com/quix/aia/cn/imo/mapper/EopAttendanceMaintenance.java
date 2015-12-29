@@ -1156,6 +1156,7 @@ public class EopAttendanceMaintenance {
 				addressBook.setName(candidate.getCandidateName());
 				addressBook.setBirthDate(candidate.getDob());
 				addressBook.setAgentId(candidate.getServicingAgent());
+				addressBook.setGender(candidate.getGender());
 				AddressBookMaintenance addressBookMaintenance=  new AddressBookMaintenance();
 //				List<AddressBook> list = (List<AddressBook>) addressBookMaintenance.getAddressBook1(addressBook);
 //				if(!list.isEmpty() && 0 < list.size()){
