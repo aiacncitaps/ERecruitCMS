@@ -637,78 +637,91 @@ public class EmailNotification {
 			String startTime = interview.getStartTime()!=null?LMSUtil.converDateIntoHHMMAMPM(interview.getStartTime()):"";
 			String endTime = interview.getEndTime()!=null?LMSUtil.converDateIntoHHMMAMPM(interview.getEndTime()):"";
 			
-			
-			InterviewCandidate candidate=interviewMain.getInterviewCandidateCode(interview.getInterview_code());
-			InterviewMaterial material=interviewMain.getInterviewMaterial(interview.getInterview_code());
-			AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
-			AddressBook addressBook = new AddressBook();
-			if(candidate!=null){
-				addressBook.setAddressCode(Integer.parseInt(candidate.getInterviewCandidateCode()));
-				addressBook = addressBookMaintenance.getAddressBook(addressBook);
-			}
-			
-			String gender = "";
-			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
-			else
-				gender="先生";
-			
-			
+            InterviewMaterial material=interviewMain.getInterviewMaterial(interview.getInterview_code());
+
 			String fname = ""; 
 			 if(interview.getAttachmentPath()!=null && interview.getAttachmentPath().length() > 0){
 				 fname = interview.getAttachmentPath().substring(interview.getAttachmentPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = interviewMain.getRegisteredEmailAddressForParticularInterview(interview.getInterview_code());
-			 String emailAddr = "";
+			 List<Object[]> mailIds = interviewMain.getRegisteredEmailAddressForParticularInterview(interview.getInterview_code());String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-	            for(int i = 0; i < mailIds.size(); i++)
-	            {
-	            	if(i==0)
-	            		 emailAddr = mailIds.get(i);
-	            	else
-	                    emailAddr = emailAddr + ", " + mailIds.get(i);
-	            }
-			 	Session session = null;
-	            session = getProps();
-	            MimeMessage msg = new MimeMessage(session);
-		          
-	            msg.setFrom(new InternetAddress(FROM));
-	            msg.setSubject("面试更新","UTF-8");
-	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	            					"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-	            					"面试名称："+interview.getInterviewSessionName()+"\n"+
-	            					"面试日期："+interviewDate+"\n"+
-	            					"活动开始时间："+startTime+"\n"+
-	            					"地点：" + interview.getLocation()+"\n"+
-	            					"面试资料："+interview.getInterviewType()+"\n"+
-	            					"附件："+ fname+"\n\n"+
-	            					"此为系统邮件，请勿直接回复。 \n\n"+
-	    							"祝您：身体健康 万事如意"+"\n\n"
-	    							+ "AIA CHINA" ;
-	            
-	            
-	            MimeBodyPart messageBodyPart =  new MimeBodyPart();
-			    messageBodyPart.setText(emailMsg,"UTF-8");
-			    
-			    Multipart multipart = new MimeMultipart();
-			    multipart.addBodyPart(messageBodyPart);
-			    if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-					DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
-					MimeBodyPart attachmentPart = new MimeBodyPart();
-					attachmentPart.setDataHandler(new DataHandler(source));
-					attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
-					multipart.addBodyPart(attachmentPart);
-			    }
-			    if(material.getMaterial() !=null && material.getMaterial().length > 0){
-    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
-    				MimeBodyPart attachmentPart = new MimeBodyPart();
-    				attachmentPart.setDataHandler(new DataHandler(source));
-    				attachmentPart.setFileName(fname);
-    				multipart.addBodyPart(attachmentPart);
-    			  }	
-	            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
-	            msg.setContent(multipart);
-	    	    Transport.send(msg);
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[6];
+		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
+		            
+		            String gender = "";
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
+						gender = "小姐";
+					else
+						gender="先生";
+					
+					String genderAgent = "";
+					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+						genderAgent = "小姐";
+					else
+						genderAgent="先生";
+		            
+				 	Session session = null;
+		            session = getProps();
+		            MimeMessage msg = new MimeMessage(session);
+			          
+		            msg.setFrom(new InternetAddress(FROM));
+		            msg.setSubject("面试更新","UTF-8");
+		            emailMsg ="尊敬的 " +candidateName + " "+ gender+","+"\n\n"+
+		            		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            					"面试名称："+interview.getInterviewSessionName()+"\n"+
+		            					"面试日期："+interviewDate+"\n"+
+		            					"活动开始时间："+startTime+"\n"+
+		            					"地点：" + interview.getLocation()+"\n"+
+		            					"面试资料："+interview.getInterviewType()+"\n"+
+		            					"附件："+ fname+"\n\n"+
+		            					"此为系统邮件，请勿直接回复。 \n\n"+
+		    							"祝您：身体健康 万事如意"+"\n\n"
+		    							+ "AIA CHINA" ;
+		            
+		            
+		            MimeBodyPart messageBodyPart =  new MimeBodyPart();
+				    messageBodyPart.setText(emailMsg,"UTF-8");
+				    
+				    Multipart multipart = new MimeMultipart();
+				    multipart.addBodyPart(messageBodyPart);
+				    if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
+						MimeBodyPart attachmentPart = new MimeBodyPart();
+						attachmentPart.setDataHandler(new DataHandler(source));
+						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
+						multipart.addBodyPart(attachmentPart);
+				    }
+				    if(material.getMaterial() !=null && material.getMaterial().length > 0){
+	    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
+	    				MimeBodyPart attachmentPart = new MimeBodyPart();
+	    				attachmentPart.setDataHandler(new DataHandler(source));
+	    				attachmentPart.setFileName(fname);
+	    				multipart.addBodyPart(attachmentPart);
+	    			  }	
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
+		            msg.setContent(multipart);
+		    	    Transport.send(msg);
+	    	    
+		        }
 	          
 	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{
@@ -869,81 +882,92 @@ public class EmailNotification {
 			String startTime = interview.getStartTime()!=null?LMSUtil.converDateIntoHHMMAMPM(interview.getStartTime()):"";
 			String endTime = interview.getEndTime()!=null?LMSUtil.converDateIntoHHMMAMPM(interview.getEndTime()):"";
 			
-			InterviewCandidate candidate=interviewMain.getInterviewCandidateCode(interview.getInterview_code());
 			InterviewMaterial material=interviewMain.getInterviewMaterial(interview.getInterview_code());
-			AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
-			AddressBook addressBook = new AddressBook();
-			if(candidate!=null){
-				addressBook.setAddressCode(Integer.parseInt(candidate.getInterviewCandidateCode()));
-				addressBook = addressBookMaintenance.getAddressBook(addressBook);
-			}
-			
-			String gender = "";
-			if("F".equalsIgnoreCase(candidate.getGender()))
-				gender = "小姐";
-			else
-				gender="先生";
-			
-			
-			
 			
 			String fname = ""; 
 			 if(interview.getAttachmentPath()!=null && interview.getAttachmentPath().length() > 0){
 				 fname = interview.getAttachmentPath().substring(interview.getAttachmentPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = interviewMain.getRegisteredEmailAddressForParticularInterview(interview.getInterview_code());
-			 String emailAddr = "";
+			 
+			 List<Object[]> mailIds = interviewMain.getRegisteredEmailAddressForParticularInterview(interview.getInterview_code());String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-	            for(int i = 0; i < mailIds.size(); i++)
-	            {
-	            	if(i==0)
-	            		 emailAddr = mailIds.get(i);
-	            	else
-	                    emailAddr = emailAddr + ", " + mailIds.get(i);
-	            }
-			 	Session session = null;
-	            session = getProps();
-	            MimeMessage msg = new MimeMessage(session);
-		          
-	            msg.setFrom(new InternetAddress(FROM));
-	            msg.setSubject("面试取消","UTF-8");
-	            emailMsg ="尊敬的 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-    					"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +candidate.getCandidateName() + " "+ gender+","+"\n\n"+
-    					"面试名称："+interview.getInterviewSessionName()+"\n"+
-    					"面试日期："+interviewDate+"\n"+
-    					"活动开始时间："+startTime+"\n"+
-    					"地点：" + interview.getLocation()+"\n"+
-    					"面试资料："+interview.getInterviewType()+"\n"+
-    					"附件："+ fname+"\n\n"+
-    					"此为系统邮件，请勿直接回复。 \n\n"+
-						"祝您：身体健康 万事如意"+"\n\n"
-						+ "AIA CHINA" ;
-	            
-	            MimeBodyPart messageBodyPart =  new MimeBodyPart();
-			    messageBodyPart.setText(emailMsg,"UTF-8");
-			    
-			    Multipart multipart = new MimeMultipart();
-			    multipart.addBodyPart(messageBodyPart);
-			    
-			    if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-					DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
-					MimeBodyPart attachmentPart = new MimeBodyPart();
-					attachmentPart.setDataHandler(new DataHandler(source));
-					attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
-					multipart.addBodyPart(attachmentPart);
-			    }
-			    if(material.getMaterial() !=null && material.getMaterial().length > 0){
-    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
-    				MimeBodyPart attachmentPart = new MimeBodyPart();
-    				attachmentPart.setDataHandler(new DataHandler(source));
-    				attachmentPart.setFileName(fname);
-    				multipart.addBodyPart(attachmentPart);
-    			  }	
-	       
-	            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
-	            msg.setContent(multipart);
-	    	    Transport.send(msg);
-	          
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[6];
+		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
+		            
+		            String gender = "";
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
+						gender = "小姐";
+					else
+						gender="先生";
+					
+					String genderAgent = "";
+					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+						genderAgent = "小姐";
+					else
+						genderAgent="先生";
+		            
+				 	Session session = null;
+		            session = getProps();
+		            MimeMessage msg = new MimeMessage(session);
+			          
+		            msg.setFrom(new InternetAddress(FROM));
+		            msg.setSubject("面试更新","UTF-8");
+		            emailMsg ="尊敬的 " +candidateName + " "+ gender+","+"\n\n"+
+		            		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            		"面试名称："+interview.getInterviewSessionName()+"\n"+
+	    					"面试日期："+interviewDate+"\n"+
+	    					"活动开始时间："+startTime+"\n"+
+	    					"地点：" + interview.getLocation()+"\n"+
+	    					"面试资料："+interview.getInterviewType()+"\n"+
+	    					"附件："+ fname+"\n\n"+
+	    					"此为系统邮件，请勿直接回复。 \n\n"+
+							"祝您：身体健康 万事如意"+"\n\n"
+							+ "AIA CHINA" ;
+		            
+		            
+		            MimeBodyPart messageBodyPart =  new MimeBodyPart();
+				    messageBodyPart.setText(emailMsg,"UTF-8");
+				    
+				    Multipart multipart = new MimeMultipart();
+				    multipart.addBodyPart(messageBodyPart);
+				    if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
+						MimeBodyPart attachmentPart = new MimeBodyPart();
+						attachmentPart.setDataHandler(new DataHandler(source));
+						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
+						multipart.addBodyPart(attachmentPart);
+				    }
+				    if(material.getMaterial() !=null && material.getMaterial().length > 0){
+	    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
+	    				MimeBodyPart attachmentPart = new MimeBodyPart();
+	    				attachmentPart.setDataHandler(new DataHandler(source));
+	    				attachmentPart.setFileName(fname);
+	    				multipart.addBodyPart(attachmentPart);
+	    			  }	
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
+		            msg.setContent(multipart);
+		    	    Transport.send(msg);
+	    	    
+		        }
 	          
 	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{

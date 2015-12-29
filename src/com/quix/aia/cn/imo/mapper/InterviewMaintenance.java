@@ -1946,13 +1946,13 @@ public ArrayList getInterviewRest(int sscCode) {
  * @param  code  interviewCode 
  * @return  ArrayList of email address
  */
-public ArrayList<String> getRegisteredEmailAddressForParticularInterview(int code){
+public List<Object[]> getRegisteredEmailAddressForParticularInterview(int code){
 	log.log(Level.INFO, "InterviewMaintenance -->getRegisteredEmailAddressForParticularInterview ");
 	Session session = null;
-	 ArrayList<String>  emailAddrs = null;
+	List  emailAddrs = null;
 	try{
 		session = HibernateFactory.openSession();
-		Query selectQ = session.createQuery("select  eMailId  from  AddressBook where addressCode in(select  interviewCandidateCode from InterviewCandidate where status=1 and interviewCode=:interviewCode)");
+		Query selectQ = session.createQuery("select eMailId, addressCode, agentId, name, gender, qrCode, co from  AddressBook where addressCode in(select  interviewCandidateCode from InterviewCandidate where status=1 and interviewCode=:interviewCode)");
 		selectQ.setParameter("interviewCode", code);
 		emailAddrs =(ArrayList<String>) selectQ.list();
 		
