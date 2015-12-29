@@ -591,7 +591,7 @@ public class EopAttendanceMaintenance {
               if("0".equals(event.getAgentTeam())){
             	  event.setAgentTeam("");
               }
-	    	req.getSession().setAttribute("EventObj", event);
+	    	
 	    	EopMaintenance eventMain=new EopMaintenance();
 	    	ImoUtilityData imoutill=new ImoUtilityData();
 	
@@ -622,11 +622,11 @@ public class EopAttendanceMaintenance {
 		ExcelGenerator excelGenerator = new ExcelGenerator();
 		String str = excelGenerator.GenerateEopRegistrationReport(listAllCandidates,event, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"));
 		if(str==null){
-			req.setAttribute("EopExcelPath", "#");
+			event.setTempFilePath("#");
 		}else{
-			req.setAttribute("EopExcelPath", str);
+			event.setTempFilePath(str);
 		}
-		
+		req.getSession().setAttribute("EventObj", event);
 		Pager pager = new Pager();
 		pager.setActualSize(item.size());
 		pager.setCurrentPageNumber(0);

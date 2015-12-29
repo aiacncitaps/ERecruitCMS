@@ -115,7 +115,7 @@ public class InterviewAttendanceMaintenance {
 //		    	req_int_code = interview.getInterview_code();
 		    }
 		
-		    req.getSession().setAttribute("selectedObj", interview);
+		   
 		    
 		InterviewMaintenance interviewMaintenance = new InterviewMaintenance();
 		LinkedList item = new LinkedList();
@@ -153,10 +153,11 @@ public class InterviewAttendanceMaintenance {
 				   item.add(candidate.getGetAttendanceListingTableRow(localeObj,userObj));
 			}
 			String str = excelGenerator.GenerateInterviewRegistrationReport(listAllCandidates,interview, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"));
-			req.setAttribute("ExcelPath", str);
+			interview.setTempFilePath(str);
 		}else{
-			req.setAttribute("ExcelPath", "#");
+			interview.setTempFilePath("#");
 		}
+		 req.getSession().setAttribute("selectedObj", interview);
 		Pager pager = new Pager();
 		pager.setActualSize(item.size());
 		pager.setCurrentPageNumber(0);

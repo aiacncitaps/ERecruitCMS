@@ -283,7 +283,7 @@ function submitForm(){
 					 	 <tr>                         
                    			<td colspan="21" class="MT30 MB30" style="text-align:center;padding-top:20px">
                    				<a href="#" class="btn1" onclick="submitForm();" ><%=localeObj.getTranslatedText("Update")%></a>
-       		 					<a href="<%=request.getAttribute("ExcelPath") %>" class="ML10 btn1"><%=localeObj.getTranslatedText("Download Result in Excel format")%></a>
+       		 					<a href="<%=interviewObj.getTempFilePath() %>" class="ML10 btn1"><%=localeObj.getTranslatedText("Download Result in Excel format")%></a>
        		 					<a href="ContentManager?key=InterviewMaintenance" class="ML10 btn1"><%=localeObj.getTranslatedText("Back")%></a> 
                   	 		</td>                                     			   
                    		 </tr>
