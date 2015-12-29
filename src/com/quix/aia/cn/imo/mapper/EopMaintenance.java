@@ -2460,13 +2460,13 @@ public class EopMaintenance {
 	  * @param  code  eventCode 
 	  * @return  ArrayList of email address
 	  */
-	public ArrayList<String> getRegisteredEmailAddressForParticularEvent(int code){
+	public List getRegisteredEmailAddressForParticularEvent(int code){
 		log.log(Level.INFO, "EopMaintenance -->getRegisteredEmailAddressForParticularEvent ");
 		Session session = null;
-		 ArrayList<String>  emailAddrs = null;
+		List  emailAddrs = null;
 		try{
 			session = HibernateFactory.openSession();
-			Query selectQ = session.createQuery("select  eMailId  from  AddressBook where addressCode in(select  eventCandidateCode from EventCandidate where status=1 and eventCode=:eventCode)");
+			Query selectQ = session.createQuery("select  eMailId, addressCode, agentId, name, gender, qrCode, co  from  AddressBook where addressCode in(select  eventCandidateCode from EventCandidate where status=1 and eventCode=:eventCode)");
 			selectQ.setParameter("eventCode", code);
 			emailAddrs =(ArrayList<String>) selectQ.list();
 			

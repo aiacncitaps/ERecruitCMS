@@ -30,6 +30,7 @@ package com.quix.aia.cn.imo.utilities;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -58,6 +59,7 @@ import com.quix.aia.cn.imo.data.interview.Interview;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidate;
 import com.quix.aia.cn.imo.data.interview.InterviewMaterial;
 import com.quix.aia.cn.imo.data.user.User;
+import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.EopMaintenance;
 import com.quix.aia.cn.imo.mapper.InterviewMaintenance;
@@ -497,12 +499,6 @@ public class EmailNotification {
 			String startTime = event.getStartTime()!=null?LMSUtil.converDateIntoHHMMAMPM(event.getStartTime()):"";
 			//String endTime = event.getEndTime()!=null?LMSUtil.converDateIntoHHMMAMPM(event.getEndTime()):"";
 			
-			EventCandidate candidate=eopMaintenance.getEopCandidateCode(event.getEvent_code());
-			AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
-			AddressBook addressBook = new AddressBook();
-			addressBook.setAddressCode(Integer.parseInt(candidate.getEventCandidateCode()));
-			addressBook = addressBookMaintenance.getAddressBook(addressBook);
-			
 			String pFileName = "",tFileName="";
 			if(event.getProfilePath()!=null && event.getProfilePath().length() > 0){
 				pFileName = event.getProfilePath().substring(event.getProfilePath().lastIndexOf('/') + 1);
@@ -510,26 +506,36 @@ public class EmailNotification {
 			if(event.getTopicPath()!=null && event.getTopicPath().length() > 0){
 				tFileName = event.getTopicPath().substring(event.getTopicPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
-			 String emailAddr = "";
+			List<Object[]> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
+			 String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-		            for(int i = 0; i < mailIds.size(); i++)
-		            {
-		            	if(i==0)
-		            		 emailAddr = mailIds.get(i);
-		            	else
-		                    emailAddr = emailAddr + ", " + mailIds.get(i);
-		            }
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[5];
 		            
-		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
 		            String gender = "";
-					if("F".equalsIgnoreCase(candidate.getGender()))
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
 						gender = "小姐";
 					else
 						gender="先生";
-					
-					
 					
 				 	Session session = null;
 		            session = getProps();
@@ -538,8 +544,8 @@ public class EmailNotification {
 		            msg.setFrom(new InternetAddress(FROM));
 		            msg.setSubject("EOP更新","UTF-8");
 									
-		            emailMsg ="尊敬的  " +candidate.getCandidateName() + gender+","+"\n\n"+
-		            		"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员  "+candidate.getCandidateName() + gender+","+"\n\n"+
+		            emailMsg ="尊敬的  " +candidateName + gender+","+"\n\n"+
+		            		"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员  "+candidateName + gender+","+"\n\n"+
 	    					"活动名称："+event.getEventName()+"\n"+
 	    					"活动日期："+eventDate+"\n"+
 	    					"活动开始时间："+startTime+"\n"+
@@ -550,6 +556,7 @@ public class EmailNotification {
 	    					"附件："+ pFileName + ", " + tFileName +"\n\n"+
 //	    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
 	    					"此为系统邮件，请勿直接回复。 \n\n"+
+	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
 							"祝您：身体健康 万事如意"+"\n\n"
 							+ "AIA CHINA" ;
 		            
@@ -572,19 +579,20 @@ public class EmailNotification {
 		 				multipart.addBodyPart(attachmentPart);
 		            	}
 		            }
-		            if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-						DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
+		            if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
 						MimeBodyPart attachmentPart = new MimeBodyPart();
 						attachmentPart.setDataHandler(new DataHandler(source));
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
 				    
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
+		        }
 		          
-		            log.log(Level.INFO, "sending succesfull"); 
+	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{
 		
 				  log.log(Level.INFO, "No Recipient Email Address Found"); 
@@ -725,23 +733,37 @@ public class EmailNotification {
 			if(event.getTopicPath()!=null && event.getTopicPath().length() > 0){
 				tFileName = event.getTopicPath().substring(event.getTopicPath().lastIndexOf('/') + 1);
 			 }
-			ArrayList<String> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
-			 String emailAddr = "";
+			
+			List<Object[]> mailIds = eopMaintenance.getRegisteredEmailAddressForParticularEvent(event.getEvent_code());
+			 String candidateEmail = "";
+			 String candidateName = "";
+			 String candidateGender = "";
+			 String candidateAgentId = "";
+			 String candidateCoBranch = "";
+			 Integer addressCode = 0;
+			 AamData aamData = null;
+			 AamDataMaintenance aamDataMaintenance = new AamDataMaintenance();
+			 byte[] qrCode = null;
 			 if(mailIds!=null && mailIds.size()>0){
-		            for(int i = 0; i < mailIds.size(); i++)
-		            {
-		            	if(i==0)
-		            		 emailAddr = mailIds.get(i);
-		            	else
-		                    emailAddr = emailAddr + ", " + mailIds.get(i);
-		            }
+		        for(Object[] arrayObjs : mailIds){    
+		            candidateEmail = (String) arrayObjs[0];
+		            addressCode = (Integer) arrayObjs[1];
+		            candidateAgentId = (String) arrayObjs[2]; 
+		            candidateName = (String) arrayObjs[3];
+		            candidateGender = (String) arrayObjs[4];
+		            qrCode = (byte[]) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[5];
+		            
+		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
 		            String gender = "";
-					if("F".equalsIgnoreCase(candidate.getGender()))
+		            if(null != candidateGender){
+		            	candidateGender.trim();
+		            }
+					if("F".equalsIgnoreCase(candidateGender))
 						gender = "小姐";
 					else
 						gender="先生";
-					
 					
 				 	Session session = null;
 		            session = getProps();
@@ -763,9 +785,9 @@ public class EmailNotification {
 //	    					"报名的 : \n\n\n"+
 	    					//"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+  aamData.getAgentName()+ "\n\n"+
 	    					"此为系统邮件，请勿直接回复。 \n\n"+
-							"祝您：身体健康 万事如意"+"\n\n"
-							+ "AIA CHINA" ;
-										
+	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+							"祝您：身体健康 万事如意"+"\n\n"	;	            
+		            
 		            ArrayList<EventMaterial> list=new ArrayList<EventMaterial>();
 		            
 		            list=eopMaintenance.getMaterialForMail(event.getEvent_code());
@@ -784,18 +806,20 @@ public class EmailNotification {
 		 				multipart.addBodyPart(attachmentPart);
 		            	}
 		            }
-		            if(addressBook.getQrCode()!=null && addressBook.getQrCode().length > 0){
-						DataSource source = new  ByteArrayDataSource(addressBook.getQrCode(),"application/octet-stream");
+		            if(qrCode!=null && qrCode.length > 0){
+						DataSource source = new  ByteArrayDataSource(qrCode,"application/octet-stream");
 						MimeBodyPart attachmentPart = new MimeBodyPart();
 						attachmentPart.setDataHandler(new DataHandler(source));
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailAddr, false));
+				    
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
+		        }
 		          
-		            log.log(Level.INFO, "sending succesfull"); 
+	            log.log(Level.INFO, "sending succesfull"); 
 			 }else{
 				 
 				  log.log(Level.INFO, "No Recipient Email Address Found"); 
