@@ -530,7 +530,7 @@ public class EmailNotification {
 		            candidateName = (String) arrayObjs[3];
 		            candidateGender = (String) arrayObjs[4];
 		            qrCode = (byte[]) arrayObjs[5];
-		            candidateCoBranch = (String) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[6];
 		            
 		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
@@ -542,6 +542,12 @@ public class EmailNotification {
 						gender = "小姐";
 					else
 						gender="先生";
+					
+					String genderAgent = "";
+					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+						genderAgent = "小姐";
+					else
+						genderAgent="先生";
 					
 				 	Session session = null;
 		            session = getProps();
@@ -562,7 +568,7 @@ public class EmailNotification {
 	    					"附件："+ pFileName + ", " + tFileName +"\n\n"+
 //	    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
 	    					"此为系统邮件，请勿直接回复。 \n\n"+
-	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
 							"祝您：身体健康 万事如意"+"\n\n"
 							+ "AIA CHINA" ;
 		            
@@ -758,7 +764,7 @@ public class EmailNotification {
 		            candidateName = (String) arrayObjs[3];
 		            candidateGender = (String) arrayObjs[4];
 		            qrCode = (byte[]) arrayObjs[5];
-		            candidateCoBranch = (String) arrayObjs[5];
+		            candidateCoBranch = (String) arrayObjs[6];
 		            
 		            aamData = aamDataMaintenance.retrieveDataToModel(candidateAgentId, candidateCoBranch);
 		            
@@ -770,6 +776,12 @@ public class EmailNotification {
 						gender = "小姐";
 					else
 						gender="先生";
+					
+					String genderAgent = "";
+					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+						genderAgent = "小姐";
+					else
+						genderAgent="先生";
 					
 				 	Session session = null;
 		            session = getProps();
@@ -791,7 +803,7 @@ public class EmailNotification {
 //	    					"报名的 : \n\n\n"+
 	    					//"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+  aamData.getAgentName()+ "\n\n"+
 	    					"此为系统邮件，请勿直接回复。 \n\n"+
-	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+", "+ aamData.getTel().trim() + " \n\n"+
+	    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
 							"祝您：身体健康 万事如意"+"\n\n"	;	            
 		            
 		            ArrayList<EventMaterial> list=new ArrayList<EventMaterial>();
