@@ -134,12 +134,21 @@ function uploadMaterial(){
 		        announcementMaterialTD.appendChild(files);
 		        files.style.display = "block";
 		        
-		        var reader = new FileReader();
-		        reader.onload = function (e) {
-		            $('#uploadImage').attr('src', e.target.result);
-		        }
+// 		        var reader = new CreateObject("Scripting.FileSystemObject");
+// 		        reader.onload = function (e) {
+// 		            $('#uploadImage').attr('src', e.target.result);
+// 		        }
 
-		        reader.readAsDataURL($('#ProfileMaterial'));
+// 		        reader.readAsDataURL($('#ProfileMaterial'));
+
+				document.getElementById("ProfileMaterial");
+				
+// 				$("#uploadImage").show();
+                $("#uploadImage")[0].filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = $("#ProfileMaterial").val();
+
+// 		        var output = document.getElementById('uploadImage');
+// 		        output.src = URL.createObjectURL($("#ProfileMaterial"));
+
 			  }else{
 					$('#ajaxLoader').find(".lightbox").hide();
 				alert("Please upload png/jpg/gif type file");
@@ -216,7 +225,7 @@ String eCode = request.getParameter("E_GREETING_ID");
 						<input type="text" name="<%=EgreetingMaintenance.NAME_PARAM %>" id="<%=EgreetingMaintenance.NAME_PARAM %>"  class="textObj" value="<%=SecurityAPI.encodeHTML(E_GreetingObj.getEGreetingName())%>" maxlength="250" />
 						<%} %>
 						</td>
-						 <td rowspan="3" style="text-align:center;"><img src="<%=E_GreetingObj.getFileLocation() %>"  id = "uploadImage"  name = "uploadImage" height="230px" width="230px" /></td>
+						 <td rowspan="3" style="text-align:center;"><img src="<%=E_GreetingObj.getFileLocation() %>"  id = "uploadImage"  name = "uploadImage" height="230px" width="230px"  style="filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);"/></td>
 					</tr>
 					
 					<tr>                         
