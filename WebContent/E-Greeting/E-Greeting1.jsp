@@ -133,6 +133,13 @@ function uploadMaterial(){
 		        var announcementMaterialTD = document.getElementById("ProfileMaterialTD");
 		        announcementMaterialTD.appendChild(files);
 		        files.style.display = "block";
+		        
+		        var reader = new FileReader();
+		        reader.onload = function (e) {
+		            $('#uploadImage').attr('src', e.target.result);
+		        }
+
+		        reader.readAsDataURL($('#ProfileMaterial'));
 			  }else{
 					$('#ajaxLoader').find(".lightbox").hide();
 				alert("Please upload png/jpg/gif type file");
