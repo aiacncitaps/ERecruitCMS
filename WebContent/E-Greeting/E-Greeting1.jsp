@@ -19,6 +19,7 @@
 <%@page import="com.quix.aia.cn.imo.utilities.ImoUtilityData"%>
 <%@page import="com.quix.aia.cn.imo.utilities.SecurityAPI"%>
 
+<script src="js/imocn.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 function submitForm(){
 	document.eGreetingForm.submit();
@@ -29,56 +30,121 @@ function submitForm(){
 function uploadMaterial(){
 	$('#ajaxLoader').find(".lightbox").show();
 	//alert($('#ProfileMaterial').val());
-	if($('#ProfileMaterial').get(0).files[0] !=undefined){
 		
-	        
-		var materialFile = $('#ProfileMaterial').get(0).files[0];
-		var file_name=materialFile.name;
-	 	if((file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG') >-1)  || (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1) 
-				 || (file_name.indexOf('.png')>-1) || (file_name.indexOf('.PNG') >-1)  || (file_name.indexOf('.GIF')>-1) || (file_name.indexOf('.gif') >-1)){ 
-			//showProgress();
-		if(materialFile==undefined)
-			materialFile = $('#materialname').html();
-		var fd = new FormData();
-			fd.append('ProfileMaterial', materialFile);
-			var material_name=$("#ProfileMaterial").val();
-			var size=$('#ProfileMaterial').get(0).files[0].size;
-			if(size<=5242880){
-		  $.ajax({
-				url : 'UploadMaterial?usedFor=E_Greeting&image_name='+material_name,
-				type: "POST",
-				data: fd,
-			   	processData: false,
-			   	contentType: false,
-			}).done(function(respond){
-				
-				$('#materialname').html(file_name);
-				$('#ajaxLoader').find(".lightbox").hide();
-				  var reader = new FileReader();
-			        reader.onload = function (e) {
-			            $('#uploadImage').attr('src', e.target.result);
-			        }
-
-			        reader.readAsDataURL($('#ProfileMaterial').get(0).files[0]);
-			
-			});
-		//  hideProgress();
-			}else{
-				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload File Less then 5 MB");
-				$('#ProfileMaterial').val('');
-			}
-		  }else{
-				$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please upload png/jpg/gif type file");
-			$('#ProfileMaterial').val('');
-		
-		} 
-	}else{
-		$('#ajaxLoader').find(".lightbox").hide();
-		alert("Please Upload a file");
-	}
+    if(isAjaxUploadSupported()){
 	
+		if($('#ProfileMaterial').get(0).files[0] !=undefined){
+			
+			var materialFile = $('#ProfileMaterial').get(0).files[0];
+			var file_name=materialFile.name;
+		 	if((file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG') >-1)  || (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1) 
+					 || (file_name.indexOf('.png')>-1) || (file_name.indexOf('.PNG') >-1)  || (file_name.indexOf('.GIF')>-1) || (file_name.indexOf('.gif') >-1)){ 
+				//showProgress();
+			if(materialFile==undefined)
+				materialFile = $('#materialname').html();
+			var fd = new FormData();
+				fd.append('ProfileMaterial', materialFile);
+				var material_name=$("#ProfileMaterial").val();
+				var size=$('#ProfileMaterial').get(0).files[0].size;
+				if(size<=5242880){
+			  $.ajax({
+					url : 'UploadMaterial?usedFor=E_Greeting&image_name='+material_name,
+					type: "POST",
+					data: fd,
+				   	processData: false,
+				   	contentType: false,
+				}).done(function(respond){
+					
+					$('#materialname').html(file_name);
+					$('#ajaxLoader').find(".lightbox").hide();
+					  var reader = new FileReader();
+				        reader.onload = function (e) {
+				            $('#uploadImage').attr('src', e.target.result);
+				        }
+	
+				        reader.readAsDataURL($('#ProfileMaterial').get(0).files[0]);
+				
+				});
+			//  hideProgress();
+				}else{
+					$('#ajaxLoader').find(".lightbox").hide();
+					alert("Please Upload File Less then 5 MB");
+					$('#ProfileMaterial').val('');
+				}
+			  }else{
+					$('#ajaxLoader').find(".lightbox").hide();
+				alert("Please upload png/jpg/gif type file");
+				$('#ProfileMaterial').val('');
+			
+			} 
+		}else{
+			$('#ajaxLoader').find(".lightbox").hide();
+			alert("Please Upload a file");
+		}
+		
+    }else{
+    	var material_name=$("#ProfileMaterial").val();
+		
+    	if('' != material_name){
+    		if((material_name.indexOf('.jpeg')>-1) || (material_name.indexOf('.JPEG') >-1)  || (material_name.indexOf('.jpg')>-1) || (material_name.indexOf('.JPG')>-1) 
+					 || (material_name.indexOf('.png')>-1) || (material_name.indexOf('.PNG') >-1)  || (material_name.indexOf('.GIF')>-1) || (material_name.indexOf('.gif') >-1)){ 
+				var iframe = document.createElement("iframe");
+				iframe.setAttribute("name", "upload_iframe_myFile");
+				iframe.setAttribute("id", "upload_iframe_myFile");
+		        iframe.setAttribute("width", "0");
+		        iframe.setAttribute("height", "0");
+		        iframe.setAttribute("border", "2px");
+		        iframe.setAttribute("src","javascript:false;");
+		        iframe.style.display = "none";
+	
+		        var form = document.createElement("form");
+		        form.setAttribute("target", "upload_iframe_myFile");
+		        form.setAttribute("action", "UploadMaterial?image_name="+material_name); //change page to post
+		        form.setAttribute("method", "post");
+		        form.setAttribute("enctype", "multipart/form-data");
+		        form.setAttribute("encoding", "multipart/form-data");
+		        form.style.display = "none";
+	
+		        var files = document.getElementById("ProfileMaterial");
+		        files.style.display = "none";
+		        
+		        form.appendChild(files);
+		        document.body.appendChild(form);
+		        document.body.appendChild(iframe);
+		        iframeIdmyFile = document.getElementById("upload_iframe_myFile");
+	
+		        // Add event...
+		        var eventHandlermyFile = function () {
+		            if (iframeIdmyFile.detachEvent) 
+		                iframeIdmyFile.detachEvent("onload", eventHandlermyFile);
+		            else 
+		                iframeIdmyFile.removeEventListener("load", eventHandlermyFile, false);
+	
+		            response = getIframeContentJSON(iframeIdmyFile);
+		        }
+	
+		        if (iframeIdmyFile.addEventListener) 
+		            iframeIdmyFile.addEventListener("load", eventHandlermyFile, true);
+		        if (iframeIdmyFile.attachEvent) 
+		            iframeIdmyFile.attachEvent("onload", eventHandlermyFile);
+	
+		        form.submit();
+		        
+		        var announcementMaterialTD = document.getElementById("ProfileMaterialTD");
+		        announcementMaterialTD.appendChild(files);
+		        files.style.display = "block";
+			  }else{
+					$('#ajaxLoader').find(".lightbox").hide();
+				alert("Please upload png/jpg/gif type file");
+				$('#ProfileMaterial').val('');
+			
+			} 
+		}else{
+			$('#ajaxLoader').find(".lightbox").hide();
+			alert("Please Upload a file");
+		}
+	}
+    $('#ajaxLoader').find(".lightbox").hide();
 }
 </script>
 
@@ -172,7 +238,7 @@ String eCode = request.getParameter("E_GREETING_ID");
             				<span style="color:#ec2028;">* </span><label ><%=localeObj.getTranslatedText("Material Upload")%></label>
             				</br><label>&nbsp;&nbsp;  <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
            				</td>
-               			<td>	
+               			<td id="ProfileMaterialTD">	
                				<input name="ProfileMaterial" id="ProfileMaterial" type="file" class="fileObj" onchange="uploadMaterial();" />               
               	 		</td> 
               	 		<td></td>

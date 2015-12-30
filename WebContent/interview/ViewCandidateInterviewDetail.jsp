@@ -30,6 +30,7 @@
 <script type='text/javascript' src='dwr/engine.js'></script>
 <script type='text/javascript' src='dwr/interface/InterviewAttendance.js'></script>
 <script type='text/javascript' src='dwr/util.js'></script>
+<script src="js/imocn.js" type="text/javascript" charset="utf-8"></script>
 
 <%try{ %>
 <%
@@ -327,8 +328,8 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                         	<input name="materialDesc" id="materialDesc" type="text" class="text" value=""  />
                                        	</td>  
                                        	
-                                       <td style="border: none;text-align:left" width="25%" colspan="2" >	
-                                        	<input name="material" id="material" type="file"  />  <progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
+                                       <td style="border: none;text-align:left" width="25%" colspan="2" id="CandidateMaterialTD">	
+                                        	<input name="CandidateMaterial" id="CandidateMaterial" type="file"  /><progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
                                        	</td>                                     			   
                                       	</tr>
                                       	
@@ -577,59 +578,140 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
            var m = '<%=localeObj.getTranslatedText("No Record Found")%>';
         function uploadFile()
         {
-       // var candidateCodes = $("#allCandidateCode").val();
-         var candidateCode = $("#candidateCode").val();
-		 $('#ajaxLoader').find(".lightbox").show();
-		 if($('input[type=file]').get(0).files[0] !=undefined){
-			var topicFile = $('input[type=file]').get(0).files[0];
-			var file_extension=topicFile.name;
-			if((file_extension.indexOf('.pdf')>-1) || (file_extension.indexOf('.PDF')>-1)
-					|| (file_extension.indexOf('.doc')>-1) || (file_extension.indexOf('.DOC')>-1)
-					|| (file_extension.indexOf('.docx')>-1)|| (file_extension.indexOf('.DOCX')>-1)){
-			//	showProgress();
-			var fd = new FormData();
-			fd.append('CandidateMaterial', topicFile);
-			var fileName=topicFile.name;
+        	$('#ajaxLoader').find(".lightbox").show();
 			var materialDesc=$("#materialDesc").val();
 			var candidateCode=$("#candidateCode").val();
 			var interviewCode=$("#interviewCode").val();
-			var size=$('input[type=file]').get(0).files[0].size;
-			if(size<=5242880){
-			  $.ajax({
-					url : 'UploadMaterial?image_name='+fileName,
-					type: "POST",
-					data: fd,
-				   	processData: false,
-				   	contentType: false,
-				}).done(function(respond){
-					 InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,{
-							callback : function(str) {
-								if((str-0)>0)
-								{
-										alert("Material Added Successfully");
-										window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode='+interviewCode+'&candidateCode='+candidateCode;
-								}
-								else
-									alert("Material Not Added");
-							}
-					 });
-				});
-			}else{
-				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload File Less then 5 MB");
-				$("#material").val('');
-			} 
-			 // hideProgress();
-			 // alert("file Uploaded Successfully");
-			 
-			}
-			else{
-				alert("Please Upload a PDF or Documents File");
-			}
-	   }
-	  else{
-			alert("Please Upload a file");
-	   }
+        	
+        	if(isAjaxUploadSupported()){
+        		
+		       // var candidateCodes = $("#allCandidateCode").val();
+		         var candidateCode = $("#candidateCode").val();
+				 
+				 if($('input[type=file]').get(0).files[0] !=undefined){
+					var topicFile = $('input[type=file]').get(0).files[0];
+					var file_extension=topicFile.name;
+					if((file_extension.indexOf('.pdf')>-1) || (file_extension.indexOf('.PDF')>-1)
+							|| (file_extension.indexOf('.doc')>-1) || (file_extension.indexOf('.DOC')>-1)
+							|| (file_extension.indexOf('.docx')>-1)|| (file_extension.indexOf('.DOCX')>-1)){
+					//	showProgress();
+					var fd = new FormData();
+					fd.append('CandidateMaterial', topicFile);
+					var fileName=topicFile.name;
+					var size=$('input[type=file]').get(0).files[0].size;
+					if(size<=5242880){
+					  $.ajax({
+							url : 'UploadMaterial?image_name='+fileName,
+							type: "POST",
+							data: fd,
+						   	processData: false,
+						   	contentType: false,
+						}).done(function(respond){
+							 InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,{
+									callback : function(str) {
+										if((str-0)>0)
+										{
+												alert("Material Added Successfully");
+												window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode='+interviewCode+'&candidateCode='+candidateCode;
+										}
+										else
+											alert("Material Not Added");
+									}
+							 });
+						});
+					}else{
+						$('#ajaxLoader').find(".lightbox").hide();
+						alert("Please Upload File Less then 5 MB");
+						$("#material").val('');
+					} 
+					 // hideProgress();
+					 // alert("file Uploaded Successfully");
+					 
+					}
+					else{
+						alert("Please Upload a PDF or Documents File");
+					}
+			   }
+			  else{
+					alert("Please Upload a file");
+			   }
+        	}else{
+        		var material_name=$("#CandidateMaterial").val();
+        		
+            	if('' != material_name){
+            		if((material_name.indexOf('.pdf')>-1) || (material_name.indexOf('.PDF')>-1)
+							|| (material_name.indexOf('.doc')>-1) || (material_name.indexOf('.DOC')>-1)
+							|| (material_name.indexOf('.docx')>-1)|| (material_name.indexOf('.DOCX')>-1)){ 
+        				var iframe = document.createElement("iframe");
+        				iframe.setAttribute("name", "upload_iframe_myFile");
+        				iframe.setAttribute("id", "upload_iframe_myFile");
+        		        iframe.setAttribute("width", "0");
+        		        iframe.setAttribute("height", "0");
+        		        iframe.setAttribute("border", "2px");
+        		        iframe.setAttribute("src","javascript:false;");
+        		        iframe.style.display = "none";
+        	
+        		        var form = document.createElement("form");
+        		        form.setAttribute("target", "upload_iframe_myFile");
+        		        form.setAttribute("action", "UploadMaterial?image_name="+material_name); //change page to post
+        		        form.setAttribute("method", "post");
+        		        form.setAttribute("enctype", "multipart/form-data");
+        		        form.setAttribute("encoding", "multipart/form-data");
+        		        form.style.display = "none";
+        	
+        		        var files = document.getElementById("CandidateMaterial");
+        		        files.style.display = "none";
+        		        
+        		        form.appendChild(files);
+        		        document.body.appendChild(form);
+        		        document.body.appendChild(iframe);
+        		        iframeIdmyFile = document.getElementById("upload_iframe_myFile");
+        	
+        		        // Add event...
+        		        var eventHandlermyFile = function () {
+        		            if (iframeIdmyFile.detachEvent) 
+        		                iframeIdmyFile.detachEvent("onload", eventHandlermyFile);
+        		            else 
+        		                iframeIdmyFile.removeEventListener("load", eventHandlermyFile, false);
+        	
+        		            response = getIframeContentJSON(iframeIdmyFile);
+        		        }
+        	
+        		        if (iframeIdmyFile.addEventListener) 
+        		            iframeIdmyFile.addEventListener("load", eventHandlermyFile, true);
+        		        if (iframeIdmyFile.attachEvent) 
+        		            iframeIdmyFile.attachEvent("onload", eventHandlermyFile);
+        	
+        		        form.submit();
+        		        
+        		        var announcementMaterialTD = document.getElementById("CandidateMaterialTD");
+        		        announcementMaterialTD.appendChild(files);
+        		        files.style.display = "block";
+        		        
+        		        var fileName = material_name;
+        		        
+        		        setTimeout(function(){
+        		            //do what you need here
+            		        InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,{
+    							callback : function(str) {
+    								if((str-0)>0)
+    								{
+    										alert("Material Added Successfully");
+    										window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode='+interviewCode+'&candidateCode='+candidateCode;
+    								}
+    								else
+    									alert("Material Not Added");
+    							}
+    					 });
+        		        }, 10000);
+        			  }else{
+  						alert("Please Upload a PDF or Documents File");
+        			
+        			} 
+        		}else{
+        			alert("Please Upload a file");
+        		}
+        	}
 		$('#ajaxLoader').find(".lightbox").hide();
 	 }
 </script>
