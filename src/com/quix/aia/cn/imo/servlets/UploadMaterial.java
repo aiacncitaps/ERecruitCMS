@@ -18,8 +18,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import com.quix.aia.cn.imo.listener.FileUploadListener;
-
 
 
 /**
@@ -75,6 +73,11 @@ public class UploadMaterial extends HttpServlet {
 
 							String fieldName = item.getFieldName();
 							fileName = item.getName();
+							
+							if(null != fileName && fileName.contains("\\")){
+//								String[] x = fileName.split("\\");
+								fileName = fileName.substring(fileName.lastIndexOf("\\")+1, fileName.length());
+							}
 
 								//byte conversion code 
 							 //create a temp directory and store file into it

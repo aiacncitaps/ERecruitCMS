@@ -141,63 +141,133 @@ $(function() {
 	
 });
 function uploadMaterial(){
+	
 	$('#ajaxLoader').find(".lightbox").show();
-	if($('input[type=file]').get(0).files[0] !=undefined){
-		var materialFile = $('input[type=file]').get(0).files[0];
-		var file_name=materialFile.name;
-		/* if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
-			|| (file_name.indexOf('.ppt')>-1) || (file_name.indexOf('.PPT')>-1)
-			|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
-			|| (file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG')>-1)
-			) */
-			if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1))
-					
-		{
-		if(materialFile==undefined)
-			materialFile = $('#materialname').html();
-		var fd = new FormData();
-			fd.append('AnnouncementMaterial', materialFile);
-			var material_name=$("#AnnouncementMaterial").val();
-			$('#uploadMaterialFile').val(file_name);
-			var size=$('input[type=file]').get(0).files[0].size;
-			if(size<=5242880){
-			
-		  $.ajax({
-				url : 'UploadMaterial?usedFor=Announcement&image_name='+material_name,
-				type: "POST",
-				data: fd,
-			   	processData: false,
-			   	contentType: false,
-			}).done(function(respond){
-				//window.location.href = "ContentManager?key=AnnouncementMaintenance";
+	
+	if(isAjaxUploadSupported()){
+		if($('input[type=file]').get(0).files[0] !=undefined){
+			var materialFile = $('input[type=file]').get(0).files[0];
+			var file_name=materialFile.name;
+			/* if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
+				|| (file_name.indexOf('.ppt')>-1) || (file_name.indexOf('.PPT')>-1)
+				|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
+				|| (file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG')>-1)
+				) */
+				if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1))
+						
+			{
+			if(materialFile==undefined)
+				materialFile = $('#materialname').html();
+			var fd = new FormData();
+				fd.append('AnnouncementMaterial', materialFile);
+				var material_name=$("#AnnouncementMaterial").val();
+				$('#uploadMaterialFile').val(file_name);
+				var size=$('input[type=file]').get(0).files[0].size;
+				if(size<=5242880){
 				
-				$('#materialname').html(file_name);
-				$('#ajaxLoader').find(".lightbox").hide();
-			});
+			  $.ajax({
+					url : 'UploadMaterial?usedFor=Announcement&image_name='+material_name,
+					type: "POST",
+					data: fd,
+				   	processData: false,
+				   	contentType: false,
+				}).done(function(respond){
+					//window.location.href = "ContentManager?key=AnnouncementMaintenance";
+					
+					$('#materialname').html(file_name);
+					$('#ajaxLoader').find(".lightbox").hide();
+				});
+				}else{
+					alert("Please Upload File Less then 5 MB");
+					$('#AnnouncementMaterial').val('');
+				} 
 			}else{
-				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload File Less then 5 MB");
-				$('#AnnouncementMaterial').val('');
-			} 
+				alert("Please Upload file with extension .pdf");
+				$('#uploadMaterialFile').val('');
+				
+				if(document.getElementById('AnnouncementMaterial') != null) 
+					 document.getElementById('AnnouncementMaterial').outerHTML = document.getElementById('AnnouncementMaterial').outerHTML;
+				if('<%=modifyFlag%>' == 'true')
+					$('#materialname').html('<%=fname%>');
+				else
+					$('#materialname').html('');
+			}
 		}else{
-			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload file with extension .pdf");
-			$('#uploadMaterialFile').val('');
 			
-			if(document.getElementById('AnnouncementMaterial') != null) 
-				 document.getElementById('AnnouncementMaterial').outerHTML = document.getElementById('AnnouncementMaterial').outerHTML;
-			if('<%=modifyFlag%>' == 'true')
-				$('#materialname').html('<%=fname%>');
-			else
-				$('#materialname').html('');
+			alert("Please Upload a file");
+			$('#uploadMaterialFile').val('');
 		}
 	}else{
-		$('#ajaxLoader').find(".lightbox").hide();
-		alert("Please Upload a file");
-		$('#uploadMaterialFile').val('');
+		var material_name=$("#AnnouncementMaterial").val();
+		if('' != material_name){
+			if((material_name.indexOf('.pdf')>-1) || (material_name.indexOf('.PDF')>-1))
+			{
+				var iframe = document.createElement("iframe");
+				iframe.setAttribute("name", "upload_iframe_myFile");
+				iframe.setAttribute("id", "upload_iframe_myFile");
+		        iframe.setAttribute("width", "0");
+		        iframe.setAttribute("height", "0");
+		        iframe.setAttribute("border", "2px");
+		        iframe.setAttribute("src","javascript:false;");
+		        iframe.style.display = "none";
 		
+		        var form = document.createElement("form");
+		        form.setAttribute("target", "upload_iframe_myFile");
+		        form.setAttribute("action", "UploadMaterial?usedFor=Announcement&image_name="+material_name); //change page to post
+		        form.setAttribute("method", "post");
+		        form.setAttribute("enctype", "multipart/form-data");
+		        form.setAttribute("encoding", "multipart/form-data");
+		        form.style.display = "none";
 		
+		        var files = document.getElementById("AnnouncementMaterial");
+		        files.style.display = "none";
+		        
+		        form.appendChild(files);
+		        document.body.appendChild(form);
+		        document.body.appendChild(iframe);
+		        iframeIdmyFile = document.getElementById("upload_iframe_myFile");
+		
+		        // Add event...
+		        var eventHandlermyFile = function () {
+		            if (iframeIdmyFile.detachEvent) 
+		                iframeIdmyFile.detachEvent("onload", eventHandlermyFile);
+		            else 
+		                iframeIdmyFile.removeEventListener("load", eventHandlermyFile, false);
+		
+		            response = getIframeContentJSON(iframeIdmyFile);
+		        }
+		
+		        if (iframeIdmyFile.addEventListener) 
+		            iframeIdmyFile.addEventListener("load", eventHandlermyFile, true);
+		        if (iframeIdmyFile.attachEvent) 
+		            iframeIdmyFile.attachEvent("onload", eventHandlermyFile);
+		
+		        form.submit();
+		        
+		        var announcementMaterialTD = document.getElementById("AnnouncementMaterialTD");
+		        announcementMaterialTD.appendChild(files);
+		        files.style.display = "block";
+			}else{
+				alert("Please Upload file with extension .pdf");
+				$('#uploadMaterialFile').val('');
+				
+				if(document.getElementById('AnnouncementMaterial') != null) 
+					 document.getElementById('AnnouncementMaterial').outerHTML = document.getElementById('AnnouncementMaterial').outerHTML;
+				if('<%=modifyFlag%>' == 'true')
+					$('#materialname').html('<%=fname%>');
+				else
+					$('#materialname').html('');
+			}  
+
+		}else{
+			
+			alert("Please Upload a file");
+			$('#uploadMaterialFile').val('');
+		}
+
+//         return;
 	}
+	$('#ajaxLoader').find(".lightbox").hide();
 	
 }
  
@@ -413,7 +483,7 @@ function uploadMaterial(){
                           				<label ><%=localeObj.getTranslatedText("Attachment")%></label>
                           				</br><label><%=localeObj.getTranslatedText("Maximum 5MB")%></label>
                          				</td>
-                             			<td>	
+                             			<td id="AnnouncementMaterialTD" >	
                              				<input name="AnnouncementMaterial" id="AnnouncementMaterial" type="file" class="fileObj"  onchange="uploadMaterial();"/>                
                          					<!-- <div id="spinner">
        											Loading...

@@ -276,113 +276,267 @@ function uploadCSVFile(){
 //$('#uploadMaterial').on('click', function(e) {
 function uploadMaterial(){
 	$('#ajaxLoader').find(".lightbox").show();
-	if($('input[type=file]').get(1).files[0] !=undefined){
-		var materialFile = $('input[type=file]').get(1).files[0];
-		var file_name=materialFile.name;
-		if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
-				|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
-				|| (file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG')>-1)
-				|| (file_name.indexOf('.doc')>-1) || (file_name.indexOf('.DOC')>-1)
-				|| (file_name.indexOf('.docs')>-1) || (file_name.indexOf('.docs')>-1)){
-		if(materialFile==undefined)
-			materialFile = $('#materialname').html();
-		var fd = new FormData();
-			fd.append('ProfileMaterial', materialFile);
-			var material_name=$("#ProfileMaterial").val();
-			$('#uploadProfileFile').val(file_name);
-			var size=$('input[type=file]').get(1).files[0].size;
-			if(size<=5242880){
-		  $.ajax({
-				url : 'UploadMaterial?',
-				type: "POST",
-				data: fd,
-			   	processData: false,
-			   	contentType: false,
-			}).done(function(respond){
-				$('#materialname').html(file_name);
-				$('#ajaxLoader').find(".lightbox").hide();
-			});
+	
+	if(isAjaxUploadSupported()){
+		if($('input[type=file]').get(1).files[0] !=undefined){
+			var materialFile = $('input[type=file]').get(1).files[0];
+			var file_name=materialFile.name;
+			if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
+					|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
+					|| (file_name.indexOf('.jpeg')>-1) || (file_name.indexOf('.JPEG')>-1)
+					|| (file_name.indexOf('.doc')>-1) || (file_name.indexOf('.DOC')>-1)
+					|| (file_name.indexOf('.docs')>-1) || (file_name.indexOf('.docs')>-1)){
+			if(materialFile==undefined)
+				materialFile = $('#materialname').html();
+			var fd = new FormData();
+				fd.append('ProfileMaterial', materialFile);
+				var material_name=$("#ProfileMaterial").val();
+				$('#uploadProfileFile').val(file_name);
+				var size=$('input[type=file]').get(1).files[0].size;
+				if(size<=5242880){
+			  $.ajax({
+					url : 'UploadMaterial?',
+					type: "POST",
+					data: fd,
+				   	processData: false,
+				   	contentType: false,
+				}).done(function(respond){
+					$('#materialname').html(file_name);
+					$('#ajaxLoader').find(".lightbox").hide();
+				});
+				}else{
+					$('#ajaxLoader').find(".lightbox").hide();
+					alert("Please Upload File Less then 5 MB");
+					$('#ProfileMaterial').val('');
+				}  
 			}else{
 				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload File Less then 5 MB");
-				$('#ProfileMaterial').val('');
-			}  
+				alert("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs");
+				$('#uploadProfileFile').val('');
+			
+				if(document.getElementById('ProfileMaterial') != null) 
+				 document.getElementById('ProfileMaterial').outerHTML = document.getElementById('ProfileMaterial').outerHTML;
+				
+				if('<%=modifyFlag%>' == 'true')
+					$('#materialname').html('<%=fname%>');
+				else
+					$('#materialname').html('');
+				
+			}
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs");
+			alert("Please  Upload a file");
 			$('#uploadProfileFile').val('');
-		
-			if(document.getElementById('ProfileMaterial') != null) 
-			 document.getElementById('ProfileMaterial').outerHTML = document.getElementById('ProfileMaterial').outerHTML;
-			
-			if('<%=modifyFlag%>' == 'true')
-				$('#materialname').html('<%=fname%>');
-			else
-				$('#materialname').html('');
 			
 		}
 	}else{
-		$('#ajaxLoader').find(".lightbox").hide();
-		alert("Please  Upload a file");
-		$('#uploadProfileFile').val('');
+		var material_name=$("#ProfileMaterial").val();
 		
+    	if('' != material_name){
+    		if((material_name.indexOf('.pdf')>-1) || (material_name.indexOf('.PDF')>-1)
+					|| (material_name.indexOf('.jpg')>-1) || (material_name.indexOf('.JPG')>-1)
+					|| (material_name.indexOf('.jpeg')>-1) || (material_name.indexOf('.JPEG')>-1)
+					|| (material_name.indexOf('.doc')>-1) || (material_name.indexOf('.DOC')>-1)
+					|| (material_name.indexOf('.docs')>-1) || (material_name.indexOf('.docs')>-1)){
+				var iframe = document.createElement("iframe");
+				iframe.setAttribute("name", "upload_iframe_myFile");
+				iframe.setAttribute("id", "upload_iframe_myFile");
+		        iframe.setAttribute("width", "0");
+		        iframe.setAttribute("height", "0");
+		        iframe.setAttribute("border", "2px");
+		        iframe.setAttribute("src","javascript:false;");
+		        iframe.style.display = "none";
+	
+		        var form = document.createElement("form");
+		        form.setAttribute("target", "upload_iframe_myFile");
+		        form.setAttribute("action", "UploadMaterial?image_name="+material_name); //change page to post
+		        form.setAttribute("method", "post");
+		        form.setAttribute("enctype", "multipart/form-data");
+		        form.setAttribute("encoding", "multipart/form-data");
+		        form.style.display = "none";
+	
+		        var files = document.getElementById("ProfileMaterial");
+		        files.style.display = "none";
+		        
+		        form.appendChild(files);
+		        document.body.appendChild(form);
+		        document.body.appendChild(iframe);
+		        iframeIdmyFile = document.getElementById("upload_iframe_myFile");
+	
+		        // Add event...
+		        var eventHandlermyFile = function () {
+		            if (iframeIdmyFile.detachEvent) 
+		                iframeIdmyFile.detachEvent("onload", eventHandlermyFile);
+		            else 
+		                iframeIdmyFile.removeEventListener("load", eventHandlermyFile, false);
+	
+		            response = getIframeContentJSON(iframeIdmyFile);
+		        }
+	
+		        if (iframeIdmyFile.addEventListener) 
+		            iframeIdmyFile.addEventListener("load", eventHandlermyFile, true);
+		        if (iframeIdmyFile.attachEvent) 
+		            iframeIdmyFile.attachEvent("onload", eventHandlermyFile);
+	
+		        form.submit();
+		        
+		        var announcementMaterialTD = document.getElementById("ProfileMaterialTD");
+		        announcementMaterialTD.appendChild(files);
+		        files.style.display = "block";
+			  }else{
+				  $('#ajaxLoader').find(".lightbox").hide();
+					alert("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs");
+				$('#uploadProfileFile').val('');
+			
+				if(document.getElementById('ProfileMaterial') != null) 
+				 document.getElementById('ProfileMaterial').outerHTML = document.getElementById('ProfileMaterial').outerHTML;
+				
+				if('<%=modifyFlag%>' == 'true')
+					$('#materialname').html('<%=fname%>');
+				else
+					$('#materialname').html('');
+			
+			} 
+		}else{
+			$('#ajaxLoader').find(".lightbox").hide();
+			alert("Please Upload a file");
+			$('#uploadProfileFile').val('');
+		}
 	}
+	$('#ajaxLoader').find(".lightbox").hide();
 
 }
 //});
 function uploadEopTopic(){
 	$('#ajaxLoader').find(".lightbox").show();
-	if($('input[type=file]').get(2).files[0] !=undefined){
-		var topicFile = $('input[type=file]').get(2).files[0];
-		var file_name=topicFile.name;
-		if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
-				|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
-				|| (file_name.indexOf('.png')>-1)|| (file_name.indexOf('.PNG')>-1)
-				|| (file_name.indexOf('.gif')>-1)|| (file_name.indexOf('.GIF')>-1)){
-		
-		var fd = new FormData();
-		fd.append('TopicFile', topicFile);
-		var fileName=$("#topic_file").val();
-		$('#uploadTopicFile').val(file_name);
-		var size=$('input[type=file]').get(2).files[0].size;
-		if(size<=5242880){
-		
-		  $.ajax({
-				url : 'UploadMaterial?',
-				type: "POST",
-				data: fd,
-			   	processData: false,
-			   	contentType: false,
-			}).done(function(respond){
-				$('#topicFile').html(file_name);
+	
+	if(isAjaxUploadSupported()){
+	
+		if($('input[type=file]').get(2).files[0] !=undefined){
+			var topicFile = $('input[type=file]').get(2).files[0];
+			var file_name=topicFile.name;
+			if((file_name.indexOf('.pdf')>-1) || (file_name.indexOf('.PDF')>-1)
+					|| (file_name.indexOf('.jpg')>-1) || (file_name.indexOf('.JPG')>-1)
+					|| (file_name.indexOf('.png')>-1)|| (file_name.indexOf('.PNG')>-1)
+					|| (file_name.indexOf('.gif')>-1)|| (file_name.indexOf('.GIF')>-1)){
+			
+			var fd = new FormData();
+			fd.append('TopicFile', topicFile);
+			var fileName=$("#TopicFile").val();
+			$('#uploadTopicFile').val(file_name);
+			var size=$('input[type=file]').get(2).files[0].size;
+			if(size<=5242880){
+			
+			  $.ajax({
+					url : 'UploadMaterial?',
+					type: "POST",
+					data: fd,
+				   	processData: false,
+				   	contentType: false,
+				}).done(function(respond){
+					$('#topicFile').html(file_name);
+					$('#ajaxLoader').find(".lightbox").hide();
+				});
+			
+			}else{
 				$('#ajaxLoader').find(".lightbox").hide();
-			});
+				alert("Please Upload File Less then 5 MB");
+				$("#TopicFile").val('');
+			} 
+			}
+			else{
+				$('#ajaxLoader').find(".lightbox").hide();
+				alert("Please Upload a PDF or Image File");
+				if(document.getElementById('TopicFile') != null) 
+				document.getElementById('TopicFile').outerHTML = document.getElementById('TopicFile').outerHTML;
+				$('#uploadTopicFile').val('');
+				if('<%=modifyFlag%>' == 'true')
+					$('#topicFile').html('<%=topicFileName%>');
+				else
+					$('#topicFile').html('');
+					
+				
+			}
+	   }
+	  else{
+			$('#ajaxLoader').find(".lightbox").hide();
+			alert("Please Upload a file");
+			$('#uploadTopicFile').val('');
+	   }
+	}else{
+		var material_name=$("#ProfileMaterial").val();
 		
+    	if('' != material_name){
+    		if((material_name.indexOf('.pdf')>-1) || (material_name.indexOf('.PDF')>-1)
+					|| (material_name.indexOf('.jpg')>-1) || (material_name.indexOf('.JPG')>-1)
+					|| (material_name.indexOf('.png')>-1)|| (material_name.indexOf('.PNG')>-1)
+					|| (material_name.indexOf('.gif')>-1)|| (material_name.indexOf('.GIF')>-1)){
+    			
+				var iframe = document.createElement("iframe");
+				iframe.setAttribute("name", "upload_iframe_myFile");
+				iframe.setAttribute("id", "upload_iframe_myFile");
+		        iframe.setAttribute("width", "0");
+		        iframe.setAttribute("height", "0");
+		        iframe.setAttribute("border", "2px");
+		        iframe.setAttribute("src","javascript:false;");
+		        iframe.style.display = "none";
+	
+		        var form = document.createElement("form");
+		        form.setAttribute("target", "upload_iframe_myFile");
+		        form.setAttribute("action", "UploadMaterial?image_name="+material_name); //change page to post
+		        form.setAttribute("method", "post");
+		        form.setAttribute("enctype", "multipart/form-data");
+		        form.setAttribute("encoding", "multipart/form-data");
+		        form.style.display = "none";
+	
+		        var files = document.getElementById("TopicFile");
+		        files.style.display = "none";
+		        
+		        form.appendChild(files);
+		        document.body.appendChild(form);
+		        document.body.appendChild(iframe);
+		        iframeIdmyFile = document.getElementById("upload_iframe_myFile");
+	
+		        // Add event...
+		        var eventHandlermyFile = function () {
+		            if (iframeIdmyFile.detachEvent) 
+		                iframeIdmyFile.detachEvent("onload", eventHandlermyFile);
+		            else 
+		                iframeIdmyFile.removeEventListener("load", eventHandlermyFile, false);
+	
+		            response = getIframeContentJSON(iframeIdmyFile);
+		        }
+	
+		        if (iframeIdmyFile.addEventListener) 
+		            iframeIdmyFile.addEventListener("load", eventHandlermyFile, true);
+		        if (iframeIdmyFile.attachEvent) 
+		            iframeIdmyFile.attachEvent("onload", eventHandlermyFile);
+	
+		        form.submit();
+		        
+		        var announcementMaterialTD = document.getElementById("TopicFileTD");
+		        announcementMaterialTD.appendChild(files);
+		        files.style.display = "block";
+			  }else{
+					$('#ajaxLoader').find(".lightbox").hide();
+					alert("Please Upload a PDF or Image File");
+					if(document.getElementById('TopicFile') != null) 
+					document.getElementById('TopicFile').outerHTML = document.getElementById('TopicFile').outerHTML;
+					$('#uploadTopicFile').val('');
+					if('<%=modifyFlag%>' == 'true')
+						$('#topicFile').html('<%=topicFileName%>');
+					else
+						$('#topicFile').html('');
+						
+			
+			} 
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload File Less then 5 MB");
-			$("#topic_file").val('');
-		} 
-		}
-		else{
-			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a PDF or Image File");
-			if(document.getElementById('topic_file') != null) 
-			document.getElementById('topic_file').outerHTML = document.getElementById('topic_file').outerHTML;
+			alert("Please Upload a file");
 			$('#uploadTopicFile').val('');
-			if('<%=modifyFlag%>' == 'true')
-				$('#topicFile').html('<%=topicFileName%>');
-			else
-				$('#topicFile').html('');
-				
-			
 		}
-   }
-  else{
-		$('#ajaxLoader').find(".lightbox").hide();
-		alert("Please Upload a file");
-		$('#uploadTopicFile').val('');
-   }
+	}
+	$('#ajaxLoader').find(".lightbox").hide();
 	
  }
 
@@ -885,7 +1039,7 @@ function uploadEopTopic(){
 	                                    				<label ><%=localeObj.getTranslatedText("Profile Upload")%></label>
 	                                    				</br><label><%=localeObj.getTranslatedText("Maximum 5MB")%></label>
                                     				</td>
-                                        			<td>	
+                                        			<td id="ProfileMaterialTD">	
                                         				<input name="ProfileMaterial" id="ProfileMaterial" type="file" class="fileObj" onchange="uploadMaterial();"/>                
                                     					<!-- <div id="spinner">
        													Loading...
@@ -909,8 +1063,8 @@ function uploadEopTopic(){
 	                                    				<label ><%=localeObj.getTranslatedText("Topic Upload")%></label>
 	                                    				</br><label><%=localeObj.getTranslatedText("Maximum 5MB")%></label>
                                     				</td>
-                                        			<td>	
-                                        				<input name="topic_file" id="topic_file" type="file"class="fileObj"  onchange="uploadEopTopic();"/>                
+                                        			<td id="TopicFileTD">	
+                                        				<input name="TopicFile" id="TopicFile" type="file"class="fileObj"  onchange="uploadEopTopic();"/>                
                                     					<!-- <div id="spinner">
        													Loading...
    														</div> -->

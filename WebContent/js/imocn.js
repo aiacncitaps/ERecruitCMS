@@ -1,3 +1,34 @@
+function isAjaxUploadSupported(){
+                var input = document.createElement("input");
+                input.type = "file";
+
+                return (
+                    "multiple" in input &&
+                        typeof File != "undefined" &&
+                        typeof FormData != "undefined" &&
+                        typeof (new XMLHttpRequest()).upload != "undefined" );
+}
+
+function getIframeContentJSON(iframe){
+    //IE may throw an "access is denied" error when attempting to access contentDocument on the iframe in some cases
+    try {
+        // iframe.contentWindow.document - for IE<7
+        var doc = iframe.contentDocument ? iframe.contentDocument: iframe.contentWindow.document,
+            response;
+
+        var innerHTML = doc.body.innerHTML;
+        //plain text response may be wrapped in <pre> tag
+        if (innerHTML.slice(0, 5).toLowerCase() == "<pre>" && innerHTML.slice(-6).toLowerCase() == "</pre>") {
+            innerHTML = doc.body.firstChild.firstChild.nodeValue;
+        }
+        response = eval("(" + innerHTML + ")");
+    } catch(err){
+        response = {success: false};
+    }
+
+    return response;
+}
+
 function getBU(bucode,txt){
   
 	$('#ajaxLoader').find(".lightbox").show();
