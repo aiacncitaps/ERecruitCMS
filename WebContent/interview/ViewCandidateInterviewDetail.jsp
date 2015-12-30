@@ -356,7 +356,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                       	</tr>
                                       	<%} %> --%>
                                       	  <td style="border: none;text-align:left" width="25%" colspan="2" >	
-                                        	<a href="ContentManager?key=ViewEapplicationForm&interviewCode=<%=interviewCandidate.getInterviewCode()%>&candidateCode=<%=interviewCandidate.getCandidateCode() %>" target="_new" id="applicationName" name="applicationName" ><%=localeObj.getTranslatedText("Application Form")%></a> 
+                                        	<a href="ContentManager?key=ViewEapplicationForm&interviewCode=<%=interviewCandidate.getInterviewCode()%>&candidateCode=<%=interviewCandidate.getCandidateCode() %>" target="_blank" id="applicationName" name="applicationName" ><%=localeObj.getTranslatedText("Application Form")%></a> 
                                        	</td>  
                                       	</tr>
                 		 				<tr> 

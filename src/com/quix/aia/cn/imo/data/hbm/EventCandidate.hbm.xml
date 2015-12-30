@@ -108,7 +108,7 @@
  -->
  
  <property name="cityName" formula="(SELECT c.CITYNAME FROM CITY_ER c WHERE c.CITYCOD=CITY) " update="false"></property>
-     <property name="sscName" formula="(SELECT s.LOCNAME FROM LOCAT_ER s WHERE s.LOCCODE=SSC AND s.CTYCOD=CITY ) " update="false"></property>
+      <property name="sscName" formula="(SELECT  MAX(s.LOCNAME) FROM LOCAT_ER s WHERE s.LOCCODE=SSC AND s.CTYCOD=CITY ) " update="false"></property>
 	<property name="officeName" formula="(SELECT b.OFFNAME FROM OFFICE_ER b WHERE b.OFFCOD=OFFICE and b.CTYCOD=CITY AND b.LOCCODE=SSC AND b.CO=(SELECT TB.BRANCH_NAME FROM T_BRANCH TB WHERE TB.BRANCH_CODE=BRANCH)) " update="false"></property>  
 	
 <!--         <property name="attendanceStatus" formula="CASE WHEN EXISTS(SELECT b.TIME_IN FROM T_EVENT_REG b WHERE b.CANDIDATE_CODE=CANDIDATE_CODE AND TIME_IN IS NOT NULL) THEN 'N' ELSE 'Y'" update="false"></property> -->

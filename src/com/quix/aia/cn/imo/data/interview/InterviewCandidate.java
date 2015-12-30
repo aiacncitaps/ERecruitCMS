@@ -759,7 +759,7 @@ returnStr ="<tr> "+
 				"<td><div style='text-align:center'>"+recuritmentScheme+"</div></td>"+
 				
 				"<td><div style='text-align:center'><a href=\"" + modifyLink + "\">"+localeObj.getTranslatedText("View")+"</a></div></td>"+
-				"<td><div style='text-align:center'><a href=\"" + applicationFormLink + "\" target=_new>"+localeObj.getTranslatedText("View")+"</a></div></td>"+
+				"<td><div style='text-align:center'><a href=\"" + applicationFormLink + "\" target=_blank>"+localeObj.getTranslatedText("View")+"</a></div></td>"+
 				
 				"<td><div style='text-align:center'><a href=\"" + modifyLink + "\" >"+localeObj.getTranslatedText("View")+" | "+localeObj.getTranslatedText("Upload")+"</a></div></td>"+
 				"<td><div style='text-align:center'>"+p100Text+"</div></td>"+

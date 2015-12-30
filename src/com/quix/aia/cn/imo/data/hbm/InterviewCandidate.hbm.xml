@@ -123,7 +123,7 @@
          <property name="interviewSessionName" formula="(SELECT b.INTERVIEW_SESSION_NAME FROM T_INTERVIEW b WHERE b.INTERVIEW_CODE=INTERVIEW_CODE ) " update="false"></property>
          <property name="serviceingAgentName" formula="(SELECT b.AGTNAME FROM AGENTER b WHERE b.AGTCOD=SERVICING_AGENT AND b.CO = BRANCH) " update="false"></property>
          <property name="cityName" formula="(SELECT c.CITYNAME FROM CITY_ER c WHERE c.CITYCOD=CITY) " update="false"></property>
-     <property name="sscName" formula="(SELECT s.LOCNAME FROM LOCAT_ER s WHERE s.LOCCODE=SSC AND s.CTYCOD=CITY ) " update="false"></property>
+      <property name="sscName" formula="(SELECT  MAX(s.LOCNAME) FROM LOCAT_ER s WHERE s.LOCCODE=SSC AND s.CTYCOD=CITY ) " update="false"></property>
 	<property name="officeName" formula="(SELECT b.OFFNAME FROM OFFICE_ER b WHERE b.OFFCOD=OFFICE and b.CTYCOD=CITY AND b.LOCCODE=SSC AND b.CO=(SELECT TB.BRANCH_NAME FROM T_BRANCH TB WHERE TB.BRANCH_CODE=BRANCH)) " update="false"></property>  
          
 <!--          <property name="passedStatus" formula="(CASE WHEN EXISTS(SELECT b.INTERVIEW_RESULT FROM T_INTERVIEW_REG b WHERE b.CANDIDATE_CODE=CANDIDATE_CODE AND (INTERVIEW_RESULT IS NULL OR INTERVIEW_RESULT = '' OR INTERVIEW_RESULT = 'FAIL')) THEN 'FAIL' ELSE 'PASS')" update="false"></property> -->

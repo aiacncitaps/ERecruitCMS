@@ -2725,7 +2725,7 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 			 Date d1=new Date();
 			 String time=(d1.getTime()+"").trim();
 			 String str=df.format(new Date())+time;
-		     path += File.separator + "signature_" + str + ".jpg";
+		     path += File.separator + "signature_" + str + ".png";
 			 File file=new File(path);
 			 if(!file.exists()){
 				 file.createNewFile();
@@ -2735,8 +2735,8 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 			 if(candidateESignature.geteSignaturePhoto()!=null){
 				 stream.write(candidateESignature.geteSignaturePhoto());
 				 stream.close();
-				 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".jpg";;
-				 url = "resources/" +"material/"+"signature_" + str + ".jpg";
+				 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".png";;
+				 url = "resources/" +"material/"+"signature_" + str + ".png";
 			 }else{
 				url="#"; 
 			 }
