@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="static/css/common.css">
 	<link rel="stylesheet" href="static/css/form.css">
 	<link rel="stylesheet" href="static/css/list.css">
+	<link rel="stylesheet" href="static/css/loading.css">
 	<script type="text/javascript" src="static/js/html5.js"></script>
 	<!--[if lt IE 9]>
 	<script src="static/js/css3-mediaqueries.js"></script>
@@ -180,12 +181,13 @@
 <nav class="nav"><a class="menu_btn" href="javascript:void(0);">菜单</a>
 <div class="btn_box cf">
 
-	<a class="sign_out_btn" href="./logout">退出</a>
+<a class="sign_out_btn" href="/">返回IMOCN</a>
 <!--
 	<a class="sign_out_btn" href="../ContentManager?key=home">返回IMOCN</a>
 	<a class="sign_out_btn" href="portIndex">报表</a>
 	<a class="sign_out_btn" href="unbandIndex">解绑</a>
 	<a class="download_btn" href="setAppLastDateIndex">设置APP时间</a>
+	<a class="sign_out_btn" href="./logout">退出</a>
 -->
 
 <a class="download_btn" href="javascript:void(0);" onclick="downResource();">打包资源</a>
@@ -324,10 +326,15 @@
 	}
 %>
 </ul>
+<section class="pop loading_pop" style="display:none;">
+<h2 class="title">正在导出，请稍等...</h2>
+<div class="container"><div class="sub_container"></div>
+</div></section>
 <script type="text/javascript">
 	function downResource(){
 		$(this).text('打包中...');
-		alert("打包时间比较长，请耐心等待，不要刷新网页，打包成功后会跳出资源下载链接");
+		$('.loading_pop').css('display','block');
+		//alert("打包时间比较长，请耐心等待，不要刷新网页，打包成功后会跳出资源下载链接");
 		$.ajax({
 			url:'zipResource',
 			type:'post',
@@ -335,15 +342,16 @@
 			success:function(json){
 				$(this).text('打包');
 				if(json.success){
+					$('.loading_pop').css('display','none');
 					$.ajax({
 						url:'setAppVersion/'+json.version,
 						type:'post',
 						dataType:'json',
 						success:function(data){
 							if(data.success){
-								if(confirm("下载地址如下："+json.msg)){
+								//if(confirm("下载地址如下："+json.msg)){
 									location.href = json.msg;
-								}
+								//}
 							}else{
 								alert(data.msg);
 							}
@@ -351,6 +359,7 @@
 					});
 					
 				}else{
+					$('.loading_pop').css('display','none');
 					alert(json.msg);
 				}
 			}

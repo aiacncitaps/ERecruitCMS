@@ -61,7 +61,7 @@ function squence(){
 			dataType : "json",
 			success : function(data) {
 				if(data.success){
-					alert("更新成功");
+					//alert("更新成功");
 				}
 			}
 		});
