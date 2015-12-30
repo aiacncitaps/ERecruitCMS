@@ -872,9 +872,11 @@ public class AdminModule extends BaseModule{
 				String fileType=TohoursUtils.getFileExt(fileName);
 				if (org.apache.commons.lang.StringUtils.isNotEmpty(peoples.getId())) {
 					String fileId = peoples.getFileId();
+					System.out.println("peoples fileId  is : "+fileId);
 					Peoples pl = dao.fetch(Peoples.class, peoples.getId());
 					if (Strings.isEmpty(fileId)) {
-						this.addFile(filePath, fileName, contentType);
+						fileId=this.addFile(filePath, fileName, contentType);
+						System.out.println("new fileId is : "+fileId);
 					}
 					pl.setContentType(contentType);
 					pl.setFileId(fileId);
@@ -896,7 +898,7 @@ public class AdminModule extends BaseModule{
 					peoples.setCreateTime(now);
 					peoples.setUpdateTime(now);
 					peoples.setFileType(fileType);
-					peoples.setFileId(fileId+"");
+					peoples.setFileId(fileId);
 					dealMark(peoples, markName, peoples.getOldMark(), peoples.getNewMark(),desc);
 					peoples = dao.insert(peoples);
 				}
