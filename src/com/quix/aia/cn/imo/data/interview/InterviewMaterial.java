@@ -34,6 +34,7 @@ public class InterviewMaterial {
 		interviewCode = 0;
 		materialName = "";
 		fieldName = "";
+		material=null;
 	}
 
 	/**

@@ -2737,6 +2737,8 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 				 stream.close();
 				 path="resources" + File.separator+ "material"+File.separator+"signature_" + str + ".png";;
 				 url = "resources/" +"material/"+"signature_" + str + ".png";
+				 				 
+				 logsMain.insertLogs("InterviewMaintenance",Level.SEVERE+"",url);
 			 }else{
 				url="#"; 
 			 }
@@ -2759,7 +2761,7 @@ public   String  getmaterialFile(CandidateESignature candidateESignature,HttpSer
 			e.printStackTrace();
 		}
 	}
-		return url;
+		return path;
 }
 
 //* ------------------------------------------------------------------------

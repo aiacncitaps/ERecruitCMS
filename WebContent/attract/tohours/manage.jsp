@@ -3,8 +3,6 @@
 <%@ page import="net.sf.json.*"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="javax.sql.*"%>
-<%@ page import="org.springframework.context.*"%>
-<%@ page import="org.springframework.context.support.*"%>
 <%@ page import="java.io.*"%>
 <%@ page import="java.net.*"%>
 <%

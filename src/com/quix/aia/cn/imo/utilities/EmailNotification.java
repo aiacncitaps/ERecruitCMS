@@ -328,13 +328,13 @@ public class EmailNotification {
 			 }
 			
 			String gender = "";
-			if("F".equalsIgnoreCase(candidate.getGender()))
+			if("F".equalsIgnoreCase(candidate.getGender().trim()))
 				gender = "小姐";
 			else
 				gender="先生";
 			
 			String genderAgent = "";
-			if("F".equalsIgnoreCase(aamData.getAgentSex()))
+			if("F".equalsIgnoreCase(aamData.getAgentSex().trim()))
 				genderAgent = "小姐";
 			else
 				genderAgent="先生";
@@ -431,13 +431,13 @@ public class EmailNotification {
 				 fname = interview.getAttachmentPath().substring(interview.getAttachmentPath().lastIndexOf('/') + 1);
 			 }
 			String gender = "";
-			if("F".equalsIgnoreCase(candidate.getGender()))
+			if("F".equalsIgnoreCase(candidate.getGender().trim()))
 				gender = "小姐";
 			else
 				gender="先生";
 			
 			String genderAgent = "";
-			if("F".equalsIgnoreCase(aamData.getAgentSex()))
+			if("F".equalsIgnoreCase(aamData.getAgentSex().trim()))
 				genderAgent = "小姐";
 			else
 				genderAgent="先生";
@@ -475,14 +475,17 @@ public class EmailNotification {
 	        				attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 	        				multipart.addBodyPart(attachmentPart);
 	        			  }	
-	        			  if(material.getMaterial() !=null && material.getMaterial().length > 0){
+	        			  
+	        		if(null != material){
+	        				
+	        			  if(null !=material.getMaterial() && material.getMaterial().length > 0){
 		        				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
 		        				MimeBodyPart attachmentPart = new MimeBodyPart();
 		        				attachmentPart.setDataHandler(new DataHandler(source));
 		        				attachmentPart.setFileName(fname);
 		        				multipart.addBodyPart(attachmentPart);
 		        			  }	
-
+	        			  }
 	            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailId, false));
                 msg.setContent(multipart);
 
@@ -544,13 +547,13 @@ public class EmailNotification {
 		            if(null != candidateGender){
 		            	candidateGender.trim();
 		            }
-					if("F".equalsIgnoreCase(candidateGender))
+					if("F".equalsIgnoreCase(candidateGender.trim()))
 						gender = "小姐";
 					else
 						gender="先生";
 					
 					String genderAgent = "";
-					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+					if("F".equalsIgnoreCase(aamData.getAgentSex().trim()))
 						genderAgent = "小姐";
 					else
 						genderAgent="先生";
@@ -668,13 +671,13 @@ public class EmailNotification {
 		            if(null != candidateGender){
 		            	candidateGender.trim();
 		            }
-					if("F".equalsIgnoreCase(candidateGender))
+					if("F".equalsIgnoreCase(candidateGender.trim()))
 						gender = "小姐";
 					else
 						gender="先生";
 					
 					String genderAgent = "";
-					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+					if("F".equalsIgnoreCase(aamData.getAgentSex().trim()))
 						genderAgent = "小姐";
 					else
 						genderAgent="先生";
@@ -710,7 +713,8 @@ public class EmailNotification {
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
-				    if(material.getMaterial() !=null && material.getMaterial().length > 0){
+				   
+				    if(material !=null && material.getMaterial().length > 0){
 	    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
 	    				MimeBodyPart attachmentPart = new MimeBodyPart();
 	    				attachmentPart.setDataHandler(new DataHandler(source));
@@ -790,13 +794,13 @@ public class EmailNotification {
 		            if(null != candidateGender){
 		            	candidateGender.trim();
 		            }
-					if("F".equalsIgnoreCase(candidateGender))
+					if("F".equalsIgnoreCase(candidateGender.trim()))
 						gender = "小姐";
 					else
 						gender="先生";
 					
 					String genderAgent = "";
-					if("F".equalsIgnoreCase(aamData.getAgentSex()))
+					if("F".equalsIgnoreCase(aamData.getAgentSex().trim()))
 						genderAgent = "小姐";
 					else
 						genderAgent="先生";
@@ -956,6 +960,7 @@ public class EmailNotification {
 						attachmentPart.setFileName("QR_CODE_IMAGE.jpeg");
 						multipart.addBodyPart(attachmentPart);
 				    }
+				   if(material!=null){
 				    if(material.getMaterial() !=null && material.getMaterial().length > 0){
 	    				DataSource source = new  ByteArrayDataSource(material.getMaterial(),"application/octet-stream");
 	    				MimeBodyPart attachmentPart = new MimeBodyPart();
@@ -963,6 +968,7 @@ public class EmailNotification {
 	    				attachmentPart.setFileName(fname);
 	    				multipart.addBodyPart(attachmentPart);
 	    			  }	
+				    }
 		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
