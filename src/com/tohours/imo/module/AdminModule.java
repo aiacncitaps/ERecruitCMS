@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ import com.tohours.imo.exception.BusinessException;
 import com.tohours.imo.util.Constants;
 import com.tohours.imo.util.QuixUtils;
 import com.tohours.imo.util.TohoursUtils;
+import com.tohours.imo.util.ZipUtils;
 @IocBean
 //声明为Ioc容器中的一个Bean
 @At("/attract")
@@ -1770,4 +1772,265 @@ public class AdminModule extends BaseModule{
 						return nm.setv("success", false).setv("msg", "解绑失败,id为空");
 					}
 				}
+				
+	
+				
+				
+		//资源包下载
+				@At
+				public Object zipResource() {
+					NutMap map = new NutMap();
+					NutMap nm= new NutMap();
+					//clearUpload();
+					nm.setv("success", true);
+					try {
+						String version=TohoursUtils.date2string(new Date());
+						map.put("index_background", loadIndexBackground());
+						map.put("guide_page", loadGuidePage());
+						map.put("ten_objective_elements", loadObjectiveElements());
+						map.put("excellence", loadExcellence());
+						map.put("ten_aia_elements", loadAiaElements());
+						map.put("version", version);
+						String zipName = "resource.zip";
+						String downLoadPath=zip(Json.toJson(map), zipName);
+						System.out.println("resoure.zip path is:"+downLoadPath);
+						nm.setv("msg", downLoadPath);
+						nm.setv("version", version);
+					} catch (Exception e) {
+						e.printStackTrace();
+						nm.setv("success", false);
+						nm.setv("msg", "失败，错误信息如下："+e.getMessage());
+					}
+					return nm;
+				}
+			private String loadIndexBackground() {
+					Resource resource = this.loadResourceByType(Constants.RESOURCE_TYPE_INDEX);
+					generateFile(resource.getFileIds());// 只有一个
+					return resource.getFilePaths();
+				}
+			private Object loadGuidePage() {
+					Resource resource = this
+							.loadResourceByType(Constants.RESOURCE_TYPE_GUIDE);
+					String ids = resource.getFileIds();
+					String[] arrId = ids.split(",");
+					String[] arrPath = resource.getFilePaths().split(",");
+					List<String> rv = new ArrayList<String>();
+					for (int i = 0; i < arrId.length; i++) {
+						rv.add(arrPath[i]);
+						generateFile(arrId[i]);
+					}
+					return rv;
+				}	
+				private Object loadObjectiveElements() {
+					Resource resource = this
+							.loadResourceByType(Constants.RESOURCE_TYPE_OBJECTIVE_ELEMENTS);
+					String ids = resource.getFileIds();
+					String[] arrId = ids.split(",");
+					String[] arrPath = resource.getFilePaths().split(",");
+					List<String> rv = new ArrayList<String>();
+					for (int i = 0; i < arrId.length; i++) {
+						rv.add(arrPath[i]);
+						generateFile(arrId[i]);
+					}
+					return rv;
+				}
+			private Object loadExcellence() {
+
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+
+					Cnd cnd = Cnd.where("deleteFlag", "=", false);
+					cnd.orderBy("squence", "asc").desc("createTime");
+					List<TopExcellence> list = dao.query(TopExcellence.class, cnd);
+					for (TopExcellence top : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", top.getName());
+						map.put("index", loadIndex(top));
+						map.put("sub_class", loadSub(top.getId()));
+						rv.add(map);
+					}
+					return rv;
+				}
+				
+			// 友邦十大要素
+				private Object loadAiaElements() {
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+
+					Cnd cnd = Cnd.where("type", "=", Constants.RESOURCE_TYPE_AIA_ELEMENTS);
+					cnd.and("deleteFlag", "=", false).orderBy("squence", "asc").desc("createTime");
+					List<Resource> list = dao.query(Resource.class, cnd);
+					for (Resource resource : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", resource.getTitle());
+						System.out.println("resourceId is :"+resource.getId());
+						map.put("children",loadChildren(resource.getId()));
+						rv.add(map);
+					}
+					return rv;
+				}
+				
+				private String zip(String json, String zipName) {
+					try {
+						String realPath = this.getRealPath(Constants.FILE_PATH);
+						File data = new File(realPath + "/data.json");
+						FileUtils.writeStringToFile(data, json, "UTF-8");
+						ZipUtils.zip(new File(realPath), zipName);
+						String contextPath=this.getContextPath();
+						return contextPath+"/attract/"+zipName;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+				
+				private void generateFile(String fileId) {
+					if (Constants.isTest) {
+						System.out.println(fileId);
+					}
+					
+					try {
+						Files files = dao.fetch(Files.class, fileId);
+						String path = files.getPath();
+						String realPath = this.getRealPath(path);
+						String folderPath = realPath.replaceAll("[^/]*$", "");
+						File folder = new File(folderPath);
+						if (folder.exists() == false) {
+							folder.mkdirs();
+						}
+						File file = new File(realPath);
+						if (file.exists() == false) {
+							try {
+								FileUtils.writeByteArrayToFile(file, files.getData());
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println("图片找不到,fileId is :"+fileId);
+					}
+					
+				}	
+				private Object loadIndex(TopExcellence top) {
+					Map<String, Object> rv = new HashMap<String, Object>();
+					String fileIds = top.getFileIds();
+					String filePaths = top.getFilePaths();
+					String[] arrIds = fileIds.split(",");
+					String[] arrPaths = filePaths.split(",");
+					List<String> pictures = new ArrayList<String>();
+					for (int i = 0; i < arrIds.length; i++) {
+						String id = arrIds[i];
+						if (rv.get("video") == null) {
+							rv.put("video", arrPaths[i]);
+						} else {
+							pictures.add(arrPaths[i]);
+						}
+						generateFile(id);
+					}
+					return rv;
+				}			
+				
+				private Object loadSub(String topId) {
+
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+
+					Cnd cnd = Cnd.where("deleteFlag", "=", false).and("top_excel_id", "=",
+							topId);
+					cnd.orderBy("squence", "asc").desc("createTime");
+					List<SubExcellence> list = dao.query(SubExcellence.class, cnd);
+					for (SubExcellence sub : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", sub.getName());
+						map.put("icon", sub.getFilePaths());
+						map.put("peoples", loadPeoples(sub.getId()));
+						generateFile(sub.getFileIds());
+						rv.add(map);
+					}
+					return rv;
+				}	
+				
+				private Object loadChildren(String resourceId) {
+
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+
+					Cnd cnd = Cnd.where("resourceId", "=",
+							resourceId);
+					cnd.orderBy("squence", "asc").desc("createTime");
+					List<Children> list = dao.query(Children.class, cnd);
+					for (Children child : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", child.getName());
+						if(child.getNextFlag()){
+							map.put("children", loadChildrenNext(child.getId()));
+						}else{
+							try {
+								String[] filePaths=child.getFilePaths().split(",");
+								map.put("pictures", Arrays.asList(filePaths));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							
+						}
+						String [] fileIds={};
+						try {
+							fileIds = child.getFileIds().split(",");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						for (int i = 0; i < fileIds.length; i++) {
+							generateFile(fileIds[i]);
+						}
+						rv.add(map);
+					}
+					return rv;
+				}			
+		
+				
+				private Object loadChildrenNext(String childrenId) {
+
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+
+					Cnd cnd = Cnd.where("childrenId", "=",childrenId);
+					cnd.orderBy("squence", "asc").desc("createTime");
+					List<ChildrenNext> list = dao.query(ChildrenNext.class, cnd);
+					for (ChildrenNext c : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", c.getName());
+						String[] filePaths=c.getFilePaths().split(",");
+						map.put("pictures", Arrays.asList(filePaths));
+						try {
+							String[] fileIds=c.getFileIds().split(",");
+							for (int i = 0; i < fileIds.length; i++) {
+								generateFile(fileIds[i]);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						rv.add(map);
+					}
+					return rv;
+				}
+				
+				private Object loadPeoples(String subId) {
+					List<Map<String, Object>> rv = new ArrayList<Map<String, Object>>();
+					Cnd cnd = Cnd.where("deleteFlag", "=", false).and("sub_excel_id", "=",subId);
+					cnd.orderBy("squence", "asc").desc("createTime");
+					List<Peoples> list = dao.query(Peoples.class, cnd);
+					for (Peoples p : list) {
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("name", p.getName());
+						map.put("join_date", p.getJoinDate());
+						map.put("old_job", p.getOldJob());
+						map.put("share_word", p.getShareWord());
+						map.put("sub_company", p.getSubCompany());
+						map.put("marks", Json.fromJson(p.getMarks()));
+						map.put("picture", p.getFilePath());
+						try {
+							generateFile(p.getFileId());
+						} catch (Exception e) {
+						}
+						rv.add(map);
+					}
+					return rv;
+				}	
+				
 }

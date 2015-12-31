@@ -551,32 +551,33 @@ public class AttractModule extends BaseModule {
 	
 
 	
-	@At
-	public Object zipResource() {
-		NutMap map = new NutMap();
-		NutMap nm= new NutMap();
-		clearUpload();
-		nm.setv("success", true);
-		try {
-			String version=TohoursUtils.date2string(new Date());
-			map.put("index_background", loadIndexBackground());
-			map.put("guide_page", loadGuidePage());
-			map.put("ten_objective_elements", loadObjectiveElements());
-			map.put("excellence", loadExcellence());
-			map.put("ten_aia_elements", loadAiaElements());
-			map.put("version", version);
-			String zipName = "resource.zip";
-			String downLoadPath=zip(Json.toJson(map), zipName);
-			System.out.println("resoure.zip path is:"+downLoadPath);
-			nm.setv("msg", downLoadPath);
-			nm.setv("version", version);
-		} catch (Exception e) {
-			e.printStackTrace();
-			nm.setv("success", false);
-			nm.setv("msg", "失败，错误信息如下："+e.getMessage());
-		}
-		return nm;
-	}
+//	@At
+//	public Object zipResource() {
+//		NutMap map = new NutMap();
+//		NutMap nm= new NutMap();
+//		clearUpload();
+//		nm.setv("success", true);
+//		try {
+//			String version=TohoursUtils.date2string(new Date());
+//			map.put("index_background", loadIndexBackground());
+//			map.put("guide_page", loadGuidePage());
+//			map.put("ten_objective_elements", loadObjectiveElements());
+//			map.put("excellence", loadExcellence());
+//			map.put("ten_aia_elements", loadAiaElements());
+//			map.put("version", version);
+//			String zipName = "resource.zip";
+//			String downLoadPath=zip(Json.toJson(map), zipName);
+//			System.out.println("resoure.zip path is:"+downLoadPath);
+//			nm.setv("msg", downLoadPath);
+//			nm.setv("version", version);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			nm.setv("success", false);
+//			nm.setv("msg", "失败，错误信息如下："+e.getMessage());
+//		}
+//		return nm;
+//	}
+	@SuppressWarnings("unused")
 	private String zip(String json, String zipName) {
 		try {
 			String realPath = this.getRealPath(Constants.FILE_PATH);
