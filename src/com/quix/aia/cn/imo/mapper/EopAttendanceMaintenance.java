@@ -164,6 +164,7 @@ public class EopAttendanceMaintenance {
 		addressBook.setGender(candidate.getGender());
 		addressBook.setName(candidate.getCandidateName());
 		addressBook.setCo(requestParameters.getParameter("co"));
+		candidate.setBranchName(requestParameters.getParameter("co"));
 	    Integer key = new AddressBookMaintenance().getAddressBookIfExist(addressBook);
 	    if(localeObj == null){
 	    	if(key != 0){
@@ -301,11 +302,11 @@ public class EopAttendanceMaintenance {
 		addressBook.setWeChat(candidate.getWeChat());
 		addressBook.setNric(candidate.getNric());
 		addressBook.setMobilePhoneNo(candidate.getContactNumber());
-		//addressBook.setCo(branchName);
+		addressBook.setCo(candidate.getBranchName());
 		AddressBook addressBookObj = new AddressBookMaintenance().insertAddressBook(addressBook,requestParameters);
 		candidate.setEventCandidateCode(""+addressBookObj.getAddressCode());
 		
-		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),null); 
+		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),addressBook.getCo()); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
 		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode(), aamData.getBranch())); 
 		candidate.setSscCode(aamData.getSscCode()+"");
@@ -1214,6 +1215,8 @@ public class EopAttendanceMaintenance {
 			 errorFlag =  true;
 			 else if(requestParameters.getParameter("agentID")==null  || (requestParameters.getParameter("agentID")!=null && requestParameters.getParameter("agentID").length() == 0))
 					 errorFlag =  true;
+			 else if(requestParameters.getParameter("co")==null  || (requestParameters.getParameter("co")!=null && requestParameters.getParameter("co").length() == 0))
+				 errorFlag =  true;
 			 else{
 				if(LMSUtil.validInt(requestParameters.getParameter("eventCode"))){
 					 event =new EopMaintenance().getEvent(Integer.parseInt(requestParameters.getParameter("eventCode")));
