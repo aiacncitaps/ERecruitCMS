@@ -73,7 +73,7 @@ if(application.getAttribute(ApplicationAttribute.LATEST_JS_CSS_VERSION)!=null)
 				            </tr>          					
 			               <tr>                         
 				               <td ><label >用户</label></td>
-				               <td ><input name="userID" id="userID" type="text" class="textObj" style="width:80%" /></td>
+				               <td ><input name="userID" id="userID" type="text" class="textObj" style="width:80%" autocomplete="off"/></td>
 				               <td align="left">	
 									<select name="SelectLang" id="SelectLang" class="comboObj" >
 										 <option value="CN" >Chinese</option>           		 
@@ -83,7 +83,7 @@ if(application.getAttribute(ApplicationAttribute.LATEST_JS_CSS_VERSION)!=null)
 			               </tr>
 			                <tr  >                         
 				               <td><label > 密码</label></td>
-				               <td><input name="password" id="password" type="password" class="textObj" style="width:80%"/></td>
+				               <td><input name="password" id="password" type="password" class="textObj" style="width:80%" autocomplete="off"/></td>
 				               <td></td>
 			               </tr>
 			                 <tr  >                         
