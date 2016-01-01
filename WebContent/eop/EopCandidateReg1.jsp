@@ -50,7 +50,7 @@ if(request.getSession().getAttribute(SessionAttributes.FORM_OBJ)!=null)
 	formDetail = (FormObj)request.getSession().getAttribute(SessionAttributes.FORM_OBJ);
 }
 candidate = (EventCandidate)request.getSession().getAttribute(SessionAttributes.FUNCTION_OBJ);
-String agent_id = "",event_code="",agent_name = "";
+String agent_id = "",event_code="",agent_name = "", co="";
 String age = "0";
 int buCode = 0,distCode = 0,branch=0;
 String cityCode = 0+"",sscCode = 0+"",office=0+"";
@@ -70,10 +70,12 @@ if(userObj!=null){
 	if(request.getParameter("agentID")!=null)
 		//agent_id =	AESPasswordManager.getInstance().decryptPassword(request.getParameter("agentID"));
 		agent_id = request.getParameter("agentID");
+	if(request.getParameter("co")!=null)
+		co = request.getParameter("co");		
 	if(request.getParameter("eventCode")!=null)
 		event_code = request.getParameter("eventCode");
 	 if(request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.ERROR_OBJ) == null)
-		 agent_name = AamDataMaintenance.retrieveAgentName(agent_id); 
+		 agent_name = AamDataMaintenance.retrieveAgentName(agent_id, co); 
 	
 	  event = (Event)request.getSession().getAttribute("Event_OBJ");
 }
@@ -130,10 +132,10 @@ $(function() {
 	
 });                                          
  
-function getAgentName(agentId){
-	if(agentId!=''){
+function getAgentName(agentId, coBranch){
+	if(agentId!='' && '' != coBranch){
 		$('#ajaxLoader').find(".lightbox").show();
-		AamData.retrieveAgentName(agentId,{
+		AamData.retrieveAgentName(agentId, coBranch,{
 			callback : function(str) 
 			{
 		         $('#agentName').val(str);
@@ -320,14 +322,18 @@ function autoCalculateAge(obj){
 					                          	if(request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.ERROR_OBJ) != null){
 					                          		if(userObj==null && agent_id !=null){  %>
 					                          		 <%-- <input name="serviceAgent" id="serviceAgent" type="text" class="textObj"    value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.SERVICING_AGENT))%>"  maxlength="30" disabled/> --%>
+					                          		 <input name="<%=EopAttendanceMaintenance.CO %>" id="<%=EopAttendanceMaintenance.CO %>" type="hidden"   value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.CO))%>"  maxlength="30"/>
 	                                       	         <input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="hidden"   value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.SERVICING_AGENT))%>"  maxlength="30"/>
 	                                       	  <%}else{ %>	
-	                                       			 <input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="text" class="textObj" value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.SERVICING_AGENT)) %>"   onblur ="getAgentName(this.value);" maxlength="30" />
+	                                       	  		<input name="<%=EopAttendanceMaintenance.CO %>" id="<%=EopAttendanceMaintenance.CO %>" type="hidden"   value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.CO))%>"  maxlength="30"/>
+	                                       			 <input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="text" class="textObj" value="<%=SecurityAPI.encodeHTML(request.getParameter(EopAttendanceMaintenance.SERVICING_AGENT)) %>"   onblur ="getAgentName(this.value,'<%=request.getParameter(EopAttendanceMaintenance.CO) %>');" maxlength="30" />
 	                                       	 <%}}else if(userObj==null && agent_id !=null){ %>
 			                                       <%-- 	  <input name="serviceAgent" id="serviceAgent" type="text" class="textObj"    value="<%=SecurityAPI.encodeHTML(agent_id)%>"  maxlength="30" disabled/> --%>
 			                                       	  <input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="hidden"   value="<%=SecurityAPI.encodeHTML(agent_id)%>"  maxlength="30"/>
+			                                       	  <input name="<%=EopAttendanceMaintenance.CO %>" id="<%=EopAttendanceMaintenance.CO %>" type="hidden"   value="<%=SecurityAPI.encodeHTML(co)%>"  maxlength="30"/>
 	                                       	 <%}else{%>
-	                                       	 		<input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="text" class="textObj"    value="<%=SecurityAPI.encodeHTML(candidate.getServicingAgent())%>"   onblur ="getAgentName(this.value);" maxlength="30" />
+	                                       	 		<input name="<%=EopAttendanceMaintenance.CO %>" id="<%=EopAttendanceMaintenance.CO %>" type="hidden"    value="<%=SecurityAPI.encodeHTML(co)%>"  maxlength="30"/>
+	                                       	 		<input name="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" id="<%=EopAttendanceMaintenance.SERVICING_AGENT %>" type="text" class="textObj"    value="<%=SecurityAPI.encodeHTML(candidate.getServicingAgent())%>"   onblur ="getAgentName(this.value,'<%=co %>');" maxlength="30" />
 	                                       	 <%} %>
 	                                      	</td>                                    			   
                                       	</tr>

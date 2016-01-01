@@ -126,7 +126,7 @@ public class EopAttendanceMaintenance {
 		
 		if(localeObj != null){
 			if(requestParameters.getParameter("servicingAgent")!=null && requestParameters.getParameter("servicingAgent").length() > 0){
-				Integer id = AamDataMaintenance.checkIfAgentExist(requestParameters.getParameter("servicingAgent"));
+				Integer id = AamDataMaintenance.checkIfAgentExist(requestParameters.getParameter("servicingAgent"), requestParameters.getParameter("co"));
 				if(id == 0)
 					return new ErrorObject("" + "<br>", "Servicing Agent is not valid",localeObj);
 			}
@@ -163,6 +163,7 @@ public class EopAttendanceMaintenance {
 		addressBook.setBirthDate(candidate.getDob());
 		addressBook.setGender(candidate.getGender());
 		addressBook.setName(candidate.getCandidateName());
+		addressBook.setCo(requestParameters.getParameter("co"));
 	    Integer key = new AddressBookMaintenance().getAddressBookIfExist(addressBook);
 	    if(localeObj == null){
 	    	if(key != 0){
@@ -306,7 +307,7 @@ public class EopAttendanceMaintenance {
 		
 		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),null); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
-		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
+		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode(), aamData.getBranch())); 
 		candidate.setSscCode(aamData.getSscCode()+"");
 		candidate.setCityCode(aamData.getCityCode()+"");
 		candidate.setOfficeCode(aamData.getOfficeCode());
@@ -374,7 +375,7 @@ public class EopAttendanceMaintenance {
 		//
 //		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), null); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
-		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
+		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode(), aamData.getBranch())); 
 		candidate.setSscCode(aamData.getSsc());
 		candidate.setCityCode(aamData.getCity());
 		candidate.setOfficeCode(aamData.getOfficeCode());
@@ -743,7 +744,7 @@ public class EopAttendanceMaintenance {
 		 String branchName=imoutill.getBranchNameBaseonCode(candidate.getBranchCode());
 		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(), branchName); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
-		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode())); 
+		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode(), branchName)); 
 		candidate.setSscCode(aamData.getSsc());
 		candidate.setCityCode(aamData.getCity());
 		candidate.setOfficeCode(aamData.getOfficeCode());
@@ -1260,7 +1261,7 @@ public class EopAttendanceMaintenance {
 		
 			
 			if(!errorFlag){
-					Integer id = AamDataMaintenance.checkIfAgentExist(requestParameters.getParameter("agentID"));
+					Integer id = AamDataMaintenance.checkIfAgentExist(requestParameters.getParameter("agentID"), requestParameters.getParameter("co"));
 					if(id == 0)
 						errorFlag = true;
 				}
@@ -1317,6 +1318,7 @@ public class EopAttendanceMaintenance {
 	
 	public static final String CANDIDATE_NAME = "candidateName";
 	public static final String SERVICING_AGENT = "servicingAgent";
+	public static final String CO = "co";
 	public static final String AGENT_NAME = "agentName";
 	public static final String BU = "bu";
 	public static final String DISTRICT = "district";

@@ -319,18 +319,19 @@ public class AamDataMaintenance {
 	 * @return String 
 	 * 
 	 */
-	public static String retrieveAgentName(String agentId) {
+	public static String retrieveAgentName(String agentId, String coBranch) {
 		String agentName = "";
 		try {
 			session = clientSessionFactory.openSession();
-			transaction = session.beginTransaction();
 
 			Criteria crit = session.createCriteria(AamData.class);
 			if (null != agentId && !"".equals(agentId)) {
 				crit.setProjection(Projections.property("agentName"));
 				crit.add(Restrictions.eq("agentCode", agentId));
 			}
-
+			if (null != agentId && !"".equals(agentId)) {
+				crit.add(Restrictions.eq("branch", coBranch));
+			}
 			ArrayList  list = (ArrayList) crit.setCacheable(true).list();
 			if(list!=null && list.size() > 0)
 				agentName = (String)list.get(0);
@@ -356,7 +357,7 @@ public class AamDataMaintenance {
 	 * @return Integer 
 	 * 
 	 */
-	public static Integer checkIfAgentExist(String agentId) {
+	public static Integer checkIfAgentExist(String agentId,String coBranch) {
 		Integer id = 0;
 		try {
 			session = clientSessionFactory.openSession();
@@ -366,6 +367,10 @@ public class AamDataMaintenance {
 			if (null != agentId && !"".equals(agentId)) {
 				//crit.setProjection(Projections.property("id"));
 				crit.add(Restrictions.eq("agentCode", agentId));
+			}
+			if (null != coBranch && !"".equals(coBranch)) {
+				//crit.setProjection(Projections.property("id"));
+				crit.add(Restrictions.eq("branch", coBranch));
 			}
 
 			ArrayList  list = (ArrayList) crit.setCacheable(true).list();
