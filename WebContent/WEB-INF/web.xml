@@ -193,5 +193,11 @@
 	
 	<session-config>
 		<session-timeout>30</session-timeout>
+	  <!-- Only for https-->
+      <cookie-config>
+            <http-only>true</http-only>
+            <secure>true</secure>
+        </cookie-config>
+		<!-- -->
 	</session-config>
 </web-app>
