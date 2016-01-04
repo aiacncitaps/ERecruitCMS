@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" id="WebApp_ID" version="2.4">
+  <display-name>IMOCN</display-name>
+  <context-param>
+    <param-name>resteasy.scan</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>resteasy.resources</param-name>
+    <param-value>com.quix.aia.cn.imo.rest.ApplicationFormRest,com.quix.aia.cn.imo.rest.UserAuthRest,com.quix.aia.cn.imo.rest.InterviewRest,com.quix.aia.cn.imo.rest.EGreetingRest,com.quix.aia.cn.imo.rest.WebServiceRest,com.quix.aia.cn.imo.rest.AnnouncementRest,com.quix.aia.cn.imo.rest.PresenterRest,com.quix.aia.cn.imo.rest.HolidayRest,com.quix.aia.cn.imo.rest.EventRest,com.quix.aia.cn.imo.rest.AddressBookRest,com.quix.aia.cn.imo.rest.TrainingRest,com.quix.aia.cn.imo.rest.FirstInterviewRest,com.quix.aia.cn.imo.rest.EncryptDecryptRest </param-value>
+  </context-param>
+  <context-param>
+    <param-name>resteasy.servlet.mapping.prefix</param-name>
+    <param-value>/rest</param-value>
+  </context-param>
+<!--   <context-param> -->
+<!--     <param-name>userAuthEnvironment</param-name> -->
+<!--     <param-value>internet</param-value> -->
+<!--   </context-param> -->
+<env-entry>
+    <env-entry-name>userAuthEnvironment</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>internet</env-entry-value>
+</env-entry>
+  <filter>
+    <description></description>
+    <display-name>SecurityFilter</display-name>
+    <filter-name>SecurityFilter</filter-name>
+    <filter-class>com.quix.aia.cn.imo.data.Filter.SecurityFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SecurityFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+<!--   <filter> -->
+<!-- 	<filter-name>nutz</filter-name> -->
+<!-- 	<filter-class>org.nutz.mvc.NutFilter</filter-class> -->
+<!-- 	<init-param> -->
+<!-- 		<param-name>modules</param-name> -->
+<!-- 		<param-value>com.tohours.imo.MainModule</param-value> -->
+<!-- 	</init-param> -->
+<!--   </filter> -->
+<!--   <filter-mapping> -->
+<!-- 	<filter-name>nutz</filter-name> -->
+<!-- 	<url-pattern>/attract/*</url-pattern> -->
+<!-- 	<dispatcher>REQUEST</dispatcher> -->
+<!-- 	<dispatcher>FORWARD</dispatcher> -->
+<!--   </filter-mapping> -->
+  <listener>
+    <listener-class>
+	   org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+	</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.quix.aia.cn.imo.listener.LMSListener</listener-class>
+  </listener>
+  <servlet>
+    <display-name>ContentManager</display-name>
+    <servlet-name>ContentManager</servlet-name>
+    <servlet-class>com.quix.aia.cn.imo.servlets.ContentManager</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <display-name>FormManager</display-name>
+    <servlet-name>FormManager</servlet-name>
+    <servlet-class>com.quix.aia.cn.imo.servlets.FormManager</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>UploadMaterial</display-name>
+    <servlet-name>UploadMaterial</servlet-name>
+    <servlet-class>com.quix.aia.cn.imo.servlets.UploadMaterial</servlet-class>
+  </servlet>
+<!--   <servlet>
+    <display-name>DWRServlet</display-name>
+    <servlet-name>dwr-invoker</servlet-name>
+    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </servlet> -->
+  
+  <servlet>
+    <display-name>DWRServlet</display-name>
+    <servlet-name>dwr-invoker</servlet-name>
+    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>true</param-value>
+    </init-param>
+	<init-param>
+      <param-name>activeReverseAjaxEnabled</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </servlet>
+  
+  <servlet>
+    <description></description>
+    <display-name>CacheRest</display-name>
+    <servlet-name>CacheRest</servlet-name>
+    <servlet-class>com.quix.aia.cn.imo.servlets.CacheRest</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>resteasy-servlet</servlet-name>
+    <servlet-class>
+	   org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+	  </servlet-class>
+  </servlet>
+  
+    <filter>
+    <display-name>TokenValidator</display-name>
+    <filter-name>TokenValidator</filter-name>
+    <filter-class>com.quix.aia.cn.imo.data.Filter.TokenValidator</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>TokenValidator</filter-name>
+    <url-pattern>/FormManager/*</url-pattern>
+  
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>TokenValidator</filter-name>
+    <url-pattern>/ContentManager/*</url-pattern>
+  
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>TokenValidator</filter-name>
+    <url-pattern>/login.jsp</url-pattern>
+  
+  </filter-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>ContentManager</servlet-name>
+    <url-pattern>/ContentManager</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FormManager</servlet-name>
+    <url-pattern>/FormManager</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadMaterial</servlet-name>
+    <url-pattern>/UploadMaterial</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>dwr-invoker</servlet-name>
+    <url-pattern>/dwr/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>resteasy-servlet</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CacheRest</servlet-name>
+    <url-pattern>/CacheRest</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>
+    <exception-type>java.lang.NullPointerException</exception-type>
+    <location>/login.jsp</location>
+  </error-page>
+  <error-page>
+    <exception-type>java.lang.RuntimeException</exception-type>
+    <location>/error.jsp</location>
+  </error-page>
+ <!--  <error-page>
+  	<error-code>404</error-code>
+  	<location>/error.jsp</location>
+  </error-page> -->
+  <error-page>
+  	<error-code>403</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+  <error-page>
+  	<error-code>400</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+  <error-page>
+  	<error-code>500</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+  <error-page>
+  	<error-code>204</error-code>
+  	<location>/error.jsp</location>
+  </error-page>
+	<resource-ref>
+		<res-ref-name>jdbc/IMOCN</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	  <!-- Only for https-->
+<!--       <cookie-config> -->
+<!--             <http-only>true</http-only> -->
+<!--             <secure>true</secure> -->
+<!--         </cookie-config> -->
+		<!-- -->
+	</session-config>
+</web-app>

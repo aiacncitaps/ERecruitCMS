@@ -1,2 +1,0 @@
-# ERecruitCMS
-For ERecruitment CMS
