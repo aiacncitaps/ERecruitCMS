@@ -2145,6 +2145,7 @@ public class EopMaintenance {
 		ArrayList<Event> eopList = new ArrayList<Event>();
 		ArrayList<Event> eopList2 = new ArrayList<Event>();
 		 List<EventCandidate> list1;
+		 ArrayList eventListAddAll = new ArrayList();
 		Event event;
 		try{
 			
@@ -2165,6 +2166,32 @@ public class EopMaintenance {
 
 			
 			
+			
+			
+			
+			
+			ImoUtilityData utilityData=new ImoUtilityData();
+			String branchName=utilityData.getBranchNameBaseonCode(aamData.getBranchCode());
+			ArrayList<Branch> branchlist= utilityData.getBranchCodeListBasedOnBranchName(branchName);
+			
+			if(branchlist.size()>0){
+
+				for(Branch bracnh:branchlist){
+					
+					
+					District dist=utilityData.getDistrictCodeBucode(bracnh.getDistCode());
+					aamData.setBranchCode(bracnh.getBranchCode());
+					aamData.setDistrictCode(dist.getDistrictCode());
+					aamData.setBuCode(dist.getBuCode());			
+					
+					
+					System.out.println("bu "+aamData.getBuCode());
+					System.out.println("dist "+aamData.getDistrictCode());
+					System.out.println("branch "+aamData.getBranchCode());
+			
+			System.out.println(""+now);
+			System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+
 			Query query=session.createQuery("select distinct e FROM Event e,SpecialGroup s where status = 1 and  e.openTo='SG'"
 					+ "  AND (e.eventDate > :eventDate OR ( e.eventDate = :eventDate AND e.startTime > :startTime ))"
 					+ "and ( (e.buCode=:bucode  and e.district=0) "
@@ -2176,10 +2203,6 @@ public class EopMaintenance {
 					+ "and s.eventCode=e.event_code and s.agencyUnit=:leadcode) ");
 			
 			
-			
-			System.out.println(""+now);
-			System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
-
 			query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 			query.setParameter("eventDate", sdf1.parse(sdf1.format(now)));
 			query.setParameter("bucode",aamData.getBuCode());
@@ -2262,7 +2285,113 @@ public class EopMaintenance {
 						   }
 				  
 				  eopList.addAll(eopList2);
-			
+				  
+				  eventListAddAll.addAll(eopList);
+				}// branch foor loop
+				
+				
+				
+			}else{
+				
+				Query query=session.createQuery("select distinct e FROM Event e,SpecialGroup s where status = 1 and  e.openTo='SG'"
+						+ "  AND (e.eventDate > :eventDate OR ( e.eventDate = :eventDate AND e.startTime > :startTime ))"
+						+ "and ( (e.buCode=:bucode  and e.district=0) "
+						+ "or (e.buCode=:bucode  and e.district=:distcode and  e.branchCode=0)"
+						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and  e.cityCode='0')"
+						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode='0')"
+						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode = '0')"
+						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode )  ) "
+						+ "and s.eventCode=e.event_code and s.agencyUnit=:leadcode) ");
+				
+				System.out.println(""+now);
+				System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+
+				query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+				query.setParameter("eventDate", sdf1.parse(sdf1.format(now)));
+				query.setParameter("bucode",aamData.getBuCode());
+				query.setParameter("distcode",aamData.getDistrictCode());
+				query.setParameter("branchCode",aamData.getBranchCode());
+				query.setParameter("citycode", aamData.getCity());
+				query.setParameter("ssccode", aamData.getSsc());
+				query.setParameter("officeCode", aamData.getOfficeCode());
+				query.setParameter("leadcode", aamData.getAgentCode());
+				
+				eopList=(ArrayList<Event>) query.setCacheable(true).list();
+				
+				
+					  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
+					    event = (Event) iterator.next();
+					    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
+					    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
+					    else
+					    	event.setPublicUrl(null);
+						if(!"".equals(candidateCode)){
+					    crit = session.createCriteria(EventCandidate.class);
+					    crit.add(Restrictions.eq("eventCode", event.getEvent_code()));
+					    crit.add(Restrictions.eq("eventCandidateCode", candidateCode));
+					    crit.add(Restrictions.eq("status", true));
+					    list1=(ArrayList<EventCandidate>) crit.list();
+					    if(!list1.isEmpty()){
+					     event.setIsRegistered(true);
+					    }else{
+					     event.setIsRegistered(false);
+					    }
+
+					   }
+					   }
+					  
+					  
+					  query=session.createQuery("FROM Event where status = 1 and openTo!='SG'"
+							  + " AND (eventDate > :eventDate OR (eventDate = :eventDate AND startTime > :startTime ))"
+			                    + " AND ( (buCode=:bucode  and district=0) "
+			                    + "or (buCode=:bucode and district=:distcode and  branchCode=0)"
+			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and  cityCode='0')"
+			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
+			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
+			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode )  )");
+						
+						
+						
+						System.out.println(""+now);
+
+						query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+						query.setParameter("eventDate", sdf1.parse(sdf1.format(now)));
+						query.setParameter("bucode",aamData.getBuCode());
+						query.setParameter("distcode",aamData.getDistrictCode());
+						query.setParameter("branchCode",aamData.getBranchCode());
+						query.setParameter("citycode", aamData.getCity());
+						query.setParameter("ssccode", aamData.getSsc());
+						query.setParameter("officeCode", aamData.getOfficeCode());
+						
+						eopList2=(ArrayList<Event>) query.setCacheable(true).list();
+						
+						
+							  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
+							    event = (Event) iterator.next();
+							    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
+							    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
+							    else
+							    	event.setPublicUrl(null);
+								if(!"".equals(candidateCode)){
+							    crit = session.createCriteria(EventCandidate.class);
+							    crit.add(Restrictions.eq("eventCode", event.getEvent_code()));
+							    crit.add(Restrictions.eq("eventCandidateCode", candidateCode));
+							    crit.add(Restrictions.eq("status", true));
+							    list1=(ArrayList<EventCandidate>) crit.list();
+							    if(!list1.isEmpty()){
+							     event.setIsRegistered(true);
+							    }else{
+							     event.setIsRegistered(false);
+							    }
+
+							   }
+							   }
+					  
+					  eopList.addAll(eopList2);
+					  eventListAddAll.addAll(eopList);
+				
+				
+			}
 			Date edate=new Date();
 			log.log(Level.SEVERE,"Total  Time "+(edate.getTime()- sdate.getTime()));
 
@@ -2283,7 +2412,7 @@ public class EopMaintenance {
 				}
 		}
 		
-		return eopList;
+		return eventListAddAll;
 	
 	
 	} 

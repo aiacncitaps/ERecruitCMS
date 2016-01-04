@@ -1077,6 +1077,39 @@ public class ImoUtilityData {
 			return branchCode;
 		}
 		
+		
+		public ArrayList<Branch> getBranchCodeListBasedOnBranchName(String branchName) {
+			ArrayList arrActivity = new ArrayList();
+			int branchCode=0;
+			Session session= null;
+				try
+				{
+					session = HibernateFactory.openSession();
+					
+					Query query= session.createQuery("from Branch where branchName=:name  and status = 1");
+					query.setParameter("name", branchName);
+					arrActivity= (ArrayList<Branch>) query.list();
+					if(arrActivity.size()>0){
+						return arrActivity;
+											
+					}
+					
+				}
+				catch(Exception e)
+				{
+					log.log(Level.SEVERE,e.getMessage());
+					e.printStackTrace();
+					LogsMaintenance logsMain=new LogsMaintenance();
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
+				}finally{
+					HibernateFactory.close(session);
+				}
+
+			return null;
+		}
+		
 		public String getSSCCodeBasedOnSSCName(String sscName) {
 			ArrayList arrActivity = new ArrayList();
 			String sscCode="0";
@@ -3109,6 +3142,39 @@ public class ImoUtilityData {
 
 	public void setCodeStr(String codeStr) {
 		this.codeStr = codeStr;
+	}
+
+	public District getDistrictCodeBucode(int distCode) {
+		// TODO Auto-generated method stub
+		log.log(Level.INFO,"UtilitesMaintanence --> getDistrictCodeBucode");
+		Session session= null;
+		ArrayList<District> arrActivity = new ArrayList<District>();
+		District dist=null;
+			try
+			{
+				
+				session = HibernateFactory.openSession();
+				
+				Query query = session.createQuery(" from District where districtCode=:code and status = 1");
+				query.setParameter("code", distCode);
+				arrActivity= (ArrayList<District>) query.list();
+				if(arrActivity.size()!=0){
+					dist=(District)arrActivity.get(0);
+				}
+			}
+			catch(Exception e)
+			{
+				log.log(Level.SEVERE,e.getMessage());
+				e.printStackTrace();
+				LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
+			}finally{
+				HibernateFactory.close(session);
+			}
+
+		return dist;
 	}
 	
 }

@@ -74,6 +74,7 @@ import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.addressbook.CandidateESignature;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.branch.Branch;
 import com.quix.aia.cn.imo.data.bu.Bu;
 import com.quix.aia.cn.imo.data.city.City;
 import com.quix.aia.cn.imo.data.common.AamData;
@@ -1679,6 +1680,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 	log.log(Level.SEVERE,"InteriewMaintenance -->  getAllInterviewRest ");
 	Session session = null;
 	ArrayList interviewList = new ArrayList();
+	ArrayList interviewListAddAll = new ArrayList();
 	 List<InterviewCandidate> list1;
 	 Interview interview;
 	 
@@ -1687,11 +1689,9 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 		session = HibernateFactory.openSession();
 		Date sdate=new Date();
 		log.log(Level.SEVERE,"Start Time "+sdate.getTime());
-		
+
 		Criteria crit ;
-		
 		Date now=new Date();
-		
 		Query query=session.createQuery("FROM Interview where status = 1 "
 				+ "  AND (interviewDate > :interviewDate OR ( interviewDate = :interviewDate AND StartTime > :startTime ))"
 				+ " AND ( (buCode=:bucode  and district=0) "
@@ -1701,9 +1701,25 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
 				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode ) )");
 		
-		System.out.println(""+now);
-		System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+	ImoUtilityData utilityData=new ImoUtilityData();
+	String branchName=utilityData.getBranchNameBaseonCode(aamData.getBranchCode());
+	ArrayList<Branch> branchlist= utilityData.getBranchCodeListBasedOnBranchName(branchName);
+	
+	if(branchlist.size()>0){
 
+		for(Branch bracnh:branchlist){
+			
+			District dist=utilityData.getDistrictCodeBucode(bracnh.getDistCode());
+			aamData.setBranchCode(bracnh.getBranchCode());
+			aamData.setDistrictCode(dist.getDistrictCode());
+			aamData.setBuCode(dist.getBuCode());			
+			
+			
+			System.out.println("bu "+aamData.getBuCode());
+			System.out.println("dist "+aamData.getDistrictCode());
+			System.out.println("branch "+aamData.getBranchCode());
+			
+			
 		query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 		query.setParameter("interviewDate",sdf1.parse(sdf1.format(now)));
 		query.setParameter("bucode",aamData.getBuCode());
@@ -1732,7 +1748,49 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			    }
 
 			   }
+			}
+		
+		interviewListAddAll.addAll(interviewList);
+		
+		
+		} // branchCode for loop
+		
+	}else{
+		
+		query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
+		query.setParameter("interviewDate",sdf1.parse(sdf1.format(now)));
+		query.setParameter("bucode",aamData.getBuCode());
+		query.setParameter("distcode",aamData.getDistrictCode());
+		query.setParameter("branchCode",aamData.getBranchCode());
+		query.setParameter("citycode", aamData.getCity());
+		query.setParameter("ssccode", aamData.getSsc());
+		query.setParameter("officeCode",aamData.getOfficeCode());
+		interviewList=(ArrayList<Interview>) query.setCacheable(true).list();
+		
+		
+		if(!"".equals(candidateCode)){
+			   for(Iterator iterator=interviewList.iterator();iterator.hasNext(); ){
+			    interview = (Interview) iterator.next();
+			    
+			    
+			    crit = session.createCriteria(InterviewCandidate.class);
+			    crit.add(Restrictions.eq("interviewCode", interview.getInterview_code()));
+			    crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
+			    crit.add(Restrictions.eq("status", true));
+			    list1=(ArrayList<InterviewCandidate>) crit.list();
+			    if(!list1.isEmpty()){
+			     interview.setIsRegistered(true);
+			    }else{
+			     interview.setIsRegistered(false);
+			    }
+
 			   }
+			}
+		
+		interviewListAddAll.addAll(interviewList);
+	}
+		
+		
 		
 		
 		Date edate=new Date();
@@ -1755,7 +1813,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			}
 	}
 	
-	return interviewList;
+	return interviewListAddAll;
 	}
 
 /**
