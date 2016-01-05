@@ -628,16 +628,6 @@ public class EopMaintenance {
                     Restrictions.eq("status", true),
                     Restrictions.gt("calendarServiceError", 0))
             );
-            System.out.println("*****************************************");
-            System.out.println("*****************************************");
-			System.out.println("bu code "+userObj.getBuCode());
-			System.out.println("dist code "+userObj.getDistrict());
-			System.out.println("branh code "+userObj.getBranchCode());
-			System.out.println("city code "+userObj.getCityCode());
-			System.out.println("ssc code "+userObj.getSscCode());
-			System.out.println("office code "+userObj.getOfficeCode());
-			System.out.println("*****************************************");
-	         System.out.println("*****************************************");
 			
 	        if(!userObj.getUserType().equalsIgnoreCase("AD")){
 	        	
@@ -670,7 +660,7 @@ public class EopMaintenance {
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
-				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"","bu code : "+userObj.getBuCode()+"dist code : "+ userObj.getDistrict()+"branch code : "+userObj.getBranchCode()+"city code : "+ userObj.getCityCode()+"ssc code : "+ userObj.getSscCode()+"office code : "+userObj.getOfficeCode());
+				//logsMain.insertLogs("EopMaintenance",Level.SEVERE+"","bu code : "+userObj.getBuCode()+"dist code : "+ userObj.getDistrict()+"branch code : "+userObj.getBranchCode()+"city code : "+ userObj.getCityCode()+"ssc code : "+ userObj.getSscCode()+"office code : "+userObj.getOfficeCode());
 			}finally{
 				try{
 					HibernateFactory.close(session);

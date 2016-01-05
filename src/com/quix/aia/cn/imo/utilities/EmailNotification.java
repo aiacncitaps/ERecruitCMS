@@ -85,7 +85,7 @@ public class EmailNotification {
 	private static String STRTTL = null;
 	
 	
-	/*static
+	static
 	{
 		try
 		{
@@ -113,10 +113,10 @@ public class EmailNotification {
 			e.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("EmailNotification",Level.SEVERE+"",errors.toString());
 		}
-	}*/
+	}
 	    
 	
-	static
+	/*static
 	{
 		try
 		{
@@ -139,7 +139,7 @@ public class EmailNotification {
 			log.log(Level.SEVERE, e.getMessage()); 
 			e.printStackTrace();
 		}
-	}
+	}*/
 	    public EmailNotification()
 	    {
 	    }
@@ -356,7 +356,7 @@ public class EmailNotification {
     					"描述：" + event.getEopDescription()+"\n"+
     					"附件："+ pFileName + ", " + tFileName +"\n\n"+
 //    					"报名的 : \n\n\n"+myString.replaceAll("^\\s+|\\s+$", "")
-    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() + " \n\n"+
+    					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() + " \n\n"+
 						"祝您：身体健康 万事如意"+"\n\n"
 						+ "AIA CHINA" ; 
 	            log.log(Level.INFO, "Mail Text : "+emailMsg);
@@ -389,7 +389,7 @@ public class EmailNotification {
 					attachmentPart.setFileName(tFileName);
 					multipart.addBodyPart(attachmentPart);
 			    }
-	            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse("jay.gagnani@quix.com.sg", false));
+	            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(emailId, false));
 	            msg.setContent(multipart);
 	    	    Transport.send(msg);
 	          
@@ -457,7 +457,7 @@ public class EmailNotification {
 	            					"地点：" + interview.getLocation()+"\n"+
 	            					"面试资料："+interview.getInterviewType()+"\n"+
 	            					"附件："+ fname+"\n\n"+
-	            					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+""+genderAgent+", "+ aamData.getTel().trim() + " \n\n"+
+	            					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() + " \n\n"+
 	        						"祝您：身体健康 万事如意"+"\n\n"
 	        						+ "AIA CHINA" ;
 	        	            log.log(Level.INFO, "Mail Text : "+emailMsg);
@@ -566,7 +566,7 @@ public class EmailNotification {
 		            msg.setSubject("EOP更新","UTF-8");
 									
 		            emailMsg ="尊敬的  " +candidateName + gender+","+"\n\n"+
-		            		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() +""+"\n\n"+
 	    					"活动名称："+event.getEventName()+"\n"+
 	    					"活动日期："+eventDate+"\n"+
 	    					"活动开始时间："+startTime+"\n"+
@@ -607,7 +607,7 @@ public class EmailNotification {
 						multipart.addBodyPart(attachmentPart);
 				    }
 				    
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse("jay.gagnani@quix.com.sg", false));
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
 		        }
@@ -690,7 +690,7 @@ public class EmailNotification {
 		            
 		            msg.setSubject("面试更新","UTF-8");
 		            emailMsg ="尊敬的 " +candidateName + " "+ gender+","+"\n\n"+
-		            		"您报名的活动进行了更新，请重新查看活动信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            		"您报名的面试进行了更新，请重新查看面试信息，若有需要请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() +""+"\n\n"+
 		            					"面试名称："+interview.getInterviewSessionName()+"\n"+
 		            					"面试日期："+interviewDate+"\n"+
 		            					"活动开始时间："+startTime+"\n"+
@@ -814,7 +814,7 @@ public class EmailNotification {
 		            msg.setSubject("EOP 取消","UTF-8");
 		            
 		            emailMsg ="尊敬的 " +candidate.getCandidateName()+" "+ gender+","+"\n\n"+
-		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() +""+"\n\n"+
 	    					"活动名称："+event.getEventName()+"\n"+
 	    					"活动日期："+eventDate+"\n"+
 	    					"活动开始时间："+startTime+"\n"+
@@ -855,7 +855,7 @@ public class EmailNotification {
 						multipart.addBodyPart(attachmentPart);
 				    }
 				    
-		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse("jay.gagnani@quix.com.sg", false));
+		            msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(candidateEmail, false));
 		            msg.setContent(multipart);
 		    	    Transport.send(msg);
 		        }
@@ -935,9 +935,9 @@ public class EmailNotification {
 		            MimeMessage msg = new MimeMessage(session);
 			          
 		            msg.setFrom(new InternetAddress(FROM));
-		            msg.setSubject("面试更新","UTF-8");
+		            msg.setSubject("面试取消","UTF-8");
 		            emailMsg ="尊敬的 " +candidateName + " "+ gender+","+"\n\n"+
-		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")+" "+genderAgent +", "+ aamData.getTel().trim() +","+"\n\n"+
+		            		"您报名的活动已经取消，给您造成不便敬请谅解，若有需求请联系您的营销员  "+aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() +""+"\n\n"+
 		            		"面试名称："+interview.getInterviewSessionName()+"\n"+
 	    					"面试日期："+interviewDate+"\n"+
 	    					"活动开始时间："+startTime+"\n"+
