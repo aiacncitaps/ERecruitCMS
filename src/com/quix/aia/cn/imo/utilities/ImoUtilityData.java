@@ -1107,7 +1107,7 @@ public class ImoUtilityData {
 					HibernateFactory.close(session);
 				}
 
-			return null;
+			return arrActivity;
 		}
 		
 		public String getSSCCodeBasedOnSSCName(String sscName) {

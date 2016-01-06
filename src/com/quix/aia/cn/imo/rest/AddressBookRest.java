@@ -523,7 +523,11 @@ public class AddressBookRest {
 			addressBookMaintenance.updateAddressBookStatus("5/9", conditionFieldName, conditionFieldValue);
 			new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidateCode), "CC Test", "CC Test Results : "+addressBook.getCcTestResult());
 			
-			jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate())+"\"}]";
+			String date="";
+			if(addressBook.getCcTestResultDate()!=null)
+					LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
+			
+			jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+date+"\"}]";
 			// Convert the object to a JSON string
 			log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
 

@@ -86,7 +86,7 @@ public class AddressBookMaintenance {
 		int key = 0;
 		int recordsToDelete = 0 ; 
 		List<AddressBook> deleteAddressBookList = new ArrayList<AddressBook>();
-
+		AddressBook addressbookDeleteSync=null;
 		String returnJsonString = "";
 		String deleteString = "";
 		CandidateEducationMaintenance candidateEducationMaintenance = new CandidateEducationMaintenance();
@@ -112,9 +112,15 @@ public class AddressBookMaintenance {
 				}
 				if(addressBook.getDeleteStatus()){
 					recordsToDelete++;
+					//addressbookDeleteSync=addressBook;
 					deleteAddressBookList.add(addressBook);
-					addressBook = getAddressBook(addressBook);
+					//addressBook = getAddressBook(addressBook);
 					addressBook.setDeleteStatus(true);
+					/*System.out.println("***************************************************");
+					System.out.println("Modification Date --->>  "+addressbookDeleteSync.getModificationDate());
+					System.out.println("***************************************************");*/
+					
+					//addressBook.setModificationDate(addressbookDeleteSync.getModificationDate());
 					deleteString = ",\"deleteStatus\":"+addressBook.getDeleteStatus();
 				}
 				session.saveOrUpdate(addressBook);
@@ -248,6 +254,8 @@ public class AddressBookMaintenance {
 		String agentId = request.getParameter("agentId");
 		String pageNo = request.getParameter("pageNo");
 		String dateTime = request.getParameter("dateTime");
+		System.out.println("***************************************************");
+		System.out.println("Date time --->> "+dateTime);
 		
 		String coBranch = request.getParameter("co");
 
@@ -276,7 +284,7 @@ public class AddressBookMaintenance {
 			
 			if (null != coBranch && !"".equals(coBranch)) {
 				criteria.add(Restrictions.eq("co", coBranch));
-			}
+			}          
 			list = (ArrayList) criteria.list();
 			
 			for(AddressBook addressBook : list){

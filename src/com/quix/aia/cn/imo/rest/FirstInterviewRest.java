@@ -187,6 +187,8 @@ public class FirstInterviewRest {
 			candidateFirstInterview.setAgentId(null);
 			candidateFirstInterview.setCandidateCode(null);
 			candidateFirstInterview.setFirstInterviewCode(null);
+		if(null!=candidateFirstInterview.getInterviewResult()){
+			
 			
 			if(candidateFirstInterview.getInterviewResult().equalsIgnoreCase("Pass")){
 				candidateFirstInterview.setInterviewResult("Pass");
@@ -196,7 +198,9 @@ public class FirstInterviewRest {
 				candidateFirstInterview.setInterviewResult("");
 			}
 			
-			
+		}else{
+			candidateFirstInterview.setInterviewResult("");
+		}	
 			//candidateFirstInterview.setRecruitmentPlan(null);
 			//candidateFirstInterview.setRemarks(null);
 			
