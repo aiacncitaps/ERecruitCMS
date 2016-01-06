@@ -961,7 +961,7 @@ public class EopAttendanceMaintenance {
 	   Query selectQ = session.createQuery("select  candidateCode from EventCandidate  where eventCode =:eventCode and servicingAgent=:servicingAgent and eventCandidateCode=:candidateCode and status=:status");
 	   selectQ.setParameter("eventCode",Integer.parseInt(eventCode));
 	   selectQ.setParameter("servicingAgent", servicingAgent);
-	   selectQ.setParameter("candidateCode", Integer.parseInt(candidateCode));
+	   selectQ.setParameter("candidateCode", ""+Integer.parseInt(candidateCode));
 	   selectQ.setParameter("status", true);
 	   
 	   List list = selectQ.list();
@@ -1005,7 +1005,7 @@ public class EopAttendanceMaintenance {
 	   Query selectQ = session.createQuery("from EventCandidate  where eventCode =:eventCode and servicingAgent=:servicingAgent and eventCandidateCode=:candidateCode and status=:status");
 	   selectQ.setParameter("eventCode",Integer.parseInt(eventCode));
 	   selectQ.setParameter("servicingAgent", servicingAgent);
-	   selectQ.setParameter("candidateCode", Integer.parseInt(candidateCode));
+	   selectQ.setParameter("candidateCode", ""+Integer.parseInt(candidateCode));
 	   selectQ.setParameter("status", true);
 	   
 	    list= selectQ.list();

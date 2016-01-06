@@ -1,5 +1,5 @@
-<%@page import="org.hibernate.connection.ConnectionProvider"%>
-<%@page import="org.hibernate.engine.SessionFactoryImplementor"%>
+<%@page import="org.hibernate.engine.jdbc.connections.spi.ConnectionProvider"%>
+<%@page import="org.hibernate.engine.spi.SessionFactoryImplementor"%>
 <%@page import="org.hibernate.SQLQuery"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>

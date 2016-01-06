@@ -50,7 +50,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;

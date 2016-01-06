@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -39,10 +38,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import cn.aia.tools.security.AESPasswordManager;
+
 import com.google.gson.Gson;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
-import com.quix.aia.cn.imo.utilities.EncrypitDecrypit;
 
 @Path("/encryptDecrypt")
 public class EncryptDecryptRest {

@@ -41,10 +41,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
-import com.quix.aia.cn.imo.data.applicationForm.ApplicationForm;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidateMaterial;
-import com.quix.aia.cn.imo.data.interview.InterviewMaterial;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.ApplicationFormPDFMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;

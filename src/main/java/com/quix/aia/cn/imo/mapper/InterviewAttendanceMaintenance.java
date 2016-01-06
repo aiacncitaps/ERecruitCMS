@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -696,7 +695,7 @@ public class InterviewAttendanceMaintenance {
 			Query selectQ = session.createQuery("select  candidateCode from InterviewCandidate  where interviewCode =:interviewCode and servicingAgent=:servicingAgent and interviewCandidateCode=:candidateCode and status=:status");
 			selectQ.setParameter("interviewCode",Integer.parseInt(interviewCode));
 			selectQ.setParameter("servicingAgent", servicingAgent);
-			selectQ.setParameter("candidateCode", Integer.parseInt(candidateCode));
+			selectQ.setParameter("candidateCode", ""+Integer.parseInt(candidateCode));
 			selectQ.setParameter("status", true);
 			
 			List list = selectQ.list();
