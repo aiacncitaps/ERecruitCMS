@@ -1105,6 +1105,7 @@ public class EopAttendanceMaintenance {
 	  Criteria crit = session.createCriteria(EventCandidate.class);
 	  crit.add(Restrictions.eq("servicingAgent", agentId));
 	  crit.add(Restrictions.eq("eventCandidateCode", candidateCode));
+	  crit.add(Restrictions.eq("status", true));
 	  list=(ArrayList<EventCandidate>) crit.list();
 	  status = "Y";
 	  
