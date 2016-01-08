@@ -97,7 +97,8 @@ public class LogedInDetailsMaintenance {
 
 		SQLQuery  query=session.createSQLQuery("SELECT  LD.LOGEDINID as loginID,LD.CO as co,COUNT(LD.LOGEDINID) AS totalLogedIn,"+
 			"(SELECT COUNT(*) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LD.LOGEDINID AND TA.CO=LD.CO) AS totalContacts,"+
-			"(SELECT U.STAFF_NAME FROM T_USER U WHERE U.STAFF_LOGIN_ID=LD.LOGEDINID ) AS logedInName FROM LOGEDINDETAIL LD "+co+"  GROUP BY LD.LOGEDINID,LD.CO ")
+			"CASE  WHEN LD.[USERTYPE]='AG' THEN (SELECT MAX(U.AGTNAME) FROM AGENTER U WHERE U.AGTCOD=LD.LOGEDINID)" +
+             "ELSE (SELECT UU.STAFF_NAME FROM T_USER UU WHERE UU.STAFF_LOGIN_ID=LD.LOGEDINID ) END  AS logedInName FROM LOGEDINDETAIL LD "+co+"  GROUP BY LD.LOGEDINID,LD.CO,LD.USERTYPE ")
 			.addScalar("loginID",new StringType()) .addScalar("co", new StringType()).addScalar("totalLogedIn", new StringType()).addScalar("totalContacts", new StringType())
 			.addScalar("logedInName", new StringType());
 			List<Object[]> entities = query.list();

@@ -259,7 +259,7 @@ public class UserMaintenance {
 		        return user;
 		    }
 
-	public void insertUserDetails(String co,String logedInId,Date logedInDate) {
+	public void insertUserDetails(String co,String logedInId,Date logedInDate, String userType) {
 		// TODO Auto-generated method stub
 		 log.log(Level.INFO, "UserMaintenance --> insertUserDetails ");
 	       Session session = null;
@@ -267,6 +267,7 @@ public class UserMaintenance {
 	       loginDetails.setLogedInId(logedInId);
 	       loginDetails.setCo(co);
 	       loginDetails.setLogedInDate(logedInDate);
+	       loginDetails.setUserType(userType);
 	      
 	        try
 	        {
@@ -414,7 +415,7 @@ public class UserMaintenance {
 		                       // tx.commit();
 		                        
 		                    
-		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date());
+		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date(),"ST");
 
 		                        log.log(Level.INFO, "authenticateUser Successfully ................. ");
 		                    }

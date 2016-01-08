@@ -144,7 +144,7 @@ public class UserAuthRest {
 	        
 	        Gson googleJson  = builder.create();
 	        LogedInDetails logedInDetails = googleJson.fromJson(jsonString, LogedInDetails.class);
-	        userMaintenance.insertUserDetails(logedInDetails.getCo(), logedInDetails.getLogedInId(), logedInDetails.getLogedInDate());    
+	        userMaintenance.insertUserDetails(logedInDetails.getCo(), logedInDetails.getLogedInId(), logedInDetails.getLogedInDate(),"AG");    
 	        
 	        status = true;
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));

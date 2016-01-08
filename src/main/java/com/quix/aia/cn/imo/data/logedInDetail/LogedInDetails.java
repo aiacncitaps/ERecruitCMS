@@ -14,6 +14,7 @@ public class LogedInDetails {
 	private int totalIPADownload;
 	private String logedInName;
 	private int totalContacts;
+	private String userType;
 
 	
 	public LogedInDetails(){
@@ -24,6 +25,7 @@ public class LogedInDetails {
 		totalLogedIn=0;
 		totalIPADownload=0;
 		logedInName="";
+		userType="";
 		
 		
 	}
@@ -92,6 +94,16 @@ public class LogedInDetails {
 				+ "</tr>";
 
 		return returnStr;
+	}
+
+
+	public String getUserType() {
+		return userType;
+	}
+
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 	
 
