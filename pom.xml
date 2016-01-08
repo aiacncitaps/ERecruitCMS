@@ -121,36 +121,36 @@
 			<artifactId>jxls-core</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.jxls</groupId>
-			<artifactId>jxls</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>cn.aia.tools.security</groupId>
-			<artifactId>aia-passwd-alg</artifactId>
-			<version>1.0</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>net.sf.jxls</groupId> -->
+<!-- 			<artifactId>jxls</artifactId> -->
+<!-- 			<version>1.0</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>cn.aia.tools.security</groupId> -->
+<!-- 			<artifactId>aia-passwd-alg</artifactId> -->
+<!-- 			<version>1.0</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
 			<version>1.45</version>
 		</dependency>
-		<dependency>
-			<groupId>org.owasp.esapi</groupId>
-			<artifactId>esapi</artifactId>
-			<version>1.4.5a</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.owasp.esapi</groupId> -->
+<!-- 			<artifactId>esapi</artifactId> -->
+<!-- 			<version>1.4.5a</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.nutz</groupId>
 			<artifactId>nutz</artifactId>
 			<version>1.b.52</version>
 		</dependency>
-		<dependency>
-			<groupId>com.ibm.crypto</groupId>
-			<artifactId>ibmjceprovider</artifactId>
-			<version>1.0</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.ibm.crypto</groupId> -->
+<!-- 			<artifactId>ibmjceprovider</artifactId> -->
+<!-- 			<version>1.0</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>commons-jexl</groupId>
 			<artifactId>commons-jexl</artifactId>
