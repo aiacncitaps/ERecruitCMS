@@ -25,6 +25,10 @@
             <column name="CO"  />
         </property>
         
+       <!--  <property name="totalLogedIn" formula="(SELECT COUNT(LD.LOGEDINID)  FROM LOGEDINDETAIL LD b WHERE LD.LOGEDINID=LOGEDINID) " update="false"></property>
+        <property name="totalContacts" formula="(SELECT COUNT(*) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LOGEDINID AND TA.CO=CO) " update="false"></property>
+        <property name="logedInName" formula="(SELECT U.STAFF_NAME FROM T_USER U WHERE U.STAFF_LOGIN_ID=LOGEDINID) " update="false"></property> -->
+        <!-- <property name="logedInDate" formula="(SELECT U.LOGEDINDATE  FROM LOGEDINDETAIL U WHERE U.CODE=CODE) " update="false"></property> -->
         
   </class>
 </hibernate-mapping>

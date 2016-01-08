@@ -22,6 +22,7 @@ import com.quix.aia.cn.imo.mapper.GoalMaintenance;
 import com.quix.aia.cn.imo.mapper.HolidayMaintenance;
 import com.quix.aia.cn.imo.mapper.InterviewAttendanceMaintenance;
 import com.quix.aia.cn.imo.mapper.InterviewMaintenance;
+import com.quix.aia.cn.imo.mapper.LogedInDetailsMaintenance;
 import com.quix.aia.cn.imo.mapper.OfficeMaintenance;
 import com.quix.aia.cn.imo.mapper.PresenterCategoryMaintenance;
 import com.quix.aia.cn.imo.mapper.PresenterMaintenance;
@@ -237,6 +238,13 @@ public class PageActionController {
 			  }
 			  
 			  
+			  if(pageObj.getKey().equals("viewLogInDetails"))
+				 {
+						LogedInDetailsMaintenance loginMain=new LogedInDetailsMaintenance();
+					    return loginMain.getAllLogedInListing(requestParamters);
+				 }
+			  
+			  
 			 if(requestParamters.getSession().getAttribute("HOL_SEARCH_OBJ")!=null)
 				 requestParamters.getSession().removeAttribute("HOL_SEARCH_OBJ");
 			 if(requestParamters.getSession().getAttribute("INT_SEARCH_OBJ")!=null)
@@ -404,6 +412,15 @@ public class PageActionController {
 			   return attendanecMaintenance.updateCandidateCompleteStatus(requestParamters);
 	            
 	        }
+		  
+		  
+		  if(pageObj.getKey().equals("viewLogInDetails"))
+			 {
+					LogedInDetailsMaintenance loginMain=new LogedInDetailsMaintenance();
+				    return loginMain.getAllLogedInListing(requestParamters);
+			 }
+		  
+		  
 		  return null;
 
 	    }

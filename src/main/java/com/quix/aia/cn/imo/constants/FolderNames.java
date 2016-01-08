@@ -39,4 +39,5 @@ public class FolderNames {
 	    public static final String GOALSETTING_FOLDER = "GoalSetting";
 	    public static final String PRESENTER_FOLDER = "presenter";
 	    public static final String E_GREETING_FOLDER = "E-Greeting";
+	    public static final String LOGEDINDETAILS = "LogInDetails";
 }

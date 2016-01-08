@@ -26,6 +26,7 @@ package com.quix.aia.cn.imo.utilities;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ import org.jxls.XLSTransformer;
 import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.event.EventCandidate;
 import com.quix.aia.cn.imo.data.interview.Interview;
+import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
 
 public class ExcelGenerator {
@@ -188,5 +190,48 @@ public class ExcelGenerator {
 	        
 	        return "#";
 	    }
+
+	public String GenerateLogInDetailsReport(Collection vecAllRes,String templDir, String outPutDir) {
+		// TODO Auto-generated method stub
+		
+		try
+    	{
+        Map beans = new HashMap();
+       
+        if(vecAllRes.size()==0)
+        	vecAllRes.add(new LogedInDetails());
+       
+        beans.put("login", vecAllRes);
+        
+        if ( ! outPutDir.endsWith("/") && !outPutDir.endsWith("\\") )
+        	outPutDir +="/";
+        
+        if ( ! templDir.endsWith("/") && !templDir.endsWith("\\") )
+        	templDir +="/";
+        
+        
+        return GenerateExcelReport(beans, templDir + "LogInReport.xls", outPutDir);
+    	}
+    	catch(Exception e)
+    	{
+    		log.log(Level.SEVERE, e.getMessage());
+    		e.printStackTrace();
+    		LogsMaintenance logsMain=new LogsMaintenance();
+    		StringWriter errors = new StringWriter();
+    		e.printStackTrace(new PrintWriter(errors));
+    		logsMain.insertLogs("ExcelGenerator",Level.SEVERE+"",errors.toString());
+    		return null;
+    	}
+    	catch(Throwable e)
+        {
+    		log.log(Level.SEVERE, e.getMessage());
+            e.printStackTrace();
+            LogsMaintenance logsMain=new LogsMaintenance();
+        	StringWriter errors = new StringWriter();
+        	e.printStackTrace(new PrintWriter(errors));
+        	logsMain.insertLogs("ExcelGenerator",Level.SEVERE+"",errors.toString());
+            return null;
+        }
+	}
 	  
 }

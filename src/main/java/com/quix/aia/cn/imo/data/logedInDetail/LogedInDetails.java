@@ -2,6 +2,8 @@ package com.quix.aia.cn.imo.data.logedInDetail;
 
 import java.util.Date;
 
+import com.quix.aia.cn.imo.utilities.SecurityAPI;
+
 public class LogedInDetails {
 	
 	private int code;
@@ -11,6 +13,7 @@ public class LogedInDetails {
 	private int totalLogedIn;
 	private int totalIPADownload;
 	private String logedInName;
+	private int totalContacts;
 
 	
 	public LogedInDetails(){
@@ -74,7 +77,22 @@ public class LogedInDetails {
 	public void setTotalContacts(int totalContacts) {
 		this.totalContacts = totalContacts;
 	}
-	private int totalContacts;
+	
+
+
+	public  Object getGetUserDetailsListingTableRow(int i) {
+		// TODO Auto-generated method stub
+		String returnStr = "<tr > " +
+
+		
+				"<td><div align=center>"+ SecurityAPI.encodeHTML(this.logedInId) + "</div></td>" 
+				+"<td><div align=center>" + this.logedInName + "</div></td>" 
+				+"<td><div align=center>" + this.totalLogedIn + "</div></td>" 
+				+"<td><div align=center>" + this.totalContacts + "</div></td>" 
+				+ "</tr>";
+
+		return returnStr;
+	}
 	
 
 }
