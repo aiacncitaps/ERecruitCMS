@@ -113,7 +113,7 @@ public class AddressBookMaintenance {
 				if(addressBook.getDeleteStatus()){
 					recordsToDelete++;
 					deleteAddressBookList.add(addressBook);
-					addressBook = getAddressBook(addressBook);
+					//addressBook = getAddressBook(addressBook);
 					addressBook.setDeleteStatus(true);
 					deleteString = ",\"deleteStatus\":"+addressBook.getDeleteStatus();
 				}

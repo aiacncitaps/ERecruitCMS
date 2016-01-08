@@ -294,14 +294,6 @@ public class ImoUtilityData {
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
 					logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
-				}catch(Exception e)
-				{
-				log.log(Level.SEVERE, e.getMessage());
-				e.printStackTrace();
-				LogsMaintenance logsMain=new LogsMaintenance();
-				StringWriter errors = new StringWriter();
-				e.printStackTrace(new PrintWriter(errors));
-				logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
 				}finally{
 					try{
 						HibernateFactory.close(session);
@@ -1115,7 +1107,7 @@ public class ImoUtilityData {
 					HibernateFactory.close(session);
 				}
 
-			return null;
+			return arrActivity;
 		}
 		
 		public String getSSCCodeBasedOnSSCName(String sscName) {

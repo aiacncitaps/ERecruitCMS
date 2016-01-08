@@ -455,7 +455,7 @@ public class EmailNotification {
 	            					"活动开始时间："+startTime+"\n"+
 	            					//"结束 时间:"+endTime+"\n"+
 	            					"地点：" + interview.getLocation()+"\n"+
-	            					"面试资料："+interview.getInterviewType()+"\n"+
+	            					"面试资料："+interview.getInterviewMaterial()+"\n"+
 	            					"附件："+ fname+"\n\n"+
 	            					"此为系统邮件，请勿直接回复。若有需要请联系您的营销员 " +aamData.getAgentName().replaceAll("^\\s+|\\s+$", "")/*+" "+genderAgent +*/+", "+ aamData.getTel().trim() + " \n\n"+
 	        						"祝您：身体健康 万事如意"+"\n\n"

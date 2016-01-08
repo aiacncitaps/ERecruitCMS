@@ -1714,11 +1714,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			aamData.setDistrictCode(dist.getDistrictCode());
 			aamData.setBuCode(dist.getBuCode());			
 			
-			
-			System.out.println("bu "+aamData.getBuCode());
-			System.out.println("dist "+aamData.getDistrictCode());
-			System.out.println("branch "+aamData.getBranchCode());
-			
+		
 			
 		query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 		query.setParameter("interviewDate",sdf1.parse(sdf1.format(now)));
