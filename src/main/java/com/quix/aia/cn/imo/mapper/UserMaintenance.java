@@ -261,7 +261,7 @@ public class UserMaintenance {
 
 	private void insertUserDetails(String co,String logedInId,Date logedInDate) {
 		// TODO Auto-generated method stub
-		
+		 log.log(Level.INFO, "UserMaintenance --> insertUserDetails ");
 	       Session session = null;
 	       LogedInDetails loginDetails=new LogedInDetails();
 	       loginDetails.setLogedInId(logedInId);
@@ -275,17 +275,24 @@ public class UserMaintenance {
 	            session.save(loginDetails);
 	            tx.commit();
 	        }
-	        catch (Exception ex)
+	        catch (Exception e)
 	        {
-	            ex.printStackTrace();
+	        	log.log(Level.SEVERE, e.getMessage());
+	            e.printStackTrace();
+	            LogsMaintenance logsMain = new LogsMaintenance();
+	            StringWriter errors = new StringWriter();
+	            e.printStackTrace(new PrintWriter(errors));
+	            logsMain.insertLogs("UserMaintenance", Level.SEVERE + "", errors.toString());
 	        }
-	        finally
-	        {
-	            if (session != null)
-	            {
-	                session.close();
-	            }
-	        }
+	        finally{
+				try{
+					HibernateFactory.close(session);
+				}catch(Exception e){
+					
+					log.log(Level.SEVERE,e.getMessage());
+					e.printStackTrace();
+				}
+			}
 	}
 
 			private User _authenticateUserISP(String userID, String password, String branch, ServletContext context)
