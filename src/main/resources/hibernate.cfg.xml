@@ -84,6 +84,7 @@
  			       <mapping resource="com/quix/aia/cn/imo/data/hbm/ApplicationForm.hbm.xml" />
  			       <mapping resource="com/quix/aia/cn/imo/data/hbm/Logs.hbm.xml" />
  			        <mapping resource="com/quix/aia/cn/imo/data/hbm/AgentTeam.hbm.xml" />
+ 			           <mapping resource="com/quix/aia/cn/imo/data/hbm/LogedInDetails.hbm.xml" />
  			       
  			    
       		

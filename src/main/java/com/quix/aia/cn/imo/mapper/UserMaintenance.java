@@ -70,6 +70,7 @@ import com.quix.aia.cn.imo.constants.RequestAttributes;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
+import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.data.user.UserRest;
 import com.quix.aia.cn.imo.data.version.Version;
@@ -227,7 +228,7 @@ public class UserMaintenance {
 			 user.setUser_no(0);
 			 user.setUserType("AD");
 			 user.setCho(true);
-	            user.setSsoSessionId("adminSSO");
+	         user.setSsoSessionId("adminSSO");
 			 log.log(Level.INFO,"authenticateUser Successfully ................. ");
 		 }else
 		        {
@@ -258,7 +259,36 @@ public class UserMaintenance {
 		        return user;
 		    }
 
-		    private User _authenticateUserISP(String userID, String password, String branch, ServletContext context)
+	private void insertUserDetails(String co,String logedInId,Date logedInDate) {
+		// TODO Auto-generated method stub
+		
+	       Session session = null;
+	       LogedInDetails loginDetails=new LogedInDetails();
+	       loginDetails.setLogedInId(logedInId);
+	       loginDetails.setCo(co);
+	       loginDetails.setLogedInDate(logedInDate);
+	      
+	        try
+	        {
+	            session = HibernateFactory.openSession();
+	            Transaction tx = session.beginTransaction();
+	            session.save(loginDetails);
+	            tx.commit();
+	        }
+	        catch (Exception ex)
+	        {
+	            ex.printStackTrace();
+	        }
+	        finally
+	        {
+	            if (session != null)
+	            {
+	                session.close();
+	            }
+	        }
+	}
+
+			private User _authenticateUserISP(String userID, String password, String branch, ServletContext context)
 		    {
 		        GsonBuilder builder = new GsonBuilder();
 		        HttpClient httpClient = new DefaultHttpClient();
@@ -333,12 +363,12 @@ public class UserMaintenance {
 		                    if ("STAFF".equalsIgnoreCase(userRest.getUSERTYPE()))
 		                    {
 		                        session = HibernateFactory.openSession();
-		                        Transaction tx = session.beginTransaction();
+		                       // Transaction tx = session.beginTransaction();
 		                        Query query = session.createQuery(" from User where status = 1 and staffLoginId=:LoginId ");
 		                        query.setParameter("LoginId", userID.toUpperCase());
 
 		                        ArrayList<User> list = (ArrayList<User>) query.list();
-
+		                        session.close();
 		                        if (list.size() == 0)
 		                        {
 		                            return null;
@@ -374,8 +404,10 @@ public class UserMaintenance {
 		                            }
 		                        }
 
-		                        tx.commit();
-		                        session.close();
+		                       // tx.commit();
+		                        
+		                    
+		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date());
 
 		                        log.log(Level.INFO, "authenticateUser Successfully ................. ");
 		                    }
