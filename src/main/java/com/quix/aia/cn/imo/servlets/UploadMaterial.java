@@ -50,6 +50,7 @@ public class UploadMaterial extends HttpServlet {
 				//User user = (User) request.getSession().getAttribute(SessionAttributes.CURR_USER_OBJ);
 				String fileName = "";
 				//String requestFrom = "";
+				String fileUrl = "";
 				try
 				{
 					// Create a factory for disk-based file items
@@ -91,6 +92,15 @@ public class UploadMaterial extends HttpServlet {
 								 String withFile = tempDir  + File.separator+ fileName;
 								 uploadedFile = new File(withFile);
 								 item.write(uploadedFile);
+							 }else if(fieldName.equals("eRecruitmentPListFile") || fieldName.equals("eopScanPListFile")){
+								 String tempDir = servletContext.getRealPath(File.separator)+ "resources" + File.separator+ fieldName;
+								 File uploadedFile1 = new File(tempDir);
+								 if(!uploadedFile1.exists())
+									 uploadedFile1.mkdirs();
+								 String withFile = tempDir  + File.separator+ fileName;
+								 uploadedFile = new File(withFile);
+								 item.write(uploadedFile);
+								 fileUrl = "resources" + File.separator+ fieldName+ File.separator+ fileName;
 							 }
 							 else
 							 {
@@ -149,6 +159,7 @@ public class UploadMaterial extends HttpServlet {
 						}
 					}
 				
+					response.getWriter().print(fileUrl);
 				}catch(Exception e){
 					log.log(Level.SEVERE, e.getMessage());
 					e.printStackTrace();

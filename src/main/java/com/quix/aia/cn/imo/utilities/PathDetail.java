@@ -123,6 +123,10 @@ public class PathDetail {
 	        pathDetail.add(new KeyObjPair(PageNames.VIEW_EAPPLICATION_FORM, new PageObj(FunctionNames.VIEW_EAPPLICATION_FORM, dir + FolderNames.INTERVIEW_FOLDER + dir +"ViewEapplicationForm", jsp, PageNames.VIEW_EAPPLICATION_FORM, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
 	        
 	        pathDetail.add(new KeyObjPair(PageNames.LOGEDINDETAILS, new PageObj(FunctionNames.LOGEDINDETAILS, dir + FolderNames.LOGEDINDETAILS + dir +"viewLogInDetails", jsp, PageNames.LOGEDINDETAILS, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
+	        
+		    //Plist Configuration
+	        pathDetail.add(new KeyObjPair("configuration", new PageObj("configuration", dir + "configuration" + dir + "configuration1", jsp, "configuration", "/images/title_pruad.jpg", HeaderNames.HEADER_NONE)));
+
 	    }
 	 
 	  public PageObj getPageObj(Object key)

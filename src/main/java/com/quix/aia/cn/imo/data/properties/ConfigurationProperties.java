@@ -115,5 +115,8 @@ public class ConfigurationProperties {
 		configurationKey = null;
 		configurationValue = null;
 	}
+	
+	public static final String E_RECRUITMENT_APP_URL = "eRecruitmentAppURL";
+	public static final String EOP_SCAN_APP_URL = "eopScanAppURL";
 
 }

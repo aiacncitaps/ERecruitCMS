@@ -31,7 +31,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.data.properties.MailProperties;
@@ -120,5 +123,75 @@ public class PropertiesMaintenance {
 		}
 
 		return propertiesMap;
+	}
+	
+	public String updateConfigurationProperties(String appType, String appURL) {
+		
+		ConfigurationProperties configurationProperties = fetchConfigurationProperty(appType);
+		
+		Session session = null;
+		Transaction tx;
+		log.log(Level.INFO, "PropertiesMaintenance --> updateConfigurationProperties");
+		Query query=null;
+		try{
+			if(null == configurationProperties){
+				configurationProperties = new ConfigurationProperties();
+				configurationProperties.setConfigurationKey(ConfigurationProperties.E_RECRUITMENT_APP_URL);
+			}
+			configurationProperties.setConfigurationValue(appURL);
+			
+			session = HibernateFactory.openSession();
+			tx = session.beginTransaction();
+			session.saveOrUpdate(configurationProperties);
+			tx.commit();
+			log.log(Level.INFO,"---PropertiesMaintenance --> Updated Successfully---");
+			} catch (Exception e) {
+//			log.log(Level.ERROR, e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				HibernateFactory.close(session);
+
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return "Updated successfully";
+	}
+	
+	/**
+	 * <p>
+	 * This method retrieves Configuration Properties into Map
+	 * </p>
+	 * 
+	 * @return Map<String,String>
+	 * 
+	 */
+	public static ConfigurationProperties fetchConfigurationProperty(String configurationKey){
+		Session session = null;
+		ConfigurationProperties configurationProperties=null;
+		try {
+			session = HibernateFactory.openSession();
+			List list = session.createCriteria(ConfigurationProperties.class).add(Restrictions.eq("configurationKey", configurationKey)).list();
+			
+			if(!list.isEmpty()){
+				configurationProperties = (ConfigurationProperties) list.get(0);
+			}
+			
+		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				HibernateFactory.close(session);
+
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		return configurationProperties;
 	}
 }

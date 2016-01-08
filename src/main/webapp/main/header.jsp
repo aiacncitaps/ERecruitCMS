@@ -49,8 +49,12 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 									<%//if(!user.isSscLevel() && !user.isOfficeLevel()){
 										if(user.getUserType().equals("AD") || user.isCho() || user.isBuLevel()){ %>
 										<td style="padding:10px"><a href="ContentManager?key=UserMaintenance" ><%=localeObj.getTranslatedText("User Management")%></a></td>
+										
 									<%} %>
-									
+									<%//if(!user.isSscLevel() && !user.isOfficeLevel()){
+										if(user.getUserType().equals("AD") || user.isCho()){ %>
+										<td style="padding:10px"><a href="ContentManager?key=configuration" ><%=localeObj.getTranslatedText("Upload PLIST")%></a></td>
+									<%} %>
 <%-- 									<td style="padding:10px"><a href="ContentManager?key=HolidayMaintenance" ><%=localeObj.getTranslatedText("Holiday")%></a></td> --%>
 									
 								    <td style="padding:10px"><a href="ContentManager?key=E_Greeting"><%=localeObj.getTranslatedText("E-Greeting")%></a></td>

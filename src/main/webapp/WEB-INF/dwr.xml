@@ -43,6 +43,11 @@
 		    </create>
 		     <convert converter="bean" match="com.quix.aia.cn.imo.data.common.AamData"/>
 		     
+		     <create creator="new" javascript="Configuration">
+		      <param name="class" value="com.quix.aia.cn.imo.mapper.PropertiesMaintenance"/>
+		    </create>
+		    <convert converter="bean" match="com.quix.aia.cn.imo.data.properties.ConfigurationProperties"/>  
+		     
 	</allow>
 		   
   
