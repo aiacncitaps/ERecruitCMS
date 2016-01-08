@@ -259,7 +259,7 @@ public class UserMaintenance {
 		        return user;
 		    }
 
-	private void insertUserDetails(String co,String logedInId,Date logedInDate) {
+	public void insertUserDetails(String co,String logedInId,Date logedInDate) {
 		// TODO Auto-generated method stub
 		 log.log(Level.INFO, "UserMaintenance --> insertUserDetails ");
 	       Session session = null;
