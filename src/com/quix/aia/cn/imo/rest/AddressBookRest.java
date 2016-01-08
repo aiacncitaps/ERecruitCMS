@@ -525,7 +525,7 @@ public class AddressBookRest {
 			
 			String date="";
 			if(addressBook.getCcTestResultDate()!=null)
-					LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
+				date=LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
 			
 			jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+date+"\"}]";
 			// Convert the object to a JSON string
