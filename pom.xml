@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20151123</version>
+			<version>20090211</version>
 		</dependency>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
