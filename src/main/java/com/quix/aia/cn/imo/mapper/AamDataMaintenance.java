@@ -89,6 +89,7 @@ public class AamDataMaintenance {
 			he.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("AamDataMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
+			session.setDefaultReadOnly(false);
 			session.close();
 		}
 

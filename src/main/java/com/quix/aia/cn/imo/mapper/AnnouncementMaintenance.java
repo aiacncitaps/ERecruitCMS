@@ -500,6 +500,7 @@ public class AnnouncementMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -534,6 +535,7 @@ public class AnnouncementMaintenance {
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -559,6 +561,7 @@ public class AnnouncementMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -577,6 +580,7 @@ public class AnnouncementMaintenance {
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -881,6 +885,7 @@ public class AnnouncementMaintenance {
 		 LogsMaintenance logsMain=new LogsMaintenance();
 		try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ = session.createQuery("select materialName,material from AnnouncementMaterial where annoucementCode = "+announcementCode+"");
 		List list = selectQ.list();
 		
@@ -900,6 +905,7 @@ public class AnnouncementMaintenance {
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){

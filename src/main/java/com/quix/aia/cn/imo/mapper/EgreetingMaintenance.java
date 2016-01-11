@@ -938,6 +938,7 @@ public class EgreetingMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -958,6 +959,7 @@ public class EgreetingMaintenance {
 				logsMain.insertLogs("EgreetingMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 				}catch(Exception e){
 					log.log(Level.SEVERE,"EgreetingMaintenance ---> getEgreetingRest ", e.getMessage());
@@ -984,6 +986,7 @@ public class EgreetingMaintenance {
 		 LogsMaintenance logsMain=new LogsMaintenance();
 		try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ = session.createQuery("select materialName,material from E_GreetingMaterial where eGreetingCode = "+eGreetingCode+"");
 		List list = selectQ.list();
 		
@@ -1003,6 +1006,7 @@ public class EgreetingMaintenance {
 			logsMain.insertLogs("EgreetingMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){

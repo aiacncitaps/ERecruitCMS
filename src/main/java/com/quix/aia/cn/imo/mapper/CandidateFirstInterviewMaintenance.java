@@ -151,7 +151,10 @@ public class CandidateFirstInterviewMaintenance {
 		List<CandidateFirstInterview> list = new ArrayList();
 		try{
 			
-			session = HibernateFactory.openSession();Criteria crit = session.createCriteria(CandidateFirstInterview.class);
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			
+			Criteria crit = session.createCriteria(CandidateFirstInterview.class);
 			crit.add(Restrictions.eq("agentId", agentId));
 			crit.add(Restrictions.eq("candidateCode", candidateCode));
 			crit.addOrder(Order.desc("firstInterviewCode"));
@@ -167,6 +170,7 @@ public class CandidateFirstInterviewMaintenance {
 			logsMain.insertLogs("CandidateFirstInterviewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());

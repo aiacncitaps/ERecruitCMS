@@ -908,6 +908,7 @@ public class HolidayMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -970,6 +971,7 @@ public class HolidayMaintenance {
 				e.printStackTrace();
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 				}catch(Exception e){
 					log.log(Level.SEVERE, e.getMessage());

@@ -721,6 +721,7 @@ public class EopMaintenance {
 		 Event event = new Event();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query query= session.createQuery("FROM Event where event_code=:eventCode  and  status=:status");
 			query.setParameter("eventCode", eventCode);
 			query.setParameter("status", true);
@@ -740,6 +741,7 @@ public class EopMaintenance {
 			logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -2140,6 +2142,7 @@ public class EopMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -2394,6 +2397,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -2419,6 +2423,7 @@ public class EopMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -2437,6 +2442,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -2463,6 +2469,7 @@ public class EopMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -2493,6 +2500,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -2525,6 +2533,7 @@ public class EopMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -2563,6 +2572,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -2619,6 +2629,7 @@ public class EopMaintenance {
 		 EventMaterial mat = null;
 		try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ=null;
 		if(materialName!=null){
 			if(materialName.equalsIgnoreCase("Profile")){
@@ -2646,6 +2657,7 @@ public class EopMaintenance {
 			logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(true);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){

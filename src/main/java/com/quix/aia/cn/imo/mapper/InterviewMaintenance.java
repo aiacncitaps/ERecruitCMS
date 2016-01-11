@@ -1687,6 +1687,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 	try{
 		
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Date sdate=new Date();
 		log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 
@@ -1801,6 +1802,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -1825,6 +1827,7 @@ public ArrayList getAllDeletedInterviewRest() {
 	try{
 		
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Date sdate=new Date();
 		log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 		
@@ -1844,6 +1847,7 @@ public ArrayList getAllDeletedInterviewRest() {
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -1868,6 +1872,7 @@ public ArrayList getAllInterviewRestPast(String agentId, String candidateCode) {
 	try{
 		
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Date sdate=new Date();
 		log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 		
@@ -1898,6 +1903,7 @@ public ArrayList getAllInterviewRestPast(String agentId, String candidateCode) {
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -2268,49 +2274,49 @@ public String createCsv(ArrayList  regList,HttpServletRequest request)
 	    int cellnum = 0;
 	    HSSFCell cell = row.createCell((short) cellnum++);
 	    
-         cell.setCellValue("面试 会话");
+         cell.setCellValue("é�¢è¯• ä¼šè¯�");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("面试 日期");
+         cell.setCellValue("é�¢è¯• æ—¥æœŸ");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("开始  时间");
+         cell.setCellValue("å¼€å§‹  æ—¶é—´");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("结束  时间");
+         cell.setCellValue("ç»“æ�Ÿ  æ—¶é—´");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("候选人  名字");
+         cell.setCellValue("å€™é€‰äºº  å��å­—");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("引荐人");
+         cell.setCellValue("å¼•è��äºº");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("引荐人名字");
+         cell.setCellValue("å¼•è��äººå��å­—");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("分公司");
+         cell.setCellValue("åˆ†å…¬å�¸");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("地区");
+         cell.setCellValue("åœ°åŒº");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("支公司");
+         cell.setCellValue("æ”¯å…¬å�¸");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("城市");
+         cell.setCellValue("åŸŽå¸‚");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("营管处");
+         cell.setCellValue("è�¥ç®¡å¤„");
          cell = row.createCell((short) cellnum++);
          cell.setCellValue("SSC");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("所属业务组");
+         cell.setCellValue("æ‰€å±žä¸šåŠ¡ç»„");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("主管姓名");
+         cell.setCellValue("ä¸»ç®¡å§“å��");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("来源  渠道");
+         cell.setCellValue("æ�¥æº�  æ¸ é�“");
          cell = row.createCell((short) cellnum++);
          cell.setCellValue("Age");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("生日");
+         cell.setCellValue("ç”Ÿæ—¥");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("性别");
+         cell.setCellValue("æ€§åˆ«");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("联络  号码");
+         cell.setCellValue("è�”ç»œ  å�·ç �");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("CC 测试  结果");
+         cell.setCellValue("CC æµ‹è¯•  ç»“æžœ");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("人才计划");
+         cell.setCellValue("äººæ‰�è®¡åˆ’");
          cell = row.createCell((short) cellnum++);
          
          

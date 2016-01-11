@@ -261,6 +261,7 @@ public class InterviewAttendanceMaintenance {
 		ArrayList<InterviewCandidate> attendanceList = new ArrayList<InterviewCandidate>();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			
 			if(null != isRest && true == isRest){
@@ -282,6 +283,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -307,6 +309,7 @@ public class InterviewAttendanceMaintenance {
 		ArrayList<InterviewCandidate> attendanceList = new ArrayList<InterviewCandidate>();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			
 			crit.add(Restrictions.eq("interviewCode", interviewCode));
@@ -328,6 +331,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -692,6 +696,7 @@ public class InterviewAttendanceMaintenance {
 		Session session = null;
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query selectQ = session.createQuery("select  candidateCode from InterviewCandidate  where interviewCode =:interviewCode and servicingAgent=:servicingAgent and interviewCandidateCode=:candidateCode and status=:status");
 			selectQ.setParameter("interviewCode",Integer.parseInt(interviewCode));
 			selectQ.setParameter("servicingAgent", servicingAgent);
@@ -712,6 +717,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -733,6 +739,7 @@ public class InterviewAttendanceMaintenance {
 		boolean fail = false;
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query selectQ = session.createQuery(" from InterviewCandidate where interviewCandidateCode=:candidateCode and status=:status ");
 			selectQ.setParameter("candidateCode", candidateCode);
 			selectQ.setParameter("status", true);
@@ -780,6 +787,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -832,6 +840,7 @@ public class InterviewAttendanceMaintenance {
 		try
 			{
 			    session = HibernateFactory.openSession();
+			    session.setDefaultReadOnly(true);
 			   // interviewcandidate=(InterviewCandidate) session.get(InterviewCandidate.class,Integer.parseInt(interviewCandidateCode));
 			    
 			    Criteria criteria = session.createCriteria(InterviewCandidate.class);
@@ -856,6 +865,7 @@ public class InterviewAttendanceMaintenance {
 					logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 				}catch(Exception e){
 					

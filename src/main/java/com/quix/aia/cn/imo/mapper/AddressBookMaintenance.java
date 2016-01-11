@@ -265,6 +265,7 @@ public class AddressBookMaintenance {
 
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.setFirstResult(firstRecordNo);
 			criteria.setMaxResults(addressBookListingOffset);
@@ -298,6 +299,7 @@ public class AddressBookMaintenance {
 			list = new ArrayList<AddressBook>();
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -428,6 +430,7 @@ public class AddressBookMaintenance {
 
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.add(Restrictions.eq("nric", nric));
 			criteria.add(Restrictions.eq("agentId", agentId));
@@ -442,6 +445,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -514,6 +518,7 @@ public class AddressBookMaintenance {
 
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.add(Restrictions.eq("addressCode", addressBook.getAddressCode()));
 			list = (ArrayList) criteria.setCacheable(true).list();
@@ -527,6 +532,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -585,6 +591,7 @@ public class AddressBookMaintenance {
 		try {
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			String fetchField = getStringFromArrayString(fetchFields,null,"forSelect");
 			String fetchCondition = getStringFromArrayString(conditionFieldName, conditionFieldValue,"forWhere");
 			query = session.createQuery(" SELECT "+fetchField+" FROM AddressBook WHERE "+fetchCondition);
@@ -599,6 +606,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -734,6 +742,7 @@ public class AddressBookMaintenance {
 		String emailAddrs = "";
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query selectQ = session.createQuery("select  eMailId  from  AddressBook where addressCode =:addressCode");
 			selectQ.setParameter("addressCode", code);
 			List list = selectQ.list();
@@ -748,6 +757,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -772,6 +782,7 @@ public class AddressBookMaintenance {
 		String nric = "";
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query selectQ = session.createQuery("select  nric  from  AddressBook where addressCode =:addressCode");
 			selectQ.setParameter("addressCode", code);
 			List list = selectQ.list();
@@ -786,6 +797,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -810,6 +822,7 @@ public class AddressBookMaintenance {
 		try {
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.add(Restrictions.eq("addressCode", Integer.parseInt(candidateCode)));
 			list = (ArrayList) criteria.setCacheable(true).list();
@@ -828,6 +841,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());

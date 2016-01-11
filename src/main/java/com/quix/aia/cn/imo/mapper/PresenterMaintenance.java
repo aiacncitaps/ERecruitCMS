@@ -794,6 +794,7 @@ public class PresenterMaintenance
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -872,6 +873,7 @@ public class PresenterMaintenance
 				e.printStackTrace();
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -930,6 +932,7 @@ public class PresenterMaintenance
 		 PresenterMaterial mat = null;
 		try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ = session.createQuery("select materialName,material from PresenterMaterial where presenterCode = "+presenterCode+" and fieldName = 'filename2'");
 		List list = selectQ.list();
 		
@@ -948,6 +951,7 @@ public class PresenterMaintenance
 			e.printStackTrace();
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){

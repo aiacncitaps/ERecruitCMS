@@ -152,6 +152,7 @@ public class CandidateTrainingDetailMaintenance {
 		
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 		
 			Criteria crit = session.createCriteria(CandidateTrainingDetail.class);
 			eventList = (ArrayList)crit.list();
@@ -166,6 +167,7 @@ public class CandidateTrainingDetailMaintenance {
 				logsMain.insertLogs("CandidateTrainingDetailMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
