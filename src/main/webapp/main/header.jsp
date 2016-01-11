@@ -34,10 +34,13 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 						</div>
 						<div id="showMe" style="display: none;">
 							<table width="80%">
+							<%
+								if(!"AG".equalsIgnoreCase(user.getUserType())){
+								 %>	
 								<tr>
 									<td style="padding:10px"><a href="ContentManager?key=home"><%=localeObj.getTranslatedText("Home")%></a></td>
 									<%-- <td style="padding:10px"><a href="ContentManager?key=DEMO"  ><%=localeObj.getTranslatedText("Demo")%></a></td> --%>
-									
+								
 									
 									<%-- <td style="padding:10px"><a href="ContentManager?key=PresenterMaintenance"  ><%=(localeObj.getTranslatedText("Presenter".toUpperCase())).toLowerCase()%></a></td> --%>
 									<td style="padding:10px"><a href="ContentManager?key=InterviewMaintenance"  ><%=localeObj.getTranslatedText("Interview")%></a></td>
@@ -50,10 +53,6 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 										if(user.getUserType().equals("AD") || user.isCho() || user.isBuLevel()){ %>
 										<td style="padding:10px"><a href="ContentManager?key=UserMaintenance" ><%=localeObj.getTranslatedText("User Management")%></a></td>
 										
-									<%} %>
-									<%//if(!user.isSscLevel() && !user.isOfficeLevel()){
-										if(user.getUserType().equals("AD") || user.isCho()){ %>
-										<td style="padding:10px"><a href="ContentManager?key=configuration" ><%=localeObj.getTranslatedText("Upload PLIST")%></a></td>
 									<%} %>
 <%-- 									<td style="padding:10px"><a href="ContentManager?key=HolidayMaintenance" ><%=localeObj.getTranslatedText("Holiday")%></a></td> --%>
 									
@@ -81,6 +80,13 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 									<td style="padding:10px"><a href="ContentManager?key=Department" ><%=localeObj.getTranslatedText("Department")%></a></td>
 									<td style="padding:10px"><a href="ContentManager?key=viewLogInDetails" ><%=localeObj.getTranslatedText("LogedIn Details")%></a></td>
 									
+									<%//if(!user.isSscLevel() && !user.isOfficeLevel()){
+										if(user.getUserType().equals("AD") || user.isCho()){ %>
+										<td style="padding:10px"><a href="ContentManager?key=configuration" ><%=localeObj.getTranslatedText("Upload PLIST")%></a></td>
+									<%} %>
+									
+									<td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td>
+									
 								</tr>
 								
 									
@@ -99,6 +105,20 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 									<td ><a href="ContentManager?key=TeamGoal_M"><%=localeObj.getTranslatedText("TeamGoal_Monthly")%></a></td>
 									<td ><a href="ContentManager?key=TeamGoal_y"><%=localeObj.getTranslatedText("TeamGoal_Yearly")%></a></td>
 								</tr> --%>
+								<%
+								
+								}else{
+								
+								 %>	
+								 <tr>
+									<td style="padding:10px"><a href="ContentManager?key=home"><%=localeObj.getTranslatedText("Home")%></a></td>
+								 	<td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td>
+								 	<tr>
+								 <%
+								
+								}
+								
+								 %>	
 							</table>
 					</div> 
 					</div>

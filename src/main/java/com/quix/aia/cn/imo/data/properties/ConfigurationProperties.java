@@ -118,5 +118,6 @@ public class ConfigurationProperties {
 	
 	public static final String E_RECRUITMENT_APP_URL = "eRecruitmentAppURL";
 	public static final String EOP_SCAN_APP_URL = "eopScanAppURL";
+	public static final String IOS_LEADING_APP_URL = "iosLeadingAppURL";
 
 }

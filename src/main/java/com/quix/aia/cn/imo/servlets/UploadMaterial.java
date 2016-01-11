@@ -92,7 +92,7 @@ public class UploadMaterial extends HttpServlet {
 								 String withFile = tempDir  + File.separator+ fileName;
 								 uploadedFile = new File(withFile);
 								 item.write(uploadedFile);
-							 }else if(fieldName.equals("eRecruitmentPListFile") || fieldName.equals("eopScanPListFile")){
+							 }else if(fieldName.equals("eRecruitmentAppURL") || fieldName.equals("eopScanAppURL")){
 								 String tempDir = servletContext.getRealPath(File.separator)+ "resources" + File.separator+ fieldName;
 								 File uploadedFile1 = new File(tempDir);
 								 if(!uploadedFile1.exists())
@@ -100,7 +100,7 @@ public class UploadMaterial extends HttpServlet {
 								 String withFile = tempDir  + File.separator+ fileName;
 								 uploadedFile = new File(withFile);
 								 item.write(uploadedFile);
-								 fileUrl = "resources" + File.separator+ fieldName+ File.separator+ fileName;
+								 fileUrl = "resources" +"/"+ fieldName+ "/"+ fileName;
 							 }
 							 else
 							 {

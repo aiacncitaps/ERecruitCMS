@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Query;
@@ -26,6 +27,7 @@ import org.hibernate.Transaction;
 import org.hibernate.type.StringType;
 
 import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
+import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.ExcelGenerator;
 import com.quix.aia.cn.imo.utilities.Pager;
@@ -96,11 +98,15 @@ public class LogedInDetailsMaintenance {
 			//tx = session.beginTransaction();
 
 		SQLQuery  query=session.createSQLQuery("SELECT  LD.LOGEDINID as loginID,LD.CO as co,COUNT(LD.LOGEDINID) AS totalLogedIn,"+
-			"(SELECT COUNT(*) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LD.LOGEDINID AND TA.CO=LD.CO) AS totalContacts,"+
+			"(SELECT COUNT(1) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LD.LOGEDINID AND TA.CO=LD.CO) AS totalContacts,"+
 			"CASE  WHEN LD.[USERTYPE]='AG' THEN (SELECT MAX(U.AGTNAME) FROM AGENTER U WHERE U.AGTCOD=LD.LOGEDINID)" +
-             "ELSE (SELECT UU.STAFF_NAME FROM T_USER UU WHERE UU.STAFF_LOGIN_ID=LD.LOGEDINID ) END  AS logedInName FROM LOGEDINDETAIL LD "+co+"  GROUP BY LD.LOGEDINID,LD.CO,LD.USERTYPE ")
+            "ELSE (SELECT UU.STAFF_NAME FROM T_USER UU WHERE UU.STAFF_LOGIN_ID=LD.LOGEDINID ) END  AS logedInName, "+
+ 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD1 WHERE DD1.LOGEDINID=LD.LOGEDINID AND DD1.CO=LD.CO AND DD1.APP_TYPE='"+ConfigurationProperties.E_RECRUITMENT_APP_URL+"') AS totalDownloadsOfERecruitmentApp, "+
+ 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD2 WHERE DD2.LOGEDINID=LD.LOGEDINID AND DD2.CO=LD.CO AND DD2.APP_TYPE='"+ConfigurationProperties.EOP_SCAN_APP_URL+"') AS totalDownloadsOfEOPApp "+
+            "FROM LOGEDINDETAIL LD "+co+"  GROUP BY LD.LOGEDINID,LD.CO,LD.USERTYPE ")
 			.addScalar("loginID",new StringType()) .addScalar("co", new StringType()).addScalar("totalLogedIn", new StringType()).addScalar("totalContacts", new StringType())
-			.addScalar("logedInName", new StringType());
+			.addScalar("logedInName", new StringType())
+			.addScalar("totalDownloadsOfERecruitmentApp", new StringType()).addScalar("totalDownloadsOfEOPApp", new StringType());
 			List<Object[]> entities = query.list();
 			LogedInDetails detais=null;
 			for(Object[] obj:entities){
@@ -110,6 +116,8 @@ public class LogedInDetailsMaintenance {
 				detais.setCo(obj[1]+"");
 				detais.setTotalLogedIn(Integer.parseInt(obj[2]+""));
 				detais.setTotalContacts(Integer.parseInt(obj[3]+""));
+				detais.setTotalDownloadsOfERecruitmentApp(Integer.parseInt(obj[5]+""));
+				detais.setTotalDownloadsOfEOPApp(Integer.parseInt(obj[6]+""));
 				
 				String str="";
 				if(obj[4]!=null){

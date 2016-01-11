@@ -126,6 +126,7 @@ public class PathDetail {
 	        
 		    //Plist Configuration
 	        pathDetail.add(new KeyObjPair("configuration", new PageObj("configuration", dir + "configuration" + dir + "configuration1", jsp, "configuration", "/images/title_pruad.jpg", HeaderNames.HEADER_NONE)));
+	        pathDetail.add(new KeyObjPair("plistDownload", new PageObj("plistDownload", dir + "configuration" + dir + "plistDownload1", jsp, "plistDownload", "/images/title_pruad.jpg", HeaderNames.HEADER_NONE)));
 
 	    }
 	 

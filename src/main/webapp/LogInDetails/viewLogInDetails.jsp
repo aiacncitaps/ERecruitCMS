@@ -81,6 +81,8 @@ function submitForm(){
 											<th><label><%=localeObj.getTranslatedText("LogedIn Name")%></label></th>
 											<th><label><%=localeObj.getTranslatedText("No. of Login")%></label></th>
 											<th width="10%"><label><%=localeObj.getTranslatedText("No. of Contacts")%></label></th>
+											<th width="10%"><label><%=localeObj.getTranslatedText("E-Recruitment App")%></label></th>
+											<th width="10%"><label><%=localeObj.getTranslatedText("EOP Scan App")%></label></th>
 										</tr>
 								</thead>
 								<tbody>

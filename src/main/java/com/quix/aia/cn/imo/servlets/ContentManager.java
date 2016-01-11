@@ -263,16 +263,19 @@ public class ContentManager extends HttpServlet {
 	                        	 request.getSession().setAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP, getServletContext().getAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP));
 	                        	 request.getSession().setAttribute(ApplicationAttribute.MAIL_PROPERTIES_MAP, getServletContext().getAttribute(ApplicationAttribute.MAIL_PROPERTIES_MAP));
 	                           
-	                            	pageObj = pathDetail.getPageObj("home");
+ 	                            if("AG".equalsIgnoreCase(user.getUserType())){
+ 	                            	pageObj = pathDetail.getPageObj("plistDownload");
+ 	                            }
+ 	                            else{
+ 	                            	pageObj = pathDetail.getPageObj("home");
+ 	                            }
 	   	                          
-	 	                            request.getSession().setAttribute("pageObj", pageObj);
-	 	                            request.setAttribute("contentPage", pageObj);
-	 	                            pathDetail = null;
-	 	                          
-	 	                     	 
-		                            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-		                            dispatcher.forward(request, response);
-		                            
+ 	                            request.getSession().setAttribute("pageObj", pageObj);
+ 	                            request.setAttribute("contentPage", pageObj);
+ 	                            pathDetail = null;
+
+	                            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+	                            dispatcher.forward(request, response);
 	                            
 	                        } else
 	                        {

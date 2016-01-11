@@ -69,6 +69,7 @@ import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.RequestAttributes;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.downloadDetail.DownloadDetails;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.user.User;
@@ -193,13 +194,7 @@ public class UserMaintenance {
 	public User authenticateUser(String userID, String password, String branch, ServletContext context) {
 		log.log(Level.INFO,"UserMaintenance --> authenticateUser ");
 		
-		 ArrayList<User> list = new ArrayList();
 		 User user=null;  
-		 Query query=null;
-		 Session session = null;
-		 Transaction tx;
-		 UserRest userRest=null;		
-		 UserAuthResponds userAuth=new UserAuthResponds();
 		 if("admin".equalsIgnoreCase(userID) && "P@ssword1".equals(password) ){
 			 user = new User();
 			 user.setBranchCode(0);
@@ -229,6 +224,8 @@ public class UserMaintenance {
 			 user.setUserType("AD");
 			 user.setCho(true);
 	         user.setSsoSessionId("adminSSO");
+	         user.setClientRestUserBranch("0");
+	         user.setClientRestUserID("ADMIN");
 			 log.log(Level.INFO,"authenticateUser Successfully ................. ");
 		 }else
 		        {
@@ -295,6 +292,44 @@ public class UserMaintenance {
 				}
 			}
 	}
+	
+		public void insertDownloadPlistDetailsOfUser(String logedInId, String co, String userType, String appType) {
+			// TODO Auto-generated method stub
+			 log.log(Level.INFO, "UserMaintenance --> insertDownloadPlistDetailsOfUser ");
+		       Session session = null;
+		       DownloadDetails downloadDetails=new DownloadDetails();
+		       downloadDetails.setLogedInId(logedInId);
+		       downloadDetails.setCo(co);
+		       downloadDetails.setUserType(userType);
+		       downloadDetails.setAppType(appType);
+		       downloadDetails.setDownloadDate(new Date());
+		      
+		        try
+		        {
+		            session = HibernateFactory.openSession();
+		            Transaction tx = session.beginTransaction();
+		            session.save(downloadDetails);
+		            tx.commit();
+		        }
+		        catch (Exception e)
+		        {
+		        	log.log(Level.SEVERE, e.getMessage());
+		            e.printStackTrace();
+		            LogsMaintenance logsMain = new LogsMaintenance();
+		            StringWriter errors = new StringWriter();
+		            e.printStackTrace(new PrintWriter(errors));
+		            logsMain.insertLogs("UserMaintenance", Level.SEVERE + "", errors.toString());
+		        }
+		        finally{
+					try{
+						HibernateFactory.close(session);
+					}catch(Exception e){
+						
+						log.log(Level.SEVERE,e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			}
 
 			private User _authenticateUserISP(String userID, String password, String branch, ServletContext context)
 		    {
@@ -419,11 +454,50 @@ public class UserMaintenance {
 
 		                        log.log(Level.INFO, "authenticateUser Successfully ................. ");
 		                    }
+		                    else if("AGENT".equalsIgnoreCase(userRest.getUSERTYPE())){
+
+			           			 user = new User();
+			           			 user.setBranchCode(0);
+			           			 user.setBranchLevel(false);
+			           			 user.setBuCode(0);
+			           			 user.setStaffName(userRest.getUSERNAME());
+			           			 user.setBuLevel(false);
+			           			// user.setChannelCode("2|3|");
+			           			 user.setCityCode("0");
+			           			 user.setCityLevel(false);
+			           			 user.setContactNo("0000000000");
+			           			 user.setDepartment(0);
+			           			 user.setDistrict(0);
+			           			 user.setDistrictLevel(false);
+			           			 user.setEmail("admin@email.com");
+			           			 user.setPassword(password);
+			           			 user.setSscCode("0");
+			           			 user.setSscLevel(false);
+			           			 user.setOfficeCode("0");
+			           			 user.setOfficeLevel(false);
+			           			 user.setBranchCode(0);
+			           			 user.setBranchLevel(false);
+			           			 user.setStaffLoginId(userRest.getUSERID());
+			           			 user.setStatus(true);
+			           			 user.setStatusPsw(true);
+			           			 user.setUser_no(0);
+			           			 user.setUserType("AG");
+			           			 user.setCho(false);
+			                        
+				                    
+		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date(),"AG");
+		                    }
 		                    else
 		                    {
 		                        // user type is not STAFF
 		                        log.log(Level.INFO, "Login Failed............");
 		                    }
+		                    
+		                    if(null != user){
+			           			user.setClientRestUserBranch(userRest.getBRANCH());
+			           			user.setClientRestUserID(userRest.getUSERID());
+		                    }
+		                    
 		                }
 		                else
 		                {

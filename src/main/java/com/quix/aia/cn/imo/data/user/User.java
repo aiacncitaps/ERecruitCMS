@@ -92,6 +92,9 @@ public class User {
 	private boolean createdUserCityLevel;
 	private boolean createdUserSscLevel;
 	private boolean createdUserOfficeLevel;
+	
+	private String clientRestUserBranch;
+	private String clientRestUserID;
 	/**
 	 * <p>Default Constructor.Setting default values for Holiday fields.</p>
 	 */
@@ -885,7 +888,34 @@ public class User {
 	public void setSsoSessionId(String ssoSessionId) {
 		this.ssoSessionId = ssoSessionId;
 	}
-	
+
+	/**
+	 * @return the clientRestUserBranch
+	 */
+	public String getClientRestUserBranch() {
+		return clientRestUserBranch;
+	}
+
+	/**
+	 * @param clientRestUserBranch the clientRestUserBranch to set
+	 */
+	public void setClientRestUserBranch(String clientRestUserBranch) {
+		this.clientRestUserBranch = clientRestUserBranch;
+	}
+
+	/**
+	 * @return the clientRestUserID
+	 */
+	public String getClientRestUserID() {
+		return clientRestUserID;
+	}
+
+	/**
+	 * @param clientRestUserID the clientRestUserID to set
+	 */
+	public void setClientRestUserID(String clientRestUserID) {
+		this.clientRestUserID = clientRestUserID;
+	}
 	
 	
 

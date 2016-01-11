@@ -28,7 +28,6 @@ package com.quix.aia.cn.imo.utilities;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -47,7 +46,6 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -62,7 +60,6 @@ import com.quix.aia.cn.imo.data.branch.Branch;
 import com.quix.aia.cn.imo.data.bu.Bu;
 import com.quix.aia.cn.imo.data.channel.Channel;
 import com.quix.aia.cn.imo.data.city.City;
-import com.quix.aia.cn.imo.data.common.AamData;
 import com.quix.aia.cn.imo.data.department.Department;
 import com.quix.aia.cn.imo.data.district.District;
 import com.quix.aia.cn.imo.data.egreeting.E_Greeting;
@@ -74,10 +71,8 @@ import com.quix.aia.cn.imo.data.presenter.Presenter;
 import com.quix.aia.cn.imo.data.ssc.Ssc;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
-import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
 public class ImoUtilityData {

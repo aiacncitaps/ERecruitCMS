@@ -48,7 +48,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 <div id="maincontainer">
 		<div class="head">
 			<h2 align="center">
-			<%=localeObj.getTranslatedText("Upload plist file of IOS App")%>
+			<%=localeObj.getTranslatedText("Upload PLIST file of IOS App")%>
 			</h2>
 		</div>
 		<div class="content" style="background-color:#ffffff;">
@@ -66,17 +66,17 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 						<td><label><%=localeObj.getTranslatedText("App Type")%></label></td>
 						<td>
 							<select name="appType" id="appType" class="comboObj" >
-        						<option value="<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>" selected><%=localeObj.getTranslatedText("eRecruitment App")%></option>
+        						<option value="<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>" selected><%=localeObj.getTranslatedText("E-Recruitment App")%></option>
            						<option value="<%=ConfigurationProperties.EOP_SCAN_APP_URL%>"  ><%=localeObj.getTranslatedText("EOP Scan App")%></option>
            	 				</select>
 						</td>
 					</tr>
 					
 					<tr>
-						<td><label><%=localeObj.getTranslatedText("Select plist file")%></label></td>
-						<td id ="appFile" >
+						<td><label><%=localeObj.getTranslatedText("Select PLIST file")%></label></td>
+						<td id ="plistFileTD" >
 						<input type="hidden" id="appURL" name="appURL"  maxlength="250" class="textObj"value="">
-						<input name="eopScanPListFile" id="eopScanPListFile" type="file" class="fileObj"  onchange="uploadMaterial1();"/>
+						<input name="plistFile" id="plistFile" type="file" class="fileObj"  onchange="uploadMaterial1();"/>
 						<input type="hidden" name="uploadMaterialFile1"  id="uploadMaterialFile1" value="" /> 
 						</td>
 						</tr>
@@ -132,8 +132,8 @@ function uploadMaterial1(){
 			if(materialFile==undefined)
 				materialFile = $('#materialname1').html();
 			var fd = new FormData();
-				fd.append('eRecruitmentPListFile', materialFile);
-				var material_name=$("#eRecruitmentPListFile").val();
+				fd.append(appType, materialFile);
+				var material_name=$("#plistFile").val();
 				$('#uploadMaterialFile1').val(file_name);
 				var size=$('input[type=file]').get(0).files[0].size;
 				if(size<=5242880){
@@ -153,14 +153,14 @@ function uploadMaterial1(){
 				});
 				}else{
 					alert("Please Upload File Less then 5 MB");
-					$('#eRecruitmentPListFile').val('');
+					$('#plistFile').val('');
 				} 
 			}else{
 				alert("Please Upload file with extension .plist");
-				$('#eRecruitmentPListFile').val('');
+				$('#plistFile').val('');
 				
-				if(document.getElementById('eRecruitmentPListFile') != null) 
-					 document.getElementById('eRecruitmentPListFile').outerHTML = document.getElementById('eRecruitmentPListFile').outerHTML;
+				if(document.getElementById('plistFile') != null) 
+					 document.getElementById('plistFile').outerHTML = document.getElementById('plistFile').outerHTML;
 			}
 		}else{
 			
@@ -168,7 +168,9 @@ function uploadMaterial1(){
 			$('#uploadMaterialFile1').val('');
 		}
 	}else{
-		var material_name=$("#eRecruitmentPListFile").val();
+		var material_name=$("#plistFile").val();
+		var appType=$("#appType").val();
+		var fileName = material_name.replace(/^.*[\\\/]/, '');
 		if('' != material_name){
 			if((material_name.indexOf('.plist')>-1) || (material_name.indexOf('.PLIST')>-1))
 			{
@@ -189,7 +191,7 @@ function uploadMaterial1(){
 		        form.setAttribute("encoding", "multipart/form-data");
 		        form.style.display = "none";
 		
-		        var files = document.getElementById("eRecruitmentPListFile");
+		        var files = document.getElementById("plistFile");
 		        files.style.display = "none";
 		        
 		        form.appendChild(files);
@@ -206,7 +208,7 @@ function uploadMaterial1(){
 		
 		            response = getIframeContentJSON(iframeIdmyFile);
 		            
-		        	$('#appURL').val(response);
+// 		        	$('#appURL').val(response);
 		        }
 		
 		        if (iframeIdmyFile.addEventListener) 
@@ -216,16 +218,17 @@ function uploadMaterial1(){
 		
 		        form.submit();
 		        
+		        $('#appURL').val("resources/"+ appType+"/"+ fileName);
 		        
-		        var announcementMaterialTD = document.getElementById("eRecruitmentPListFileTD");
+		        var announcementMaterialTD = document.getElementById("plistFileTD");
 		        announcementMaterialTD.appendChild(files);
 		        files.style.display = "block";
 			}else{
 				alert("Please Upload file with extension .plist");
 				$('#uploadMaterialFile1').val('');
 				
-				if(document.getElementById('eRecruitmentPListFile') != null) 
-					 document.getElementById('eRecruitmentPListFile').outerHTML = document.getElementById('eRecruitmentPListFile').outerHTML;
+				if(document.getElementById('plistFile') != null) 
+					 document.getElementById('plistFile').outerHTML = document.getElementById('plistFile').outerHTML;
 			}  
 
 		}else{

@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -132,7 +131,6 @@ public class PropertiesMaintenance {
 		Session session = null;
 		Transaction tx;
 		log.log(Level.INFO, "PropertiesMaintenance --> updateConfigurationProperties");
-		Query query=null;
 		try{
 			if(null == configurationProperties){
 				configurationProperties = new ConfigurationProperties();
