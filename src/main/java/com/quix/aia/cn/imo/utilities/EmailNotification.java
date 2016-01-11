@@ -695,7 +695,7 @@ public class EmailNotification {
 		            					"面试日期："+interviewDate+"\n"+
 		            					"活动开始时间："+startTime+"\n"+
 		            					"地点：" + interview.getLocation()+"\n"+
-		            					"面试资料："+interview.getInterviewType()+"\n"+
+		            					"面试资料："+interview.getInterviewMaterial()+"\n"+
 		            					"附件："+ fname+"\n\n"+
 		            					"此为系统邮件，请勿直接回复。 \n\n"+
 		    							"祝您：身体健康 万事如意"+"\n\n"
@@ -942,7 +942,7 @@ public class EmailNotification {
 	    					"面试日期："+interviewDate+"\n"+
 	    					"活动开始时间："+startTime+"\n"+
 	    					"地点：" + interview.getLocation()+"\n"+
-	    					"面试资料："+interview.getInterviewType()+"\n"+
+	    					"面试资料："+interview.getInterviewMaterial()+"\n"+
 	    					"附件："+ fname+"\n\n"+
 	    					"此为系统邮件，请勿直接回复。 \n\n"+
 							"祝您：身体健康 万事如意"+"\n\n"
