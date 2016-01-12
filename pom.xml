@@ -10,11 +10,21 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>3.0.9.Final</version>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.17.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>1.17.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.6</version>
+		</dependency>
 
 		<!-- hibernate dependency code -->
 		<dependency>
@@ -74,6 +84,12 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>2.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
@@ -121,36 +137,36 @@
 			<artifactId>jxls-core</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>net.sf.jxls</groupId> -->
-<!-- 			<artifactId>jxls</artifactId> -->
-<!-- 			<version>1.0</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>cn.aia.tools.security</groupId> -->
-<!-- 			<artifactId>aia-passwd-alg</artifactId> -->
-<!-- 			<version>1.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>net.sf.jxls</groupId> -->
+		<!-- <artifactId>jxls</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>cn.aia.tools.security</groupId> -->
+		<!-- <artifactId>aia-passwd-alg</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
 			<version>1.45</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.owasp.esapi</groupId> -->
-<!-- 			<artifactId>esapi</artifactId> -->
-<!-- 			<version>1.4.5a</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.owasp.esapi</groupId> -->
+		<!-- <artifactId>esapi</artifactId> -->
+		<!-- <version>1.4.5a</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.nutz</groupId>
 			<artifactId>nutz</artifactId>
 			<version>1.b.52</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.ibm.crypto</groupId> -->
-<!-- 			<artifactId>ibmjceprovider</artifactId> -->
-<!-- 			<version>1.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.ibm.crypto</groupId> -->
+		<!-- <artifactId>ibmjceprovider</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>commons-jexl</groupId>
 			<artifactId>commons-jexl</artifactId>

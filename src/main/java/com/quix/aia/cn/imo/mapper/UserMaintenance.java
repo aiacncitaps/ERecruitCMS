@@ -411,7 +411,7 @@ public class UserMaintenance {
 		                        query.setParameter("LoginId", userID.toUpperCase());
 
 		                        ArrayList<User> list = (ArrayList<User>) query.list();
-		                        session.close();
+//		                        session.close();
 		                        if (list.size() == 0)
 		                        {
 		                            return null;
