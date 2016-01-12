@@ -31,7 +31,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css">
 
-<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="js/jquery-2.2.0.js" type="text/javascript"></script>
  -->
 
 
@@ -40,7 +40,7 @@
 <link href="css/jqtranform.css?t=<%=latestVersion%>" rel="stylesheet" type="text/css" media="all" />
 <link href="css/jquery-ui.css?t=<%=latestVersion%>" rel="stylesheet" type="text/css" /> 
 
-<script type="text/javascript" src="js/jquery-1.9.1.js?t=<%=latestVersion%>" ></script>
+<script type="text/javascript" src="js/jquery-2.2.0.js?t=<%=latestVersion%>" ></script>
 <script type="text/javascript" src="js/jq_transform.js?t=<%=latestVersion%>" ></script> 
 <script type="text/javascript" src="js/simple-expand.js?t=<%=latestVersion%>"></script> 
 <script type="text/javascript" src="js/jquery-ui.js?t=<%=latestVersion%>"></script> 

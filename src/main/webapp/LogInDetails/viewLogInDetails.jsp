@@ -17,7 +17,7 @@
 <script type='text/javascript' src='dwr/engine.js'></script>
 <script type='text/javascript' src='dwr/interface/ImoUtilityData.js'></script>
 <script src="js/imocn.js" type="text/javascript" charset="utf-8" ></script>
-<script type="text/javascript" src="js/jquery-1.9.1.js" ></script>
+<script type="text/javascript" src="js/jquery-2.2.0.js" ></script>
 
 
 <%
