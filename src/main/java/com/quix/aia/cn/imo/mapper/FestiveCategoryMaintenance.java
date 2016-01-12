@@ -133,6 +133,7 @@ public class FestiveCategoryMaintenance {
 		try {
 
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 
 			Query query = session
 					.createQuery(" from FestiveCategory where status = 1 ");
@@ -145,6 +146,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
+			session.setDefaultReadOnly(false);
 			HibernateFactory.close(session);
 		}
 
@@ -214,6 +216,7 @@ public class FestiveCategoryMaintenance {
 		try {
 
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 
 			Query query = session
 					.createQuery(" from FestiveCategory where status = 1 "
@@ -232,6 +235,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
+			session.setDefaultReadOnly(false);
 			HibernateFactory.close(session);
 		}
 
@@ -443,6 +447,7 @@ public class FestiveCategoryMaintenance {
 		FestiveCategory FestiveCategoryClassObj = new FestiveCategory();
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 
 			FestiveCategoryClassObj = (FestiveCategory) session.get(
 					FestiveCategory.class, FestiveCategoryCode);
@@ -455,6 +460,7 @@ public class FestiveCategoryMaintenance {
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 
 			} catch (Exception e) {

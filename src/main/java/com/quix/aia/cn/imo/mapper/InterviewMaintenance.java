@@ -441,6 +441,7 @@ public  ArrayList getAllInterview(HttpServletRequest req) {
 	 try	
 		{
 		    session = HibernateFactory.openSession();   
+		    session.setDefaultReadOnly(true);
 		   // Criteria criteria = session.createCriteria(Interview.class);
 		    if(candidateName!=null && candidateName.length() > 0)
 		    	query = " select  I.interview_code,I.interviewSessionName,I.interviewType,I.buName,I.distName,I.cityName,I.sscName,I.branchName," +
@@ -572,6 +573,7 @@ public  ArrayList getAllInterview(HttpServletRequest req) {
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				
@@ -600,6 +602,7 @@ public  ArrayList getInterview(HttpServletRequest req) {
 	 try
 		{
 		    session = HibernateFactory.openSession();   
+		    session.setDefaultReadOnly(true);
 		    int month=Calendar.getInstance().get(Calendar.MONTH)+1;
 			int year= Calendar.getInstance().get(Calendar.YEAR);
 			
@@ -644,6 +647,7 @@ public  ArrayList getInterview(HttpServletRequest req) {
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				
@@ -666,6 +670,7 @@ public  Interview getInterviewBasedOnInterviewCode(int interview_code) {
 	 try
 		{
 		    session = HibernateFactory.openSession();
+		    session.setDefaultReadOnly(true);
 		    interview = (Interview) session.get(Interview.class, interview_code);
 			
 		}
@@ -678,6 +683,7 @@ public  Interview getInterviewBasedOnInterviewCode(int interview_code) {
 			logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				

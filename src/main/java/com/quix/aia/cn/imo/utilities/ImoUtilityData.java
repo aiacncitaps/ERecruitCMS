@@ -1258,6 +1258,7 @@ public class ImoUtilityData {
 				try{
 				
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 				   HashMap<String,String> map=new HashMap<String,String>();
 				   listData =  (ArrayList<Channel>) session.createQuery("FROM Channel where status = 1" ).list();
 					
@@ -1281,6 +1282,7 @@ public class ImoUtilityData {
 						logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
 					} finally{
 						try{
+							session.setDefaultReadOnly(false);
 							HibernateFactory.close(session);
 						}catch(Exception e){
 							log.log(Level.SEVERE, e.getMessage());

@@ -562,7 +562,7 @@ public class UserMaintenance {
 		                 EG2:
 		                 {"loginResult":"failed",
 		                 "errorCode":"SSO001",
-		                 "errorMessage":"è¯·æ³¨æ„ï¼šå¯†ç è¾“é”™3æ¬¡ï¼Œæ‚¨çš„å¸å·ä¼šè¢«é”å®š60åˆ†é’Ÿ!æ‚¨å·²è¾“é”™1æ¬¡.",
+		                 "errorMessage":"Ã¨Â¯Â·Ã¦Â³Â¨Ã¦â€žÂ�Ã¯Â¼Å¡Ã¥Â¯â€ Ã§Â Â�Ã¨Â¾â€œÃ©â€�â„¢3Ã¦Â¬Â¡Ã¯Â¼Å’Ã¦â€šÂ¨Ã§Å¡â€žÃ¥Â¸Â�Ã¥Â�Â·Ã¤Â¼Å¡Ã¨Â¢Â«Ã©â€�Â�Ã¥Â®Å¡60Ã¥Ë†â€ Ã©â€™Å¸!Ã¦â€šÂ¨Ã¥Â·Â²Ã¨Â¾â€œÃ©â€�â„¢1Ã¦Â¬Â¡.",
 		                 "gotoURL":"",
 		                 "sessionID":"",
 		                 "agentChannel":""}
@@ -1037,6 +1037,8 @@ public class UserMaintenance {
 					
 				}
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
+				
 				Query query = session.createQuery(" from User where status = 1  "+str+" ");
 				if(!userObj.getUserType().equals("AD") ){
 					
@@ -1067,6 +1069,7 @@ public class UserMaintenance {
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}
 
@@ -1240,6 +1243,7 @@ public class UserMaintenance {
 			{
 				
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				
 				Query query = session.createQuery(" from User where status = 1 "+str+"  ");
 				if(!req.getParameter("staffName").equals("")){
@@ -1303,6 +1307,7 @@ public class UserMaintenance {
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 			}
 
@@ -1323,6 +1328,7 @@ public class UserMaintenance {
 		
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			user = (User)session.get(User.class,userCode);
 	
 	  
@@ -1336,6 +1342,7 @@ public class UserMaintenance {
 			logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){

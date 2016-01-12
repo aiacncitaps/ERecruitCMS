@@ -521,6 +521,7 @@ public class EgreetingMaintenance {
 		String year = req.getParameter(YEAR_PARAM);
 
 		Session session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try {
 			Criteria crit = session.createCriteria(E_Greeting.class);
@@ -553,6 +554,7 @@ public class EgreetingMaintenance {
 			logsMain.insertLogs("EgreetingMaintenance",Level.SEVERE+"",errors.toString());
 		}
 		try {
+			session.setDefaultReadOnly(false);
 			HibernateFactory.close(session);
 		} catch (Exception e) {
 			log.log(Level.SEVERE,"EgreetingMaintenance ---> getSearcheGreeting ", e.getMessage());
@@ -578,6 +580,7 @@ public class EgreetingMaintenance {
 		ArrayList arrPresenter = new ArrayList();
 
 		Session session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		int month=Calendar.getInstance().get(Calendar.MONTH)+1;
 		int year= Calendar.getInstance().get(Calendar.YEAR);
 		LogsMaintenance logsMain=new LogsMaintenance();
@@ -603,6 +606,7 @@ public class EgreetingMaintenance {
 			logsMain.insertLogs("EgreetingMaintenance",Level.SEVERE+"",errors.toString());
 		}
 		try {
+			session.setDefaultReadOnly(false);
 			HibernateFactory.close(session);
 		} catch (Exception e) {
 			log.log(Level.SEVERE,"EgreetingMaintenance ---> getSearcheGreeting ", e.getMessage());
@@ -744,6 +748,7 @@ public class EgreetingMaintenance {
 		log.log(Level.INFO,"EgreetingMaintenance ---> getE_GreetingDetail ");
 		E_Greeting e_Greeting = new E_Greeting();
 		Session session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try {
 			e_Greeting = (E_Greeting) session.get(E_Greeting.class,
@@ -779,6 +784,7 @@ public class EgreetingMaintenance {
 			logsMain.insertLogs("EgreetingMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 
 			} catch (Exception e) {

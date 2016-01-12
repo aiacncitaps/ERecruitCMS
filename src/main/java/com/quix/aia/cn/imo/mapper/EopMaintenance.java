@@ -547,6 +547,7 @@ public class EopMaintenance {
 		String agentTeam = req.getParameter(AGENT_TEAM_PARAM);
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			
 			Criteria crit = session.createCriteria(Event.class);
 			if(eventName!=null && eventName.length() > 0)
@@ -593,6 +594,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -618,6 +620,7 @@ public class EopMaintenance {
 		User userObj = (User)req.getSession().getAttribute("currUserObj");
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			
 			Criteria crit = session.createCriteria(Event.class);
 			crit.add(Restrictions.sqlRestriction("MONTH(EVENT_DATE)=?", month,IntegerType.INSTANCE));
@@ -663,6 +666,7 @@ public class EopMaintenance {
 				//logsMain.insertLogs("EopMaintenance",Level.SEVERE+"","bu code : "+userObj.getBuCode()+"dist code : "+ userObj.getDistrict()+"branch code : "+userObj.getBranchCode()+"city code : "+ userObj.getCityCode()+"ssc code : "+ userObj.getSscCode()+"office code : "+userObj.getOfficeCode());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){

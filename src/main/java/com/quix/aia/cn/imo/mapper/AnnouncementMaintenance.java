@@ -370,6 +370,7 @@ public class AnnouncementMaintenance {
 		
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(Announcement.class);
 			if(subject!=null && subject.length() > 0)
 				crit.add(Restrictions.like("subject",subject, MatchMode.ANYWHERE));
@@ -408,6 +409,7 @@ public class AnnouncementMaintenance {
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -434,6 +436,7 @@ public class AnnouncementMaintenance {
 			int month=Calendar.getInstance().get(Calendar.MONTH)+1;
 			int year= Calendar.getInstance().get(Calendar.YEAR);
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			
 			Criteria crit = session.createCriteria(Announcement.class);
 			crit.add(Restrictions.eq("status", true));
@@ -476,6 +479,7 @@ public class AnnouncementMaintenance {
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
+					session.setDefaultReadOnly(false);
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){
@@ -606,6 +610,7 @@ public class AnnouncementMaintenance {
 		 LogsMaintenance logsMain=new LogsMaintenance();
 		try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		announcement = (Announcement)session.get(Announcement.class,announcementCode);
 	
 	  
@@ -618,6 +623,7 @@ public class AnnouncementMaintenance {
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.setDefaultReadOnly(false);
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
