@@ -94,44 +94,26 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 </div>
 
 	<script language="javascript">
-	$('#saveButton').click(function(){
-	    	var logedInId = "<%=userObj.getClientRestUserID()%>";
-	    	var co = "<%=userObj.getClientRestUserBranch()%>";
-	    	var userType = "<%=userObj.getUserType()%>";
-	    	var appType=$('#appType').val();
-	    	UserManagement.insertDownloadPlistDetailsOfUser(logedInId, co, userType, appType,{
-	    		callback : function(response) 
-	    		{
-// 	    			alert(response);
-	    	    }	
-	        });
-	});
 	
 	
 	$('#appType').change(function(){
 	    	var appType=$('#appType').val();
 	    	
-	    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){
-				window.location.href = '<%=eRecruitmentAppURL%>';
-	    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){
-				window.location.href = '<%=eopScanAppURL%>';
-	    	}
-	    	
 	    	var logedInId = "<%=userObj.getClientRestUserID()%>";
 	    	var co = "<%=userObj.getClientRestUserBranch()%>";
 	    	var userType = "<%=userObj.getUserType()%>";
 	    	UserManagement.insertDownloadPlistDetailsOfUser(logedInId, co, userType, appType,{
 	    		callback : function(response) 
 	    		{
-// 	    			alert(response);
+  	    			//alert(response);
 	    	    }	
-	        });
-	});
-		
-			
-	$('#cancelButton').click(function()
-	{
-		 window.location.href="ContentManager?key=home";
+	        });                
+	    	
+	    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){
+				window.location.href = '<%=eRecruitmentAppURL%>';
+	    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){ 
+				window.location.href = '<%=eopScanAppURL%>';
+	    	}
 	});
 	</script>
  <%}catch(Exception e) {
