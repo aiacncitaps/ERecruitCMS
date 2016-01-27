@@ -169,7 +169,7 @@ public class EopAttendanceMaintenance {
 	    if(localeObj == null){
 	    	if(key != 0){
 			    if(checkDuplicateCandiadteReg(mapFields.get("EVENT_CODE"),mapFields.get("S_AGENT"),String.valueOf(key))){
-			    	return new ErrorObject("" + "<br>", "å€™é€‰äººå·²æ³¨å†Œ",localeObj);
+			    	return new ErrorObject("" + "<br>", "候选人已注册",localeObj);
 				}
 	    	}
 	    }else{
@@ -192,21 +192,21 @@ public class EopAttendanceMaintenance {
 				if(localeObj !=null)
 					errMsg += localeObj.getTranslatedText("Candidate Name Required") + "<br>";
 				else
-					errMsg += "å€™é€‰å��ç§°å¿…éœ€" + "<br>";
+					errMsg += "候选名称必需" + "<br>";
 					
 			
 			if(mapFields.get("S_AGENT") == null || (mapFields.get("S_AGENT") != null  && mapFields.get("S_AGENT").length() == 0))
 				if(localeObj !=null)
 					errMsg += localeObj.getTranslatedText("Servicing Agent Required") + "<br>";
 				else
-					errMsg +="æœ�åŠ¡ä»£ç�†è¦�æ±‚" + "<br>";
+					errMsg +="服务代理要求" + "<br>";
 					
 		
 			if(mapFields.get("A_NAME") == null || (mapFields.get("A_NAME") != null && mapFields.get("A_NAME").length() == 0))
 				if(localeObj !=null)
 					errMsg += localeObj.getTranslatedText("Agent Name Required") + "<br>";
 				else
-					errMsg += "ä»£ç�†å��ç§°å¿…éœ€" + "<br>";
+					errMsg += "代理名称必需" + "<br>";
 			
 	/*		if(mapFields.get("BU") == null || (mapFields.get("BU") != null && (mapFields.get("BU").equals("0") || mapFields.get("BU").length() == 0)))
 				errMsg += "BU Required" + "<br>";
@@ -227,17 +227,17 @@ public class EopAttendanceMaintenance {
 				if(localeObj !=null)
 					errMsg += localeObj.getTranslatedText("Date of Birth Required") + "<br>";
 				else
-					errMsg += "å‡ºç”Ÿæ—¥æœŸå¿…å¡«" + "<br>";
+					errMsg += "出生日期必填" + "<br>";
 			
 			if(mapFields.get("GENDER") == null || (mapFields.get("GENDER") != null  && (mapFields.get("GENDER").length() == 0 || mapFields.get("GENDER").equals("1"))))
 				if(localeObj !=null)
 					errMsg += localeObj.getTranslatedText("Gender Required") + "<br>";
 				else
-					errMsg += "æ€§åˆ« å¿…å¡«" + "<br>";
+					errMsg += "性别 必填" + "<br>";
 			if(localeObj ==null){
 				if(mapFields.get("C_NUMBER") == null || (mapFields.get("C_NUMBER") != null && mapFields.get("C_NUMBER").length() == 0))
 					//errMsg += "Contact Number Required" + "<br>";
-					errMsg += "è�”ç³»ç”µè¯�å¿…å¡«" + "<br>";
+					errMsg += "联系电话必填" + "<br>";
 			}
 		
 		/*	if(mapFields.get("AGE") != null && mapFields.get("AGE").length() > 0 ){
@@ -255,14 +255,14 @@ public class EopAttendanceMaintenance {
 			}
 			if(localeObj ==null){
 				if(mapFields.get("E_MAIL") == null || (mapFields.get("E_MAIL") != null && mapFields.get("E_MAIL").length() == 0))
-					errMsg += "ç”µå­�é‚®ä»¶å¿…å¡«" + "<br>";
+					errMsg += "电子邮件必填" + "<br>";
 			}
 			if(mapFields.get("E_MAIL") != null  && mapFields.get("E_MAIL").length() > 0 ){
 				 if(!LMSUtil.emailValidation(mapFields.get("E_MAIL"))){
 				if(localeObj !=null)
 					 errMsg += localeObj.getTranslatedText("Email Should Be Valid") + "<br>";
 				else
-					 errMsg += "ç”µå­�é‚®ä»¶åº”è¯¥æ˜¯æœ‰æ•ˆçš„ " + "<br>";
+					 errMsg += "电子邮件应该是有效的 " + "<br>";
 				 }
 			}
 			/*if(mapFields.get("C_NUMBER") != null && mapFields.get("C_NUMBER").length() > 0){
@@ -326,7 +326,7 @@ public class EopAttendanceMaintenance {
 				auditTrailMaint.insertAuditTrail(new AuditTrail(userObj.getStaffLoginId()+"", AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_SUCCESS +" "+candidate.toString()));
 			else{
 				auditTrailMaint.insertAuditTrail(new AuditTrail(candidate.getServicingAgent(), AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_SUCCESS +" "+candidate.toString()));
-				requestParameters.setAttribute("CANDIDATE_REG_MSG", "æ�­å–œæ‚¨ï¼Œæ´»åŠ¨æŠ¥å��æˆ�åŠŸã€‚æˆ‘ä»¬ä¼šå�‘é€�äºŒç»´ç �é—¨ç¥¨åˆ°æ‚¨æ³¨å†Œæ—¶çš„é‚®ç®±ã€‚");
+				requestParameters.setAttribute("CANDIDATE_REG_MSG", "恭喜您，活动报名成功。我们会发送二维码门票到您注册时的邮箱。");
 				return candidate;
 			}
 		}
@@ -336,7 +336,7 @@ public class EopAttendanceMaintenance {
 				auditTrailMaint.insertAuditTrail(new AuditTrail(userObj.getStaffLoginId()+"", AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_FAILED +" "+candidate.toString()));
 			else{
 				auditTrailMaint.insertAuditTrail(new AuditTrail(candidate.getServicingAgent(), AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_FAILED +" "+candidate.toString()));
-				requestParameters.setAttribute("CANDIDATE_REG_MSG", "æ´»åŠ¨æŠ¥å��æ˜¯ä¸�æ˜¯æˆ�åŠŸ");
+				requestParameters.setAttribute("CANDIDATE_REG_MSG", "活动报名是不是成功");
 				return candidate;
 			}
 				
@@ -397,7 +397,7 @@ public class EopAttendanceMaintenance {
 				auditTrailMaint.insertAuditTrail(new AuditTrail(userObj.getStaffLoginId()+"", AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_SUCCESS +" "+candidate.toString()));
 			else{
 				auditTrailMaint.insertAuditTrail(new AuditTrail(candidate.getServicingAgent(), AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_SUCCESS +" "+candidate.toString()));
-				requestParameters.setAttribute("CANDIDATE_REG_MSG", "æ´»åŠ¨æŠ¥å��æˆ�åŠŸ");
+				requestParameters.setAttribute("CANDIDATE_REG_MSG", "活动报名成功");
 				 
 				return candidate;
 			}
@@ -408,7 +408,7 @@ public class EopAttendanceMaintenance {
 				auditTrailMaint.insertAuditTrail(new AuditTrail(userObj.getStaffLoginId()+"", AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_FAILED +" "+candidate.toString()));
 			else{
 				auditTrailMaint.insertAuditTrail(new AuditTrail(candidate.getServicingAgent(), AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_CREATE, AuditTrail.FUNCTION_FAILED +" "+candidate.toString()));
-				requestParameters.setAttribute("CANDIDATE_REG_MSG", "æ´»åŠ¨æŠ¥å��æ˜¯ä¸�æ˜¯æˆ�åŠŸ");
+				requestParameters.setAttribute("CANDIDATE_REG_MSG", "活动报名是不是成功");
 				return candidate;
 			}
 				
@@ -1280,7 +1280,7 @@ public class EopAttendanceMaintenance {
 			}
 	
 			if(errorFlag)
-				errorMsg = "æ‚¨æ‰€è®¿é—®çš„ç½‘å�€æ— æ•ˆ";
+				errorMsg = "您所访问的网址无效";
 			else
 				requestParameters.getSession().setAttribute("Event_OBJ", event);
 			return errorMsg;

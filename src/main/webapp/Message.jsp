@@ -21,6 +21,7 @@
                  	 if(request.getAttribute("CANDIDATE_REG_MSG")!=null){
                       %>
                        <td colspan="2" style="text-align: center"><span style="color:#ec2028;"><%=(String)request.getAttribute("CANDIDATE_REG_MSG") %></span></td>
+                      
                       <%
                       	}else{
                       %>

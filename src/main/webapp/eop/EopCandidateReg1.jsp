@@ -133,7 +133,8 @@ $(function() {
 });                                          
  
 function getAgentName(agentId, coBranch){
-	if(agentId!='' && '' != coBranch){
+	
+	if(agentId!=''){   //if(agentId!='' && '' != coBranch){
 		$('#ajaxLoader').find(".lightbox").show();
 		AamData.retrieveAgentName(agentId, coBranch,{
 			callback : function(str) 

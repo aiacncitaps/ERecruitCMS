@@ -3,7 +3,7 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<!-- <property name="connection.datasource">jdbc/IMOCN</property> -->
+		<!-- <property name="connection.datasource">java:comp/env/jdbc/IMOCN</property> -->
 			<property name="hibernate.connection.url">jdbc:sqlserver://202.150.218.108:1433;databaseName=DEMOIMOCN2;instanceName=MSSQLSERVER;</property>
 		    <property name="hibernate.connection.username">sa</property>
 		      <property name="hibernate.connection.password">5!ngap0re</property> 

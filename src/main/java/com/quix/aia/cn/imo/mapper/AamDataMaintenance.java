@@ -332,7 +332,7 @@ public class AamDataMaintenance {
 				crit.setProjection(Projections.property("agentName"));
 				crit.add(Restrictions.eq("agentCode", agentId));
 			}
-			if (null != agentId && !"".equals(agentId)) {
+			if (null != coBranch && !"".equals(coBranch)) {
 				crit.add(Restrictions.eq("branch", coBranch));
 			}
 			ArrayList  list = (ArrayList) crit.setCacheable(true).list();

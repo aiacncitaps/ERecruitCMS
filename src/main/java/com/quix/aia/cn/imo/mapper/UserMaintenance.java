@@ -244,7 +244,9 @@ public class UserMaintenance {
 		            if (sessionId == null || sessionId.isEmpty())
 		            {
 		                // failed to authenticate from SSO
-		                return null;
+		               user.setCho(true);
+		               
+		            //	return null;
 		            }
 		            
 		            user.setSsoSessionId(sessionId);
