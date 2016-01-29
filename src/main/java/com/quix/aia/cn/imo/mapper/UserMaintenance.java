@@ -244,12 +244,13 @@ public class UserMaintenance {
 		            if (sessionId == null || sessionId.isEmpty())
 		            {
 		                // failed to authenticate from SSO
-		               user.setCho(true);
+		              // user.setCho(true);
 		               
 		            //	return null;
+		            	user.setSsoSessionId("");
 		            }
 		            
-		            user.setSsoSessionId(sessionId);
+		            
 
 		            log.log(Level.INFO, "Updating user last login timestamp.");
 		            _updateUserLastLogin(user.getUser_no(), new Date());
