@@ -2826,7 +2826,7 @@ public class EopMaintenance {
 			session = HibernateFactory.openSession();
 			Query query= session.createQuery("select openToRegistration from  Event where event_code=:eventCode and status=:status");
 			query.setParameter("eventCode", eventCode);
-			query.setParameter("status", 1);
+			query.setParameter("status", true);
 		    List l = query.list();
 		    if(l!=null && l.size() > 0){
 		    	openToReg = (String)l.get(0);
