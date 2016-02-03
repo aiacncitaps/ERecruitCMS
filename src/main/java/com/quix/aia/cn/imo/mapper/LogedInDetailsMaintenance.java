@@ -115,10 +115,6 @@ public class LogedInDetailsMaintenance {
 				endDate=simpleDateFormat.format(simpleDateFormat1.parse(req.getParameter("endDate")));
 			}
 			
-			System.out.println("start date "+strDate);
-			System.out.println("End Date "+endDate);
-			
-			System.out.println(req.getParameter("startDate"));
 			
 			if(req.getParameter("branch")!=null && req.getParameter("branch").length()>0 ){
 				co=co+" CO="+req.getParameter("branch").trim()+" ";
@@ -131,48 +127,45 @@ public class LogedInDetailsMaintenance {
 				
 				if(req.getParameter("branch").length()==0){
 					date2=date2+" LD.LOGEDINDATE BETWEEN '"+strDate+"' and '"+endDate+"' ";
-					//mmDate2=mmDate2+" MM.LOGEDINDATE BETWEEN '"+req.getParameter("startDate")+"' and '"+req.getParameter("endDate")+"' ";
+					
 				}else{
 					date2=date;
-					//mmDate2=mmDate;
+					
 				}
 				
 				
 			}
 			
-			//if((req.getParameter("startDate")!=null && req.getParameter("endDate")==null) && (req.getParameter("startDate").length()>0 && req.getParameter("endDate").length()==0) ){
+			
 			if(!strDate.equals("") && endDate.equals("")){	
 				date=date+" AND LD.LOGEDINDATE >='"+strDate+"'";
 				mmDate=mmDate+" AND MM.LOGEDINDATE >='"+strDate+"'";
 				
 				if(req.getParameter("branch").length()==0){
 					date2=date2+" LD.LOGEDINDATE >='"+strDate+"'";
-					//mmDate2=mmDate2+" MM.LOGEDINDATE >='"+req.getParameter("startDate")+"'";
+					
 					
 				}else{
 					date2=date;
-					//mmDate2=mmDate;
+					
 				}
 			}
 			
 			
-			//if(req.getParameter("startDate")==null && req.getParameter("endDate")!=null && req.getParameter("startDate").length()==0 && req.getParameter("endDate").length()>0 ){
+			
 			if(strDate.equals("") && !endDate.equals("")){		
 				date=date+" AND LD.LOGEDINDATE <='"+endDate+"'";
 				mmDate=mmDate+" AND MM.LOGEDINDATE <='"+endDate+"'";
 				
 				if(req.getParameter("branch").length()==0){
 					date2=date2+"  LD.LOGEDINDATE <='"+endDate+"'";
-					//mmDate2=mmDate2+"  MM.LOGEDINDATE <='"+req.getParameter("endDate")+"'";
+					
 					
 				}else{
 					date2=date;
-					//mmDate2=mmDate;
+					
 				}
 			}
-			//if((req.getParameter("branch")!=null && req.getParameter("branch").length()>0 ) || 
-			//(req.getParameter("startDate")!=null && req.getParameter("endDate")==null && req.getParameter("startDate").length()>0 && req.getParameter("endDate").length()==0) ||
-			//(req.getParameter("startDate")==null && req.getParameter("endDate")!=null && req.getParameter("startDate").length()==0 && req.getParameter("endDate").length()>0 )){
 		if(!co.equals("") || !strDate.equals("") || !endDate.equals("") ){		
 			where=where+"WHERE";
 			}
@@ -211,12 +204,6 @@ public class LogedInDetailsMaintenance {
 				arrActivity.add(detais);
 				
 			}
-			
-			/*Query query=session.createQuery("select logedInId,co from LogedInDetails group by logedInId,co");
-			arrActivity=(ArrayList) query.list();
-*/
-			
-			
 			
 
 		} catch (Exception e) {
