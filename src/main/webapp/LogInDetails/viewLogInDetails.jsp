@@ -4,7 +4,7 @@
   - Copyright Notice:   Copyright (c) 2015 Quix Creation Pte. Ltd. All Rights Reserved.
   - Description:        
 --%>
-
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@page import="com.quix.aia.cn.imo.constants.SessionAttributes"%>
 <%@page import="com.quix.aia.cn.imo.data.locale.LocaleObject"%>
 <%@page import="com.quix.aia.cn.imo.utilities.Pager"%>
@@ -17,21 +17,53 @@
 <script type='text/javascript' src='dwr/engine.js'></script>
 <script type='text/javascript' src='dwr/interface/ImoUtilityData.js'></script>
 <script src="js/imocn.js" type="text/javascript" charset="utf-8" ></script>
-<script type="text/javascript" src="js/jquery-2.2.0.js" ></script>
+<!-- <script type="text/javascript" src="js/jquery-2.2.0.js" ></script> -->
 
 
 <%
 LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LOCALE_OBJ);
 Pager pager = (com.quix.aia.cn.imo.utilities.Pager) request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.PAGING_OBJECT);
 %>
-<script type="text/javascript">
+<script>
+
+$(function() {
+	 
+	$( ".datepicker" ).datepicker({
+		/* defaultDate: "+1w", */
+	showOn: "button",
+	buttonImage: "images/calendar_icon.gif",
+	buttonImageOnly: true,
+	dateFormat:"dd/mm/yy",
+	changeMonth: true, 
+	changeYear: true,
+	/* minDate: 0 */
+	
+	});
+	
+ }); 
+</script>
+<script type="text/javascript" charset="utf-8" >
 function submitForm(){
+	
+	 var $from=$("#startDate").datepicker('getDate');
+	  var $to =$("#endDate").datepicker('getDate');
+	  if($from>$to){
+		  alert("日期到必须在日期从之后","utf-8");
+		  $("#startDate").val('');
+		  $("#endDate").val('');
+		  return false;
+	  }
+	     
+	
 	document.BUForm.submit();
 }
 	$(function(){
 		$(".data_table tr:odd").addClass("odd");
         $(".data_table tr:not(.odd)").addClass("even");  
 	});
+	
+	
+	
 </script>
 		<div id="maincontainer">
 					<div class="head">
@@ -51,7 +83,24 @@ function submitForm(){
                             	</select>
 									</td>
 								</tr>
-								
+								<tr>                         
+                               				<td><span style="color:#ec2028;">* </span><label ><%=localeObj.getTranslatedText("Start Date")%></label></td>                                    				
+                               				
+                                   			<td>	
+											<input name="startDate" id="startDate" type="text" class="textObj datepicker"   readonly="readonly" />
+                                  				
+                                  	 		</td>                                     			   
+                                 </tr>
+                                 
+                                 	<tr>                         
+                               				<td><span style="color:#ec2028;">* </span><label ><%=localeObj.getTranslatedText("End Date")%></label></td>                                    				
+                               				
+                                   			<td>	
+											<input name="endDate" id="endDate" type="text" class="textObj datepicker"   readonly="readonly" />
+                                  				
+                                  	 		</td>                                     			   
+                                 </tr>
+                                 
 								<tr >
 									<td colspan="2" class="MT30 MB30" style="text-align:center;padding-top:20px">
 										<a href="#" class="btn1" onclick="javascript:submitForm();"><%=localeObj.getTranslatedText("Search")%></a>

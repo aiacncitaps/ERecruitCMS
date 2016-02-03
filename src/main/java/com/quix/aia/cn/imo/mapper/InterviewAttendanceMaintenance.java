@@ -264,9 +264,9 @@ public class InterviewAttendanceMaintenance {
 			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			
-			if(null != isRest && true == isRest){
+			/*if(null != isRest && true == isRest){
 				crit.add(Restrictions.eq("servicingAgent", agentId));
-			}
+			}*/
 			
 			crit.add(Restrictions.eq("interviewCode", interviewCode));
 			crit.add(Restrictions.eq("status", true));

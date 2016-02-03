@@ -2,11 +2,16 @@ package com.quix.aia.cn.imo.mapper;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+
+
 
 
 
@@ -30,6 +35,7 @@ import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.ExcelGenerator;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.Pager;
 
 public class LogedInDetailsMaintenance {
@@ -91,19 +97,97 @@ public class LogedInDetailsMaintenance {
 		try {
 
 			String co="";
-			if(req.getParameter("branch")!=null){
-				co=co+"WHERE CO="+req.getParameter("branch").trim()+" ";
+			String date="";
+			String where="";
+			
+			String date2="";
+			String strDate="";
+			String endDate="";
+			String mmDate="";
+			String mmDate2="";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+			Date dt=new Date();
+			if(req.getParameter("startDate")!=null && req.getParameter("startDate").length()>0){
+				strDate=simpleDateFormat.format(simpleDateFormat1.parse(req.getParameter("startDate")));
 			}
+			if(req.getParameter("endDate")!=null && req.getParameter("endDate").length()>0){
+				endDate=simpleDateFormat.format(simpleDateFormat1.parse(req.getParameter("endDate")));
+			}
+			
+			System.out.println("start date "+strDate);
+			System.out.println("End Date "+endDate);
+			
+			System.out.println(req.getParameter("startDate"));
+			
+			if(req.getParameter("branch")!=null && req.getParameter("branch").length()>0 ){
+				co=co+" CO="+req.getParameter("branch").trim()+" ";
+			}
+			
+			if(req.getParameter("startDate")!=null && req.getParameter("endDate")!=null  && req.getParameter("startDate").length()>0 && req.getParameter("endDate").length()>0 ){
+				
+				date=date+"  AND LD.LOGEDINDATE BETWEEN '"+strDate+"' and '"+endDate+"' ";
+				mmDate=mmDate+"  AND MM.LOGEDINDATE BETWEEN '"+strDate+"' and '"+endDate+"' ";
+				
+				if(req.getParameter("branch").length()==0){
+					date2=date2+" LD.LOGEDINDATE BETWEEN '"+strDate+"' and '"+endDate+"' ";
+					//mmDate2=mmDate2+" MM.LOGEDINDATE BETWEEN '"+req.getParameter("startDate")+"' and '"+req.getParameter("endDate")+"' ";
+				}else{
+					date2=date;
+					//mmDate2=mmDate;
+				}
+				
+				
+			}
+			
+			//if((req.getParameter("startDate")!=null && req.getParameter("endDate")==null) && (req.getParameter("startDate").length()>0 && req.getParameter("endDate").length()==0) ){
+			if(!strDate.equals("") && endDate.equals("")){	
+				date=date+" AND LD.LOGEDINDATE >='"+strDate+"'";
+				mmDate=mmDate+" AND MM.LOGEDINDATE >='"+strDate+"'";
+				
+				if(req.getParameter("branch").length()==0){
+					date2=date2+" LD.LOGEDINDATE >='"+strDate+"'";
+					//mmDate2=mmDate2+" MM.LOGEDINDATE >='"+req.getParameter("startDate")+"'";
+					
+				}else{
+					date2=date;
+					//mmDate2=mmDate;
+				}
+			}
+			
+			
+			//if(req.getParameter("startDate")==null && req.getParameter("endDate")!=null && req.getParameter("startDate").length()==0 && req.getParameter("endDate").length()>0 ){
+			if(strDate.equals("") && !endDate.equals("")){		
+				date=date+" AND LD.LOGEDINDATE <='"+endDate+"'";
+				mmDate=mmDate+" AND MM.LOGEDINDATE <='"+endDate+"'";
+				
+				if(req.getParameter("branch").length()==0){
+					date2=date2+"  LD.LOGEDINDATE <='"+endDate+"'";
+					//mmDate2=mmDate2+"  MM.LOGEDINDATE <='"+req.getParameter("endDate")+"'";
+					
+				}else{
+					date2=date;
+					//mmDate2=mmDate;
+				}
+			}
+			//if((req.getParameter("branch")!=null && req.getParameter("branch").length()>0 ) || 
+			//(req.getParameter("startDate")!=null && req.getParameter("endDate")==null && req.getParameter("startDate").length()>0 && req.getParameter("endDate").length()==0) ||
+			//(req.getParameter("startDate")==null && req.getParameter("endDate")!=null && req.getParameter("startDate").length()==0 && req.getParameter("endDate").length()>0 )){
+		if(!co.equals("") || !strDate.equals("") || !endDate.equals("") ){		
+			where=where+"WHERE";
+			}
+
 			session = HibernateFactory.openSession();
 			//tx = session.beginTransaction();
 
-		SQLQuery  query=session.createSQLQuery("SELECT  LD.LOGEDINID as loginID,LD.CO as co,COUNT(LD.LOGEDINID) AS totalLogedIn,"+
-			"(SELECT COUNT(1) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LD.LOGEDINID AND TA.CO=LD.CO) AS totalContacts,"+
-			"CASE  WHEN LD.[USERTYPE]='AG' THEN (SELECT MAX(U.AGTNAME) FROM AGENTER U WHERE U.AGTCOD=LD.LOGEDINID)" +
+		SQLQuery  query=session.createSQLQuery("SELECT DISTINCT LD.LOGEDINID as loginID,LD.CO as co,"
+				+ "(SELECT COUNT(MM.LOGEDINID) FROM  LOGEDINDETAIL MM WHERE MM.LOGEDINID=LD.LOGEDINID  AND MM.CO=LD.CO "+mmDate+" ) AS totalLogedIn,"+
+			"(SELECT COUNT(1) FROM T_ADDRESS_BOOK TA WHERE TA.AGENT_ID=LD.LOGEDINID AND TA.CO=LD.CO ) AS totalContacts,"+
+			"CASE  WHEN LD.USERTYPE='AG' THEN (SELECT MAX(U.AGTNAME) FROM AGENTER U WHERE U.AGTCOD=LD.LOGEDINID )" +
             "ELSE (SELECT UU.STAFF_NAME FROM T_USER UU WHERE UU.STAFF_LOGIN_ID=LD.LOGEDINID ) END  AS logedInName, "+
- 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD1 WHERE DD1.LOGEDINID=LD.LOGEDINID AND DD1.CO=LD.CO AND DD1.APP_TYPE='"+ConfigurationProperties.E_RECRUITMENT_APP_URL+"') AS totalDownloadsOfERecruitmentApp, "+
- 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD2 WHERE DD2.LOGEDINID=LD.LOGEDINID AND DD2.CO=LD.CO AND DD2.APP_TYPE='"+ConfigurationProperties.EOP_SCAN_APP_URL+"') AS totalDownloadsOfEOPApp "+
-            "FROM LOGEDINDETAIL LD "+co+"  GROUP BY LD.LOGEDINID,LD.CO,LD.USERTYPE ")
+ 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD1 WHERE DD1.LOGEDINID=LD.LOGEDINID AND DD1.CO=LD.CO AND DD1.APP_TYPE='"+ConfigurationProperties.E_RECRUITMENT_APP_URL+"' ) AS totalDownloadsOfERecruitmentApp, "+
+ 			"(SELECT COUNT(1) FROM DOWNLOAD_DETAIL DD2 WHERE DD2.LOGEDINID=LD.LOGEDINID AND DD2.CO=LD.CO AND DD2.APP_TYPE='"+ConfigurationProperties.EOP_SCAN_APP_URL+"' ) AS totalDownloadsOfEOPApp "+
+            "FROM LOGEDINDETAIL LD "+where+" "+co+" "+date2+"  GROUP BY LD.LOGEDINID,LD.CO,LD.USERTYPE  ")
 			.addScalar("loginID",new StringType()) .addScalar("co", new StringType()).addScalar("totalLogedIn", new StringType()).addScalar("totalContacts", new StringType())
 			.addScalar("logedInName", new StringType())
 			.addScalar("totalDownloadsOfERecruitmentApp", new StringType()).addScalar("totalDownloadsOfEOPApp", new StringType());
