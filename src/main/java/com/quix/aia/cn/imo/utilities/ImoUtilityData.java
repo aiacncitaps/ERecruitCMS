@@ -3184,7 +3184,7 @@ public class ImoUtilityData {
 			
 			Query query=session.createQuery("select branchFullName from Branch where branchName=:co and status = 1 ");
 			query.setParameter("co",co);
-			List list=query.list();
+			List list=query.setCacheable(true).list();
 			if(list.size()!=0){
 				str=(String) list.get(0);
 			}
