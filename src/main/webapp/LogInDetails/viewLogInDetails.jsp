@@ -47,13 +47,14 @@ function submitForm(){
 	
 	 var $from=$("#startDate").datepicker('getDate');
 	  var $to =$("#endDate").datepicker('getDate');
+	  if($("#startDate").val()!='' && $("#endDate").val()!='' ){
 	  if($from>$to){
 		  alert("日期到必须在日期从之后","utf-8");
 		  $("#startDate").val('');
 		  $("#endDate").val('');
 		  return false;
 	  }
-	     
+	  }  
 	
 	document.BUForm.submit();
 }

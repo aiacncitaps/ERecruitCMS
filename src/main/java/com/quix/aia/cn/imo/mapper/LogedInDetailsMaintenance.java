@@ -60,8 +60,12 @@ public class LogedInDetailsMaintenance {
 		vecAllRes = getAllUserDetails(req);
 		
 		ExcelGenerator excelGenerator = new ExcelGenerator();
-		String str = excelGenerator.GenerateLogInDetailsReport(vecAllRes, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"));
-		if(str==null){
+		String str="";
+		if(vecAllRes.size()>0){
+			str = excelGenerator.GenerateLogInDetailsReport(vecAllRes, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"));
+		}
+		
+		if(str.equals("")){
 			req.setAttribute("path", "#");
 			
 		}else{
@@ -186,25 +190,28 @@ public class LogedInDetailsMaintenance {
 			.addScalar("totalDownloadsOfERecruitmentApp", new StringType()).addScalar("totalDownloadsOfEOPApp", new StringType());
 			List<Object[]> entities = query.list();
 			LogedInDetails detais=null;
-			for(Object[] obj:entities){
+			if(entities.size()>0){
 				
-				detais=new LogedInDetails();
-				detais.setLogedInId(obj[0]+"");
-				detais.setCo(obj[1]+"");
-				detais.setTotalLogedIn(Integer.parseInt(obj[2]+""));
-				detais.setTotalContacts(Integer.parseInt(obj[3]+""));
-				detais.setTotalDownloadsOfERecruitmentApp(Integer.parseInt(obj[5]+""));
-				detais.setTotalDownloadsOfEOPApp(Integer.parseInt(obj[6]+""));
-				
-				String str="";
-				if(obj[4]!=null){
-					str=obj[4]+"";
+				for(Object[] obj:entities){
+					
+					detais=new LogedInDetails();
+					detais.setLogedInId(obj[0]+"");
+					detais.setCo(obj[1]+"");
+					detais.setTotalLogedIn(Integer.parseInt(obj[2]+""));
+					detais.setTotalContacts(Integer.parseInt(obj[3]+""));
+					detais.setTotalDownloadsOfERecruitmentApp(Integer.parseInt(obj[5]+""));
+					detais.setTotalDownloadsOfEOPApp(Integer.parseInt(obj[6]+""));
+					
+					String str="";
+					if(obj[4]!=null){
+						str=obj[4]+"";
+					}
+					detais.setLogedInName(str);
+					arrActivity.add(detais);
 				}
-				detais.setLogedInName(str);
-				arrActivity.add(detais);
 				
-			}
 			
+			}
 
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage());

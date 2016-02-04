@@ -183,8 +183,9 @@ public class LogedInDetails {
 
 	public Object getGetUserDetailsListingTableRow(int i) {
 		// TODO Auto-generated method stub
-		String returnStr = "<tr > " +
-
+		String returnStr;
+		
+		 returnStr = "<tr > " +
 		"<td><div align=center>" + SecurityAPI.encodeHTML(this.logedInId) + "</div></td>" + 
 		"<td><div align=center>" + this.logedInName + "</div></td>" + 
 		"<td><div align=center>" + this.totalLogedIn + "</div></td>" + 
