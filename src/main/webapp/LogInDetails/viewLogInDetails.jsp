@@ -126,7 +126,7 @@ function submitForm(){
 							<table class="subFormDesign">
 								<thead>
 										<tr>
-											
+											<th><label><%=localeObj.getTranslatedText("Branch")%></label></th>
 											<th><label><%=localeObj.getTranslatedText("LogedIn ID")%></label></th>
 											<th><label><%=localeObj.getTranslatedText("LogedIn Name")%></label></th>
 											<th><label><%=localeObj.getTranslatedText("No. of Login")%></label></th>

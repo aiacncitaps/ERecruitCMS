@@ -16,6 +16,9 @@ public class LogedInDetails {
 	private String logedInName;
 	private int totalContacts;
 	private String userType;
+	private String branchName;
+	private String sDate;
+	private String eDate;
 
 	public LogedInDetails() {
 		code = 0;
@@ -27,6 +30,10 @@ public class LogedInDetails {
 		totalDownloadsOfEOPApp = 0;
 		logedInName = "";
 		userType = "";
+		sDate="";
+		eDate="";
+		branchName="";
+		
 
 	}
 
@@ -186,6 +193,7 @@ public class LogedInDetails {
 		String returnStr;
 		
 		 returnStr = "<tr > " +
+				 "<td><div align=center>" + SecurityAPI.encodeHTML(this.branchName) + "</div></td>" + 
 		"<td><div align=center>" + SecurityAPI.encodeHTML(this.logedInId) + "</div></td>" + 
 		"<td><div align=center>" + this.logedInName + "</div></td>" + 
 		"<td><div align=center>" + this.totalLogedIn + "</div></td>" + 
@@ -195,6 +203,30 @@ public class LogedInDetails {
 		"</tr>";
 
 		return returnStr;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+
+	public String getsDate() {
+		return sDate;
+	}
+
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+
+	public String geteDate() {
+		return eDate;
+	}
+
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
 	}
 
 }

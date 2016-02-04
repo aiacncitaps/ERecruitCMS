@@ -3174,4 +3174,39 @@ public class ImoUtilityData {
 		return dist;
 	}
 	
+	public static String getBranchNameForLogInDetails(String co){
+	 	ArrayList<ImoUtilityData> listData =  new  ArrayList<ImoUtilityData>();
+		ImoUtilityData imoData = null;
+		 Session session = null;
+		String str="";
+		try {
+			session = HibernateFactory.openSession();
+			
+			Query query=session.createQuery("select branchFullName from Branch where branchName=:co and status = 1 ");
+			query.setParameter("co",co);
+			List list=query.list();
+			if(list.size()!=0){
+				str=(String) list.get(0);
+			}
+		}catch(Exception e){
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("IMOUtilityData",Level.SEVERE+"",errors.toString());
+				
+		}finally{
+			try{
+				HibernateFactory.close(session);
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	}
+		
+		
+	    return str;
+	}
+	
 }

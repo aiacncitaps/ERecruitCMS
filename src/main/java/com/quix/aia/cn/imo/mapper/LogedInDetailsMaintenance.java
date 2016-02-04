@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Query;
@@ -35,6 +36,7 @@ import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.ExcelGenerator;
+import com.quix.aia.cn.imo.utilities.ImoUtilityData;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.Pager;
 
@@ -62,7 +64,7 @@ public class LogedInDetailsMaintenance {
 		ExcelGenerator excelGenerator = new ExcelGenerator();
 		String str="";
 		if(vecAllRes.size()>0){
-			str = excelGenerator.GenerateLogInDetailsReport(vecAllRes, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"));
+			str = excelGenerator.GenerateLogInDetailsReport(vecAllRes, req.getRealPath("/resources/templates/"), req.getRealPath("/resources/userFiles/"),req);
 		}
 		
 		if(str.equals("")){
@@ -196,7 +198,12 @@ public class LogedInDetailsMaintenance {
 					
 					detais=new LogedInDetails();
 					detais.setLogedInId(obj[0]+"");
-					detais.setCo(obj[1]+"");
+					detais.setCo(obj[1]+"");  
+					if(obj[1].toString().equals("9986")){
+						detais.setBranchName("中国区");
+					}else{
+						detais.setBranchName(ImoUtilityData.getBranchNameForLogInDetails(obj[1]+""));
+					}
 					detais.setTotalLogedIn(Integer.parseInt(obj[2]+""));
 					detais.setTotalContacts(Integer.parseInt(obj[3]+""));
 					detais.setTotalDownloadsOfERecruitmentApp(Integer.parseInt(obj[5]+""));

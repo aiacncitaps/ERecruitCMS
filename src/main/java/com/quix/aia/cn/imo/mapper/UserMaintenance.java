@@ -453,7 +453,7 @@ public class UserMaintenance {
 		                       // tx.commit();
 		                        
 		                    
-		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date(),"ST");
+		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID().toUpperCase(),new Date(),"ST");
 
 		                        log.log(Level.INFO, "authenticateUser Successfully ................. ");
 		                    }
@@ -488,7 +488,7 @@ public class UserMaintenance {
 			           			 user.setCho(false);
 			                        
 				                    
-		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID(),new Date(),"AG");
+		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID().toUpperCase(),new Date(),"AG");
 		                    }
 		                    else
 		                    {

@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jxls.XLSTransformer;
 
 import com.quix.aia.cn.imo.data.event.Event;
@@ -191,7 +193,7 @@ public class ExcelGenerator {
 	        return "#";
 	    }
 
-	public String GenerateLogInDetailsReport(Collection vecAllRes,String templDir, String outPutDir) {
+	public String GenerateLogInDetailsReport(Collection vecAllRes,String templDir, String outPutDir, HttpServletRequest req) {
 		// TODO Auto-generated method stub
 		
 		try
@@ -202,6 +204,10 @@ public class ExcelGenerator {
         	vecAllRes.add(new LogedInDetails());
        
         beans.put("login", vecAllRes);
+        LogedInDetails lgDetails=new LogedInDetails();
+        lgDetails.setsDate(req.getParameter("startDate"));
+        lgDetails.seteDate(req.getParameter("endDate"));
+        beans.put("loginDate", lgDetails);
         
         if ( ! outPutDir.endsWith("/") && !outPutDir.endsWith("\\") )
         	outPutDir +="/";
