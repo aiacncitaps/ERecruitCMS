@@ -289,7 +289,7 @@ function interviewFormSubmit ( action )
 			<form name="interviewForm" method="post" action="FormManager"
 				class="PT20">
 				<input type="hidden" name="token" id="token" value="<%=request.getSession().getAttribute("Token")+"" %>">
-				<%System.out.println("jsp token --> "+request.getSession().getAttribute("Token")+""); %>
+				
 				
 				<input type="hidden" name="actionType" />
 				<table class="formDesign">
@@ -594,7 +594,7 @@ function interviewFormSubmit ( action )
 
 					<tr>
 						<td colspan="2" class="MT30 MB30"
-							style="text-align: center; padding-top: 20px">
+							style="text-align: center; padding-top: 20px;">
 							<%if(modifyFlag == true){%> <a href="#" class="btn1 "
 							onclick="javascript:interviewFormSubmit('<%=FormInfo.SUBMIT%>')"><%=localeObj.getTranslatedText("Modify")%>
 						</a> <%}else{%> <a href="#" class="btn1 " style="margin-left: -2%;"

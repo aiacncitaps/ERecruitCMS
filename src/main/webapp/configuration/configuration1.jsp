@@ -45,6 +45,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 
 %>
 
+
 <div id="maincontainer">
 		<div class="head">
 			<h2 align="center">
@@ -72,6 +73,26 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 						</td>
 					</tr>
 					
+						<tr>
+						<td><label><%=localeObj.getTranslatedText("Version")%></label></td>
+						<td>
+							<input name="version" id="version" type="text" class="textObj" maxlength="10" />
+						</td>
+					</tr>
+					
+					<tr>
+						<td><label><%=localeObj.getTranslatedText("Build")%></label></td>
+						<td>
+							<input name="build" id="build" type="text" class="textObj"  />
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="vertical-align:middle"><label><%=localeObj.getTranslatedText("Change Log")%></label>
+						</td>
+						<td><textarea name="log" id="log" class="textObj"
+								rows="10" cols="5" maxlength="400"> </textarea></td>
+					</tr>
 					<tr>
 						<td><label><%=localeObj.getTranslatedText("Select PLIST file")%></label></td>
 						<td id ="plistFileTD" >
@@ -95,12 +116,29 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 	$('#saveButton').click(function(){
 	    	var appType=$('#appType').val();
 	    	var appURL=$('#appURL').val();
+	    	if($('#version').val().length == 0){
+	    		alert("Require version");
+	    		return false;	
+	    	}else if($('#build').val().length == 0){
+	    		alert("Require Build");
+	    		return false;	
+	    	}
+	    	
+	    	var version=$('#version').val();
+	    	var build=$('#build').val();
+	    	var changeLog=$('#log').val();
+	    	
+	    	
 	    	if('' != appURL){
 		    	if((appURL.indexOf('.plist')>-1) || (appURL.indexOf('.PLIST')>-1)) {
-			    	Configuration.updateConfigurationProperties(appType,appURL,{
+			    	Configuration.updateConfigurationProperties(appType,appURL,version,build,changeLog,{
 			    		callback : function(response) 
 			    		{
+			    			$('#version').val('');
+			    			$('#build').val('');
+			    			$('#log').val('');
 			    			alert(response);
+			    			
 			    	    }	
 			        });
 		        }else{

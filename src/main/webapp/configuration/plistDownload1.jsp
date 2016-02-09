@@ -49,7 +49,33 @@ String appUrl = configurationMap.get("APP_URL");
 String iosLeadingAppURL = configurationMap.get(ConfigurationProperties.IOS_LEADING_APP_URL);
 String eRecruitmentAppURL = configurationMap.get(ConfigurationProperties.E_RECRUITMENT_APP_URL);
 String eopScanAppURL = configurationMap.get(ConfigurationProperties.EOP_SCAN_APP_URL);
+PropertiesMaintenance propMain=new PropertiesMaintenance();
+ArrayList<ConfigurationProperties> configPropertyList=propMain.getConfigData();
 
+ConfigurationProperties eRequitConfig=null;
+ConfigurationProperties eopRequitConfig=null;
+for(ConfigurationProperties eRequitConfig1 : configPropertyList){
+	if(eRequitConfig1.getConfigurationKey().equals(ConfigurationProperties.E_RECRUITMENT_APP_URL)){
+		eRequitConfig=new ConfigurationProperties();
+		eRequitConfig.setBuild(eRequitConfig1.getBuild());
+		eRequitConfig.setChangeLog(eRequitConfig1.getChangeLog());
+		eRequitConfig.setConfigurationKey(eRequitConfig1.getConfigurationKey());
+		eRequitConfig.setConfigurationValue(eRequitConfig1.getConfigurationValue());
+		eRequitConfig.setVersion(eRequitConfig1.getVersion());
+		
+	}else if(eRequitConfig1.getConfigurationKey().equals(ConfigurationProperties.EOP_SCAN_APP_URL)){
+		eopRequitConfig=new ConfigurationProperties();
+		eopRequitConfig.setBuild(eRequitConfig1.getBuild());
+		eopRequitConfig.setChangeLog(eRequitConfig1.getChangeLog());
+		eopRequitConfig.setConfigurationKey(eRequitConfig1.getConfigurationKey());
+		eopRequitConfig.setConfigurationValue(eRequitConfig1.getConfigurationValue());
+		eopRequitConfig.setVersion(eRequitConfig1.getVersion());
+		
+	}
+	
+}
+
+//appUrl="http://localhost:8080/IMOCN_MAVEN/";
 iosLeadingAppURL += appUrl;
 eRecruitmentAppURL = iosLeadingAppURL + eRecruitmentAppURL;
 eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
@@ -64,7 +90,7 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 		<div class="content" style="background-color:#ffffff;">
 			<form action="FormManager" name="administrationForm" method="post" class="PT20">
 			<input type="hidden" name="token" id="token" value="<%=request.getSession().getAttribute("Token")+"" %>">
-				<table class="formDesign">
+				<table class="formDesign" style="width : 50%; " >
 					<tr>
 						<td colspan="2" style="text-align: center;color:#ec2028;">
 							<%if(request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.ERROR_OBJ) != null){%>	
@@ -72,7 +98,7 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
                             <%}%>    
 						</td>
 					</tr>
-					<tr>
+				<%-- 	<tr>
 						<td><label><%=localeObj.getTranslatedText("App Type")%></label></td>
 						<td>
 							<select name="appType" id="appType" class="comboObj" >
@@ -80,6 +106,61 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
         						<option value="<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>"><%=localeObj.getTranslatedText("E-Recruitment App")%></option>
            						<option value="<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>"  ><%=localeObj.getTranslatedText("EOP Scan App")%></option>
            	 				</select>
+						</td>
+					</tr> --%>
+					
+						<tr >
+						<td><label><%=localeObj.getTranslatedText("E-Recruitment")%></label></td>
+						<td>
+							<input type="button" class="ML10 btn1" name="erAppType" id="erAppType" value="Install">
+						</td>
+						
+						<td  style="padding-right : 30%;"  > </td>
+						<td><label><%=localeObj.getTranslatedText("EOP Scan")%></label></td>
+						<td>
+							<input type="button" class="ML10 btn1" name="eopAppType" id="eopAppType" value="Install">
+						</td>
+					</tr>
+					
+					<tr >
+						<td><label><%=localeObj.getTranslatedText("Version")%></label></td>
+						<td>
+							<label>&nbsp;&nbsp;&nbsp;<%=eRequitConfig.getVersion() %></label>
+						</td>
+						
+						<td  style="padding-right : 30%;"  > </td>
+						<td><label><%=localeObj.getTranslatedText("Version")%></label></td>
+						<td>
+							<label>&nbsp;&nbsp;&nbsp<%=eopRequitConfig.getVersion() %></label>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><label><%=localeObj.getTranslatedText("Build")%></label></td>
+						<td>
+							<label>&nbsp;&nbsp;&nbsp<%=eRequitConfig.getBuild() %></label>
+						</td>
+						
+						<td  style="padding-right : 30%;"  > </td>
+						<td><label><%=localeObj.getTranslatedText("Build")%></label></td>
+						<td>
+							<label>&nbsp;&nbsp;&nbsp<%=eopRequitConfig.getBuild() %></label>
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
+						<td>
+							<textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
+							<%=eRequitConfig.getChangeLog() %></textarea>
+						</td>
+						
+						<td  style="padding-right : 30%;"  > </td>
+						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
+						<td>
+							
+							<b><textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
+							<%=eopRequitConfig.getChangeLog() %></textarea></b>
 						</td>
 					</tr>
 <!-- 					<tr > -->
@@ -96,8 +177,9 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 	<script language="javascript">
 	
 	
-	$('#appType').change(function(){
-	    	var appType=$('#appType').val();
+	$('#erAppType').click(function(){
+		alert("hiiii");
+	    	var appType='<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>';
 	    	
 	    	var logedInId = "<%=userObj.getClientRestUserID()%>";
 	    	var co = "<%=userObj.getClientRestUserBranch()%>";
@@ -115,6 +197,26 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 				window.location.href = '<%=eopScanAppURL%>';
 	    	}
 	});
+	
+	$('#eopAppType').click(function(){
+    	var appType='<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>';
+    	
+    	var logedInId = "<%=userObj.getClientRestUserID()%>";
+    	var co = "<%=userObj.getClientRestUserBranch()%>";
+    	var userType = "<%=userObj.getUserType()%>";
+    	UserManagement.insertDownloadPlistDetailsOfUser(logedInId, co, userType, appType,{
+    		callback : function(response) 
+    		{
+	    			//alert(response);
+    	    }	
+        });                
+    	
+    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){
+			window.location.href = '<%=eRecruitmentAppURL%>';
+    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){ 
+			window.location.href = '<%=eopScanAppURL%>';
+    	}
+});
 	</script>
  <%}catch(Exception e) {
 	e.printStackTrace();}

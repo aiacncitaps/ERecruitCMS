@@ -24,6 +24,7 @@
 
 package com.quix.aia.cn.imo.mapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -86,6 +88,36 @@ public class PropertiesMaintenance {
 
 		return propertiesMap;
 	}
+	
+	public ArrayList<ConfigurationProperties> getConfigData(){
+		Map<String,String> propertiesMap = new HashMap<String, String>();
+		Session session = null;
+		ArrayList<ConfigurationProperties> list=null;
+		try {
+			session = HibernateFactory.openSession();
+			 Criteria criteria=session.createCriteria(ConfigurationProperties.class);
+			 criteria.add(Restrictions.or(
+	                    Restrictions.eq("configurationKey",ConfigurationProperties.E_RECRUITMENT_APP_URL),
+	                    Restrictions.eq("configurationKey",ConfigurationProperties.EOP_SCAN_APP_URL))
+	            );
+				
+			 list = (ArrayList<ConfigurationProperties>) criteria.list();
+			
+		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				HibernateFactory.close(session);
+
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+	}
 
 	/**
 	 * <p>
@@ -124,7 +156,7 @@ public class PropertiesMaintenance {
 		return propertiesMap;
 	}
 	
-	public String updateConfigurationProperties(String appType, String appURL) {
+	public String updateConfigurationProperties(String appType, String appURL,String version,String build,String changeLog) {
 		
 		ConfigurationProperties configurationProperties = fetchConfigurationProperty(appType);
 		
@@ -137,6 +169,10 @@ public class PropertiesMaintenance {
 				configurationProperties.setConfigurationKey(ConfigurationProperties.E_RECRUITMENT_APP_URL);
 			}
 			configurationProperties.setConfigurationValue(appURL);
+			configurationProperties.setVersion(version);
+			configurationProperties.setBuild(build);
+			configurationProperties.setChangeLog(changeLog);
+			
 			
 			session = HibernateFactory.openSession();
 			tx = session.beginTransaction();

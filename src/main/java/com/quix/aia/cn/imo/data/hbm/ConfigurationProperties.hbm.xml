@@ -20,6 +20,18 @@
         <property  name="configurationValue" type="java.lang.String">
             <column name="CONFIGURATION_VALUE"  />
         </property>
+        
+         <property  name="version" type="java.lang.String">
+            <column name="VERSION"  />
+        </property>
+        
+         <property  name="build" type="java.lang.String">
+            <column name="BUILD"  />
+        </property>
+        
+         <property  name="changeLog" type="java.lang.String">
+            <column name="CHANGE_LOG"  />
+        </property>
        
     </class>
 </hibernate-mapping>

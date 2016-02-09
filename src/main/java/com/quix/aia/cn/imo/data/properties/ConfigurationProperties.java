@@ -37,6 +37,33 @@ public class ConfigurationProperties {
 	private Integer configurationCode;
 	private String configurationKey;
 	private String configurationValue;
+	private String version;
+	private String build;
+	private String changeLog;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getBuild() {
+		return build;
+	}
+
+	public void setBuild(String build) {
+		this.build = build;
+	}
+
+	public String getChangeLog() {
+		return changeLog;
+	}
+
+	public void setChangeLog(String changeLog) {
+		this.changeLog = changeLog;
+	}
 
 	/**
 	 * <p>
@@ -48,6 +75,7 @@ public class ConfigurationProperties {
 		configurationCode = null;
 		configurationKey = null;
 		configurationValue = null;
+		
 	}
 	
 	/**

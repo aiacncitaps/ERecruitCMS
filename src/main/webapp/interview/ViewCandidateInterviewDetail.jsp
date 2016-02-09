@@ -58,6 +58,14 @@ if(address!=null){
 		ccResult="";
 	}else{
 		ccResult=address.getCcTestResult();
+		if(ccResult.equals("Urgent")){
+			ccResult="Urgent Recruit";
+		}else if(ccResult.equals("Normal")){
+			ccResult="Normal Recruit";
+		}else if(ccResult.equals("Prudent")){
+			ccResult="Caution Recruit";
+		}
+		
 	}
 	if(address.getCcTestResultDate()!=null)
 		ccDate=LMSUtil.convertDateToString(address.getCcTestResultDate());
@@ -190,9 +198,14 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                        	<td style="border: none;" width="25%" >		                                    				
 	                                    	<label ><%=localeObj.getTranslatedText("Interviewer")%>:</label>
                                     	</td>
-                                    	
+                                    	<%
+                                    		if(interviewCandidate.getInterviwer_name().trim().length()==0){
+                                    			interviewCandidate.setInterviwer_name(userObj.getStaffName());
+                                    		}
+                                    		
+                                    	%>
                                        <td style="border: none;" width="25%" >	
-                                        	<input name="interviewer" id="interviewer" type="text" class="text" readonly="readonly" value="<%=interviewCandidate.getInterviwer_name()==null?"":interviewCandidate.getInterviwer_name()%>"  />
+                                        	<input name="interviewer" id="interviewer" type="text" class="text" readonly="readonly" value="<%=interviewCandidate.getInterviwer_name()%>"  />
                                        	</td>                                     			   
                                       	</tr>
                                       	
@@ -778,9 +791,17 @@ $(document).ready(function() {
 						if(fileNameLink!="")
 							fileNameLink=fileNameLink.substr(0,fileNameLink.length-2);
 						
+						var interviewerName;
+						if(interviewCandList[i].interviwer_name==null){
+							interviewerName="<%=interviewCandidate.getInterviwer_name()%>";
+						}else{
+							interviewerName=interviewCandList[i].interviwer_name;
+						}
+						
 						if(interviewCandList[i].interviewType=="2nd")
 						{
 							cnt1 = cnt1 + 1;
+							
 							if(flag2)
 							{
 								secondString+="<tr style='background-color: #dad7d8;border: 1px solid #e7acbc;'>";
@@ -788,7 +809,7 @@ $(document).ready(function() {
 								secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+inDate+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+interviewCandList[i].location+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+candidateList[i].recruitmentScheme+"</td>";
-	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'></td>";
+	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+interviewerName+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+result+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+candidateList[i].remarks+"</td>";
 	  							secondString+="<td  width='7%'>"+fileNameLink+"</td>";
@@ -802,7 +823,7 @@ $(document).ready(function() {
 								secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+inDate+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+interviewCandList[i].location+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+candidateList[i].recruitmentScheme+"</td>";
-	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'></td>";
+	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+interviewerName+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+result+"</td>";
 	  							secondString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+candidateList[i].remarks+"</td>";
 	  							secondString+="<td  width='7%'>"+fileNameLink+"</td>";
@@ -813,6 +834,12 @@ $(document).ready(function() {
 						if(interviewCandList[i].interviewType=="3rd")
 						{
 							cnt2 = cnt2 + 1;
+							
+							<%-- if(interviewCandList[i].interviwer_name==null){
+								interviewerName="<%=interviewCandidate.getInterviwer_name()%>";
+							}else{
+								interviewerName=interviewCandList[i].interviwer_name;
+							} --%>
 							if(flag3)
 							{
 								thirdString+="<tr style='background-color: #dad7d8;border: 1px solid #e7acbc;'>";
@@ -820,7 +847,7 @@ $(document).ready(function() {
 								thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+inDate+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+interviewCandList[i].location+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+candidateList[i].recruitmentScheme+"</td>";
-	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'></td>";
+	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+interviewerName+" </td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+result+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+candidateList[i].remarks+"</td>";
 	  							thirdString+="<td  width='7%'>"+fileNameLink+"</td>";
@@ -834,7 +861,7 @@ $(document).ready(function() {
 								thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+inDate+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+interviewCandList[i].location+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;text-align: center;' width='10%'>"+candidateList[i].recruitmentScheme+"</td>";
-	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'></td>";
+	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+interviewerName+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+result+"</td>";
 	  							thirdString+="<td  style='border-right: 1px solid #e7acbc;' width='7%'>"+candidateList[i].remarks+"</td>";
 	  							thirdString+="<td  width='7%'>"+fileNameLink+"</td>";

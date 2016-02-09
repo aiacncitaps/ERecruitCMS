@@ -17,25 +17,25 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
    
-<!--   <filter> -->
-<!-- 	<filter-name>nutz</filter-name> -->
-<!-- 	<filter-class>org.nutz.mvc.NutFilter</filter-class> -->
+<!-- <filter> 
+	<filter-name>nutz</filter-name>
+	<filter-class>org.nutz.mvc.NutFilter</filter-class>
 	
-<!-- <init-param>                                                                                -->
-<!--             <param-name>ignore</param-name> -->
-<!--             <param-value>^(.+[.])(jsp|png|gif|jpg|js|css|jspx|jpeg|html|zip)$</param-value> -->
-<!--         </init-param> -->
-<!-- <init-param> -->
-<!-- 		<param-name>modules</param-name> -->
-<!-- 		<param-value>com.tohours.imo.MainModule</param-value> -->
-<!-- 	</init-param> -->
-<!--   </filter> -->
-<!--   <filter-mapping> -->
-<!-- 	<filter-name>nutz</filter-name> -->
-<!-- 	<url-pattern>/attract/*</url-pattern> -->
-<!-- 	<dispatcher>REQUEST</dispatcher> -->
-<!-- 	<dispatcher>FORWARD</dispatcher> -->
-<!--   </filter-mapping> -->
+<init-param>                                                                               
+            <param-name>ignore</param-name>
+            <param-value>^(.+[.])(jsp|png|gif|jpg|js|css|jspx|jpeg|html|zip)$</param-value>
+        </init-param>
+<init-param>
+		<param-name>modules</param-name>
+		<param-value>com.tohours.imo.MainModule</param-value>
+	</init-param>
+  </filter>
+  <filter-mapping>
+	<filter-name>nutz</filter-name>
+	<url-pattern>/attract/*</url-pattern>
+	<dispatcher>REQUEST</dispatcher>
+	<dispatcher>FORWARD</dispatcher>
+  </filter-mapping>  -->
  
  
 <filter>
