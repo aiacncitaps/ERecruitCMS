@@ -178,7 +178,7 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 	
 	
 	$('#erAppType').click(function(){
-		alert("hiiii");
+		
 	    	var appType='<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>';
 	    	
 	    	var logedInId = "<%=userObj.getClientRestUserID()%>";
