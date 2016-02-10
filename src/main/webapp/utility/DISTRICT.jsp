@@ -113,7 +113,7 @@ $( document ).ready(function() {
 								  {
 									noOfAnnouncements = ((com.quix.aia.cn.imo.utilities.Pager)request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.PAGING_OBJECT)).getActualSize();
 							  	  }%>								
-								<tr><td align="left"><a href="FormManager?key=DISTRICTAdd&type=NEW" class="ML10 btn1" ><%=localeObj.getTranslatedText("Add New")%></a></td>
+								<tr><td align="left"><a href="FormManager?key=DISTRICTAdd&type=NEW" class="ML10 btn1" ><%=localeObj.getTranslatedText("Add District")%></a></td>
 								<td align="right" style="font-weight:bold;padding-right:10px"><%=localeObj.getTranslatedText("Search Result")%> : <%=noOfAnnouncements %></td></tr>
 						</table>
 					</div>
