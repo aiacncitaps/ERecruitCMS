@@ -13,7 +13,7 @@
 		     <create creator="new" javascript="Presenter">
 		      <param name="class" value="com.quix.aia.cn.imo.mapper.PresenterMaintenance"/>
 		    </create>
-		     <convert converter="bean" match="com.quix.aia.cn.imo.data.presenter.presenter"/>
+		     <convert converter="bean" match="com.quix.aia.cn.imo.data.presenter.Presenter"/>
 		     
 		     <create creator="new" javascript="UserManagement">
 		      <param name="class" value="com.quix.aia.cn.imo.mapper.UserMaintenance"/>
