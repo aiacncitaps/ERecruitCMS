@@ -342,7 +342,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                        	</td>  
                                        	
                                        <td style="border: none;text-align:left" width="25%" colspan="2" id="CandidateMaterialTD">	
-                                        	<input name="CandidateMaterial" id="CandidateMaterial" type="file"  /><progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
+                                        	<input name="CandidateMaterial" id="CandidateMaterial" type="file"  /><progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload ")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
                                        	</td>                                     			   
                                       	</tr>
                                       	
