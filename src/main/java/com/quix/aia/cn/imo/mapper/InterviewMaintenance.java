@@ -837,7 +837,7 @@ public Object updateInterview(Interview interview, HttpServletRequest req) {
 		
 		// send web service to iCalendar
         iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
-        if(!userObj.getSsoSessionId().equals("")){
+        if(!"".equals(userObj.getSsoSessionId())){
         	helper.updateInterview(interview.getInterview_code(), userObj.getSsoSessionId());
         }
 	}
@@ -953,7 +953,7 @@ public void deleteInterview(int interview_code,HttpServletRequest req) {
 			
 			// call the iCalendar web service to delete interview
             iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
-            if(!userObj.getSsoSessionId().equals("")){
+            if(!"".equals(userObj.getSsoSessionId())){
             	helper.deleteInterview(interview_code, userObj.getSsoSessionId());
             }
 		}
@@ -2858,7 +2858,7 @@ public void resyncInterview(int interview_code, HttpServletRequest req)
         {
             // is not deleted, re-update to iCalendar
             iCalendarInterviewHelper helper = new iCalendarInterviewHelper();
-            if(!userObj.getSsoSessionId().equals("")){
+            if(!"".equals(userObj.getSsoSessionId())){
             	success = helper.updateInterview(interview_code, userObj.getSsoSessionId());
             }
         }

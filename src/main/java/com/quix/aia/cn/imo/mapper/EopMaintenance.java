@@ -866,7 +866,7 @@ public class EopMaintenance {
 
             // call iCalendar web service to update the EOP
             iCalendarEOPHelper iCalHelper = new iCalendarEOPHelper();
-            if(!userObj.getSsoSessionId().equals("")){
+            if(!"".equals(userObj.getSsoSessionId())){
             	iCalHelper.updateEOP(event.getEvent_code(), userObj.getSsoSessionId());
             }
 		}catch(Exception e)
@@ -930,7 +930,7 @@ public class EopMaintenance {
 
         // call iCalendar web service to update the EOP
         iCalendarEOPHelper iCalHelper = new iCalendarEOPHelper();
-        if(!userObj.getSsoSessionId().equals("")){
+        if(!"".equals(userObj.getSsoSessionId())){
         	iCalHelper.deleteEOP(event.getEvent_code(), userObj.getSsoSessionId());
         }
         
@@ -2981,7 +2981,7 @@ public class EopMaintenance {
                 if (eop.isStatus() == true)
                 {
                     iCalendarEOPHelper helper = new iCalendarEOPHelper();
-                    if(!userObj.getSsoSessionId().equals("")){
+                    if(!"".equals(userObj.getSsoSessionId())){
                     	success = helper.updateEOP(eventCode, userObj.getSsoSessionId());
                     }
                 }
