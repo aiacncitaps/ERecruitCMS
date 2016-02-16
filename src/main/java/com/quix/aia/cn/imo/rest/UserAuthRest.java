@@ -181,6 +181,7 @@ public class UserAuthRest {
 		String json = "";
 		String appURL = "";
 		String mergedAppURL = "";
+		String currentAppVersion = "";
 		
 //		appType = "eRecruitmentAppURL";
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
@@ -190,10 +191,11 @@ public class UserAuthRest {
 			appURL = configurationProperties.getConfigurationValue();
 			
 			configurationProperties = propertiesMaintenance.fetchConfigurationProperty(appType);
-			if(configurationProperties.getVersion().equals(versionNo)){
-				json="{\"isValidVersion\":"+true+",\"webAppURL\":\""+appURL+"\"}";
+			currentAppVersion = configurationProperties.getVersion();
+			if(currentAppVersion.equals(versionNo)){
+				json="{\"isValidVersion\":"+true+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
 			}else{
-				json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\"}";
+				json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
 			}
 			
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_USER, AuditTrail.FUNCTION_REST, "SUCCESS"));
@@ -207,7 +209,7 @@ public class UserAuthRest {
 			LogsMaintenance logsMain = new LogsMaintenance();
 			logsMain.insertLogs("UserAuthRest", Level.SEVERE + "",errors.toString());
 			
-			json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\"}";
+			json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
 			return Response.status(500).entity(json).build();
 		}
 
