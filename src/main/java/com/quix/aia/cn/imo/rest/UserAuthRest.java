@@ -52,9 +52,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
+import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.mapper.PropertiesMaintenance;
 import com.quix.aia.cn.imo.mapper.UserMaintenance;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
 
@@ -165,6 +167,50 @@ public class UserAuthRest {
 		}
 		
 		return Response.status(200).entity("{\"status\":"+status+"}").build();
+	}
+	
+	@GET
+	@Path("/validateVersion")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response validateVersion(@Context HttpServletRequest request,
+			@Context ServletContext context) {
+
+		log.log(Level.INFO, "UserAuthRest --> validateVersion ");
+		String versionNo = request.getParameter("versionNo");
+		String appType = request.getParameter("appType");
+		String json = "";
+		String appURL = "";
+		String mergedAppURL = "";
+		
+//		appType = "eRecruitmentAppURL";
+		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
+		PropertiesMaintenance propertiesMaintenance = new PropertiesMaintenance();
+		try {
+			ConfigurationProperties configurationProperties = propertiesMaintenance.fetchConfigurationProperty("APP_URL");
+			appURL = configurationProperties.getConfigurationValue();
+			
+			configurationProperties = propertiesMaintenance.fetchConfigurationProperty(appType);
+			if(configurationProperties.getVersion().equals(versionNo)){
+				json="{\"isValidVersion\":"+true+",\"webAppURL\":\""+appURL+"\"}";
+			}else{
+				json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\"}";
+			}
+			
+		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_USER, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			return Response.status(200).entity(json).build();
+		} catch (Exception e) {
+			log.log(Level.INFO, "UserAuthRest --> validateVersion --> Exception..... ");
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain = new LogsMaintenance();
+			logsMain.insertLogs("UserAuthRest", Level.SEVERE + "",errors.toString());
+			
+			json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\"}";
+			return Response.status(500).entity(json).build();
+		}
+
 	}
 
 }
