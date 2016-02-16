@@ -35,7 +35,7 @@ public class InterviewCandidateMaterial
 	private Date createdDate;
 	private int interviewCode;
 	private byte[] formContent;
-	
+	private String uploadby;
 	
 	
 	
@@ -131,6 +131,16 @@ public class InterviewCandidateMaterial
 
 	public void setFormContent(byte[] formContent) {
 		this.formContent = formContent;
+	}
+
+
+	public String getUploadby() {
+		return uploadby;
+	}
+
+
+	public void setUploadby(String uploadby) {
+		this.uploadby = uploadby;
 	}
 	
 	

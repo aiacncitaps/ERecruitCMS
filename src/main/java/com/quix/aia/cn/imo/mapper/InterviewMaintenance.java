@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +70,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 
 import com.archerlogic.aia.cn.helpers.iCalendar.iCalendarInterviewHelper;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
@@ -298,6 +300,7 @@ public  int insertInterview(Interview interview,HttpServletRequest requestParame
 					    	IntMat.setFieldName(field_name);
 					    	IntMat.setMaterial(bytearray);
 					    	session.save(IntMat);
+					    	//tx.commit();
 					    }
 					   
 						requestParameters.getSession().removeAttribute("material_file_name");// removing uploaded file details from session after file is uploaded
@@ -882,7 +885,7 @@ public  int modifyInterview(Interview interview,HttpServletRequest req) {
 				}
 		   }
 		    session.update(interview);
-			tx.commit();
+			
 			record_updated=1;
 			
 			if(req.getSession().getAttribute("material_file_name")!=null){  //checks if user  uploaded files  to update
@@ -902,6 +905,7 @@ public  int modifyInterview(Interview interview,HttpServletRequest req) {
 				    	IntMat.setFieldName(field_name);
 				    	IntMat.setMaterial(bytearray);
 				    	session.save(IntMat);
+				    	//tx.commit();
 				    
 				    }
 					
@@ -909,6 +913,8 @@ public  int modifyInterview(Interview interview,HttpServletRequest req) {
 				req.getSession().removeAttribute("material_byte_session");
 				req.getSession().removeAttribute("material_field_name");
 		   }
+			
+			tx.commit();
 		}
 		catch(Exception e)
 		{

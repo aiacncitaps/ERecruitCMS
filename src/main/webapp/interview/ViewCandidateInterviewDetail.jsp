@@ -44,6 +44,8 @@ iCode = iCode==null||iCode.equals("")?"0":iCode;
 String candidateCode = request.getParameter("candidateCode");
 candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
 
+//String candidateMaterial=attendanceMaintenance.getinterviewCandidateMaterialName(iCode,candidateCode);
+
 InterviewCandidate interviewCandidate = attendanceMaintenance.getAttendanceCandidateDetail1(request, Integer.parseInt(iCode),Integer.parseInt(candidateCode));
 AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
 String nric = addrBookMain.getNric(Integer.parseInt(interviewCandidate.getInterviewCandidateCode()));
@@ -342,15 +344,35 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
                                        	</td>  
                                        	
                                        <td style="border: none;text-align:left" width="25%" colspan="2" id="CandidateMaterialTD">	
-                                        	<input name="CandidateMaterial" id="CandidateMaterial" type="file"  /><progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload ")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
+                                        	<input name="CandidateMaterial" id="CandidateMaterial" type="file"  /><progress value="22" max="100" id="progress1" style="border: 4px solid #CCCCCC; margin-left:400px; margin-top:-24px;" ></progress> <a href="javascript:uploadFile()" class="btn1 ML10"><%=localeObj.getTranslatedText("Upload")%></a></br><label> <%=localeObj.getTranslatedText("Maximum 5MB")%></label>  
                                        	</td>                                     			   
                                       	</tr>
+                                      	
+                                      	
+                                      	
+                                      	<%-- <%
+                                    		if(!candidateMaterial.equals("")){
+                                    	%>
+                                    	<tr>
+                                    	 <td style="border: none;" width="25%" >	                                    				
+	                                    	<label ></label>
+                                    	</td>
+                                       
+                                       	
+                                       	<td style="border: none;text-align:left" width="25%" colspan="2" >	
+                                        	<span id="uploadFilename"><%=candidateMaterial %></span> 
+                                       	</td> 
+                                       	</tr>
+                                       <td><a href="#" id="materialnameImg" onclick="removeMaterial('<%=iCode,candidateCode %>');" ><img src=images/delete.png border=0></a> </td>
+                                       	<%} %>
+                                      	 --%>
                                       	
                                       	<tr>
                                       		<td style="border: none;" width="25%" >	                                    				
 	                                    	<label ></label>
                                     	</td>
-                                       <td style="border: none;" width="25%" >	
+                                    
+                                       	<td style="border: none;" width="25%" >	
                                         	
                                        	</td>  
                                      <%--   	<%
@@ -595,6 +617,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 			var materialDesc=$("#materialDesc").val();
 			var candidateCode=$("#candidateCode").val();
 			var interviewCode=$("#interviewCode").val();
+			var username='<%= userObj.getStaffName()%>';
         	
         	if(isAjaxUploadSupported()){
         		
@@ -620,7 +643,7 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 						   	processData: false,
 						   	contentType: false,
 						}).done(function(respond){
-							 InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,{
+							 InterviewAttendance.insertCandidateMaterialDWR(candidateCode,fileName,materialDesc,interviewCode,username,{
 									callback : function(str) {
 										if((str-0)>0)
 										{
@@ -737,6 +760,23 @@ $(function() {
 	dateFormat:"dd/mm/yy"
 	});
  });
+ 
+function removeMaterial(code){
+	//alert(code);
+	InterviewAttendance.removeInterviewMaterial(code,{
+		callback : function(response) 
+		{
+  			//alert(response);
+  			if(response=='1'){
+  				//alert("Sucess");
+  				window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode=<%=Integer.parseInt(iCode) %>&candidateCode=<%=Integer.parseInt(candidateCode) %>';
+  			}
+	    }	
+    });                
+	
+}
+
+
 $(document).ready(function() {
 	 $("#progress").hide();
 	 $("#progress1").hide();
@@ -757,6 +797,7 @@ $(document).ready(function() {
 
 				var candidateList = str.list;
 				var interviewCandList = str.interviewCandidateList;
+				var materialCode=str.materialCode;
 			
 					var flag2=false;
 					var flag3=false;
@@ -782,10 +823,19 @@ $(document).ready(function() {
 						if(candidateList[i].fileNameList!='')
 						{	
 							var fileName = candidateList[i].fileNameList.split("|");
+							var materialcode=candidateList[i].strMaterialCode.split("|");
+							var uploadBy=candidateList[i].uploadBy.split("|");
+							var username='<%= userObj.getStaffName()%>';
+							
 							for(var j=0;j<fileName.length;j++)
 							{
 								
-									fileNameLink+="<a href='<%=stFilePath%>/"+fileName[j]+"' target='_new'>"+fileName[j]+"</a> | ";
+									if(username==uploadBy[j]){
+										fileNameLink+="<a href='<%=stFilePath%>/"+fileName[j]+"' target='_new'>"+fileName[j]+"</a> "+" <a href='#' id='materialnameImg' onclick=removeMaterial("+materialcode[j]+"); ><img src=images/delete.png border=0></a> </br> ";
+									}else{
+										fileNameLink+="<a href='<%=stFilePath%>/"+fileName[j]+"' target='_new'>"+fileName[j]+"</a>  </br> ";
+									}
+									
 							}		
 						}
 						if(fileNameLink!="")

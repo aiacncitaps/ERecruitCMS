@@ -61,6 +61,8 @@ public class InterviewCandidate
     private Date interviewDate;
     private String interviewSessionName;
     private String teamName;
+    private String strMaterialCode;
+    private String uploadBy;
 	
 	
 	public int getBranchCode() {
@@ -798,6 +800,18 @@ returnStr ="<tr> "+
 	}
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
+	}
+	public String getStrMaterialCode() {
+		return strMaterialCode;
+	}
+	public void setStrMaterialCode(String strMaterialCode) {
+		this.strMaterialCode = strMaterialCode;
+	}
+	public String getUploadBy() {
+		return uploadBy;
+	}
+	public void setUploadBy(String uploadBy) {
+		this.uploadBy = uploadBy;
 	}
 	
 }

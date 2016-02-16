@@ -36,5 +36,9 @@
       <column name="FORM_CONTENT"/>
     </property>
     
+    <property  name="uploadby" type="java.lang.String">
+            <column name="UPLOADBY"  />
+        </property>
+    
     </class>
 </hibernate-mapping>

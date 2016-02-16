@@ -50,6 +50,7 @@ import com.quix.aia.cn.imo.data.common.AamData;
 import com.quix.aia.cn.imo.data.interview.Interview;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidate;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidateMaterial;
+import com.quix.aia.cn.imo.data.interview.InterviewMaterial;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
@@ -426,7 +427,7 @@ public class InterviewAttendanceMaintenance {
 	}
 	
 	
-	public  int insertCandidateMaterialDWR(int candidateCode, String materialName, String materialDesc)
+	public  int insertCandidateMaterialDWR(int candidateCode, String materialName, String materialDesc,int interviewCode,String username)
 	{
 		Integer key = 0;
 		Session session = null;
@@ -446,6 +447,9 @@ public class InterviewAttendanceMaintenance {
 			material.setCandidateCode(candidateCode);
 			material.setMaterialFileName(materialName);
 			material.setMaterialDescrption(materialDesc);
+			material.setInterviewCode(interviewCode);
+			material.setUploadby(username);
+			
 			key = (Integer)session.save(material);
 			tx.commit();
 			log.log(Level.INFO,"---New Candidate Material Saved Successfully--- ");
@@ -508,21 +512,28 @@ public class InterviewAttendanceMaintenance {
 //		for (Iterator iterator = attendanceList.iterator(); iterator.hasNext();) 
 		Interview interview = null;
 		InterviewMaintenance main = new InterviewMaintenance();
+		ArrayList<InterviewCandidateMaterial> materialcodeList=new ArrayList<InterviewCandidateMaterial>();
 		for (int i = 0; i < attendanceList.size(); i++) {
 			
 			InterviewCandidate candidate = (InterviewCandidate) attendanceList.get(i);
 			
 			materialList = getMaterailList(candidate.getCandidateCode());
 			String fileName = "";
+			String uploadBy="";
+			String materialCode="";
+			
 				for (Iterator<InterviewCandidateMaterial> iterator2 = materialList.iterator(); iterator2.hasNext();) 
 			{
 					InterviewCandidateMaterial material = (InterviewCandidateMaterial) iterator2.next();
 					fileName +=material.getMaterialFileName()+"|";
-				
+					materialCode +=material.getMaterialCode()+"|";
+					uploadBy +=material.getUploadby()+"|";
 			}
-			if(!fileName.equals(""))
+			if(!fileName.equals("")){
 				attendanceList.get(i).setFileNameList(fileName.substring(0,fileName.length()-1));
-			
+				attendanceList.get(i).setStrMaterialCode(materialCode.substring(0,materialCode.length()-1));
+				attendanceList.get(i).setUploadBy(uploadBy.substring(0,uploadBy.length()-1));
+			}			
 			interview = main.getInterviewBasedOnInterviewCode(candidate.getInterviewCode());
 			if(null != interview && interview.isStatus()){
 				interviewList.add(interview);
@@ -965,6 +976,103 @@ public class InterviewAttendanceMaintenance {
 			}
 		}
 	}
+	
+	/**
+	 * <p>get all attendance registered for particular interview</p>
+	 * @param req   Servlet Request Parameter
+	 * @param interviewCode
+	 * @return File name of candidate uploaded material
+	 */
+	public String  getinterviewCandidateMaterialName(String interviewCode,String candidateCode)
+	{
+		Session session = null;
+		String filename="";
+		ArrayList<InterviewCandidateMaterial> attendanceList = new ArrayList<InterviewCandidateMaterial>();
+		InterviewCandidateMaterial material=null;
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Criteria crit = session.createCriteria(InterviewCandidateMaterial.class);
+			
+			crit.add(Restrictions.eq("interviewCode", Integer.parseInt(interviewCode)));
+			crit.add(Restrictions.eq("candidateCode", Integer.parseInt(candidateCode)));
+			crit.addOrder(Order.desc("materialCode"));
+			crit.setMaxResults(1);
+
+			attendanceList = (ArrayList)crit.list();
+			
+			if(attendanceList.size()>0){
+				material = (InterviewCandidateMaterial)attendanceList.get(0);
+				filename=material.getMaterialFileName();
+			}
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	}
+		return filename;
+	}
+	
+	
+	public  String removeInterviewMaterial(String materialCode) {
+		
+		 log.log(Level.INFO,"InterviewAttendance Maintenance --> removeInterviewCandidateMaterial");
+			Session session = null;
+			Transaction tx = null;
+			 try
+				{
+				    session = HibernateFactory.openSession();
+					tx = session.beginTransaction();
+					Query query=session.createQuery("from InterviewCandidateMaterial where materialCode=:code");
+					query.setParameter("code",Integer.parseInt(materialCode) );
+					ArrayList<InterviewCandidateMaterial> list=(ArrayList<InterviewCandidateMaterial>) query.list();
+					
+					if(list.size()>0){
+						for(InterviewCandidateMaterial material:list){
+						    session.delete(material);
+							
+						}
+				
+						
+					tx.commit();
+					}else{
+						return "0";
+					}
+					
+					
+				}
+				catch(Exception e)
+				{
+					log.log(Level.SEVERE,e.getMessage());
+					e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
+				}finally{
+					try{
+						HibernateFactory.close(session);
+					}catch(Exception e){
+						
+						log.log(Level.SEVERE,e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			return "1";
+	}
+
 	
 	
 	public static final String CANDIDATE_NAME = "candidateName";
