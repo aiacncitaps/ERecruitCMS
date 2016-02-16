@@ -30,7 +30,6 @@ package com.quix.aia.cn.imo.mapper;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -115,6 +114,7 @@ public class AddressBookMaintenance {
 					deleteAddressBookList.add(addressBook);
 					//addressBook = getAddressBook(addressBook);
 					addressBook.setDeleteStatus(true);
+					addressBook.setModificationDate(new Date());
 					deleteString = ",\"deleteStatus\":"+addressBook.getDeleteStatus();
 				}
 				session.saveOrUpdate(addressBook);
@@ -271,6 +271,7 @@ public class AddressBookMaintenance {
 			criteria.setMaxResults(addressBookListingOffset);
 
 			criteria.add(Restrictions.eq("agentId", agentId));
+			criteria.add(Restrictions.eq("deleteStatus", false));
 			if (null != date) {
 				criteria.add(Expression.ge("modificationDate", date));
 			}
@@ -316,6 +317,99 @@ public class AddressBookMaintenance {
 			candidateNoteMaintenance = null;
 		}
 		return list;
+	}
+	
+	/**
+	 * <p>
+	 * This method retrieves all AddressBooks of Particular Agent
+	 * <p>
+	 * 
+	 * @param agentID
+	 * @return List<AddressBook> List of Class Object
+	 * 
+	 */
+	public String getAgentDeletedAddressBook(HttpServletRequest request, ServletContext context) {
+
+		Session session = null;
+		ArrayList<AddressBook> list = null;
+		ArrayList<Object[]> tempList = new ArrayList<Object[]>();
+		Query query = null;
+		String jsonString = ""; 
+
+		String agentId = request.getParameter("agentId");
+		String pageNo = request.getParameter("pageNo");
+		String dateTime = request.getParameter("dateTime");
+		
+		String coBranch = request.getParameter("co");
+
+		agentId = agentId == null ? "" : agentId;
+		Date date = null;
+		if (null != dateTime && !"".equals(dateTime)) {
+			date = LMSUtil.convertDateToyyyymmddhhmmssDashed(dateTime);
+		}
+
+		try {
+			String queryString = "SELECT addressCode, iosAddressCode, agentId FROM AddressBook WHERE agentId = :agentId and deleteStatus = :deleteStatus"; 
+
+			if (null != date) {
+				queryString += " and modificationDate >= :modificationDate";
+			}
+			
+			if (null != coBranch && !"".equals(coBranch)) {
+				queryString += " and co = :co";
+			}
+			
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			query = session.createQuery(queryString);
+
+			query.setParameter("agentId", agentId);
+			query.setParameter("deleteStatus", true);
+			if (null != date) {
+				query.setParameter("modificationDate", date);
+			}
+			
+			if (null != coBranch && !"".equals(coBranch)) {
+				query.setParameter("co", coBranch);
+			}
+			tempList = (ArrayList) query.list();
+
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.getMessage());
+			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			ex.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
+			list = new ArrayList<AddressBook>();
+		} finally {
+			try {
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+			session = null;
+			query = null;
+		}
+		
+		AddressBook addressBook = null;  
+		boolean flag = false;
+		for(Object[] objectArray : tempList){
+			if(flag){
+				jsonString +=",";
+			}else{
+				flag = true;
+			}
+			jsonString += "{"
+					+ "\"addressCode\" : "+objectArray[0]+","
+					+ "\"iosAddressCode\" : \""+objectArray[1]+"\","
+					+ "\"agentId\":\""+objectArray[2]+"\","
+					+ "\"deleteStatus\":"+true+""
+					+ "}";
+		}
+		
+		return jsonString;
 	}
 	
 	/**

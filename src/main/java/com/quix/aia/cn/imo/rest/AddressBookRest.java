@@ -29,7 +29,6 @@ package com.quix.aia.cn.imo.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -210,9 +209,24 @@ public class AddressBookRest {
 
 			log.log(Level.INFO, "Address Book --> fetching Information ... ");
 			addressBookList = addressBookMaintenance.getAgentAddressBook(request,context);
+			
+			String deletedList = "";
 			// Convert the object to a JSON string
 			log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
 			jsonString = googleJson.toJson(addressBookList);
+
+			String dateTime = request.getParameter("dateTime");
+			if (null != dateTime && !"".equals(dateTime)) {
+				deletedList = addressBookMaintenance.getAgentDeletedAddressBook(request, context);
+				if(!"".equals(deletedList)){
+					jsonString = jsonString.substring(0, jsonString.length()-1);
+					if(!addressBookList.isEmpty()){
+						deletedList = ","+deletedList;
+					}
+					deletedList+="]";
+					jsonString +=deletedList;
+				}
+			}
 
 			return Response.status(200).entity(jsonString).build();
 		} catch (Exception e) {
