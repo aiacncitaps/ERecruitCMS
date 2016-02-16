@@ -151,7 +151,7 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 					<tr>
 						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
 						<td>
-							<textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
+							<textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
 							<%=eRequitConfig.getChangeLog() %></textarea>
 						</td>
 						
@@ -159,7 +159,7 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
 						<td>
 							
-							<b><textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
+							<b><textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
 							<%=eopRequitConfig.getChangeLog() %></textarea></b>
 						</td>
 					</tr>
