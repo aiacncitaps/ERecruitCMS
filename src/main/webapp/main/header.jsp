@@ -69,6 +69,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 									 <td style="padding:10px"><a href="ContentManager?key=BU"><%=localeObj.getTranslatedText("Business Unit")%></a></td>
 									<td style="padding:10px"><a href="ContentManager?key=DISTRICT" ><%=localeObj.getTranslatedText("District")%></a></td>
 									<td style="padding:10px"><a href="ContentManager?key=BRANCH" ><%=localeObj.getTranslatedText("Branch")%></a></td>
+									<td style="padding:10px"><a href="ContentManager?key=CITY_DIST" ><%=localeObj.getTranslatedText("City_District")%></a></td>
 									<%--<td style="padding:10px"><a href="ContentManager?key=CITY" ><%=localeObj.getTranslatedText("City")%></a></td> --%>
 <!-- 									<td style="padding:10px">&nbsp;</td> -->
 									

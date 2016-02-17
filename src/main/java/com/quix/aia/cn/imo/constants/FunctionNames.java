@@ -54,6 +54,9 @@ public class FunctionNames {
 		
 		public static final String CITY = "CITY";
 		public static final String CITY_ADD = "CITYAdd";
+		public static final String CITY_DIST = "CITY_DIST";
+		public static final String CITY_DIST_ADD = "CITY_DIST_Add";
+		
 		public static final String DISTRICT = "DISTRICT";
 		public static final String DISTRICT_ADD = "DISTRICTAdd";
 		public static final String SSC = "SSC";

@@ -250,34 +250,31 @@ public class ImoUtilityData {
 		    return map;
 	}
 	
-	public static Map  getCity(String co){
+	public static Map  getCity(int dist){
 		 ArrayList<ImoUtilityData> listData =  new  ArrayList<ImoUtilityData>();
 		 Session session= null;
 			try{
 				
 				session = HibernateFactory.openSession();
 				ImoUtilityData imoData = null;
-			   
-				Query query = session.createQuery("SELECT  branchName  FROM Branch where branchCode=:code" );
-				query.setParameter("code", Integer.parseInt(co));
-				List list=query.list();
-				if(list.size()>0){
-				     query = session.createQuery("SELECT  cityName,cityFullName FROM City where co=:branchcode" );
-						query.setParameter("branchcode", list.get(0));
-						 list = query.list();
+				
+				Query  query = session.createQuery("SELECT  cityCode,cityFullName FROM City_Dist where distCode=:dist and status=1" );
+						query.setParameter("dist", dist);
+						List list = query.list();
 						Iterator ite = list.iterator();
 						if(list !=null  && list.size() > 0){
 							  for(int i=0;i<list.size();i++){
 								  if(ite.hasNext()){
 									  Object [] objectBu = (Object []) ite.next();
 									  imoData = new ImoUtilityData();
+									  String cityname=getCityName((String)objectBu[0]);
 									  imoData.setCodeStr(SecurityAPI.encodeHTML((String)objectBu[0]));
-									  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[1]).trim());
+									  imoData.setName(SecurityAPI.encodeHTML(cityname).trim());
 									  
 									  listData.add(imoData);
 								  }
 							  }
-						}
+						
 				}
 				
             
@@ -779,7 +776,7 @@ public class ImoUtilityData {
 			return branchName;
 		}
 		
-		public String getCityName(String cityCode) {
+		public static  String getCityName(String cityCode) {
 			// TODO Auto-generated method stub
 			log.log(Level.INFO,"UtilitesMaintanence --> getCityName");
 			

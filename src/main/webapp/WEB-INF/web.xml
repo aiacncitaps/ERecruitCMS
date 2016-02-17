@@ -17,7 +17,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
    
-  <filter> 
+ <!--  <filter> 
 	<filter-name>nutz</filter-name>
 	<filter-class>org.nutz.mvc.NutFilter</filter-class>
 	<init-param>                                                                               
@@ -35,7 +35,7 @@
 	<dispatcher>REQUEST</dispatcher>
 	<dispatcher>FORWARD</dispatcher>
   </filter-mapping>
- 
+  -->
  
   <filter>
     <display-name>TokenValidator</display-name>

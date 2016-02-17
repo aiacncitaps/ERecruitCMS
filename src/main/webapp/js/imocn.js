@@ -142,11 +142,11 @@ function getBranch(dist,branch,txt){
 	}
 
 
-function getCity(branch,city,txt){
+function getCity(dist,city,txt){
 	 
-	 if(branch != '0'){
+	 if(dist != '0'){
 		 $('#ajaxLoader').find(".lightbox").show();
-		 ImoUtilityData.getCity(branch,{
+		 ImoUtilityData.getCity(dist,{
 			callback : function(str) 
 			{
 				 list = str.list;

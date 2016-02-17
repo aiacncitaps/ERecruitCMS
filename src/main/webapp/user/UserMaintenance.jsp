@@ -221,7 +221,7 @@ office=userObj.getOfficeCode();
 	                         				</td>
 	                             			<td>
                                         			<% if(userObj.getUserType().equals("AD") || userObj.isDistrictLevel() || userObj.isBuLevel()){ %>
-                                        				<select name="branch" id="branch" class="comboObj" onchange="getCity(this.value,'<%=city %>','E');"  >
+                                        				<select name="branch" id="branch" class="comboObj" onchange="getCity($('#district').val(),'<%=city %>','E');"  >
                                        						<option value="0" ><%=localeObj.getTranslatedText("All") %></option>
                                        						                          	
                                        	 			   </select>
@@ -520,7 +520,7 @@ office=userObj.getOfficeCode();
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel()  ){ %>
 				 
-					getCity('<%=branch %>','<%=city %>');
+					getCity('<%=dis %>','<%=city %>');
 				<% }%>
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>
@@ -559,7 +559,7 @@ office=userObj.getOfficeCode();
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() ){ %>
 				 
-					getCity('<%=branch %>','<%=city %>','L');
+					getCity('<%=dis %>','<%=city %>','L');
 				<% }%>
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>

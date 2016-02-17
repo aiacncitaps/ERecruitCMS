@@ -9,6 +9,7 @@ import com.quix.aia.cn.imo.data.category.FestiveCategory;
 import com.quix.aia.cn.imo.data.category.PresenterCategory;
 import com.quix.aia.cn.imo.data.channel.Channel;
 import com.quix.aia.cn.imo.data.city.City;
+import com.quix.aia.cn.imo.data.city_dist.City_Dist;
 import com.quix.aia.cn.imo.data.department.Department;
 import com.quix.aia.cn.imo.data.district.District;
 import com.quix.aia.cn.imo.data.egreeting.E_Greeting;
@@ -25,6 +26,7 @@ import com.quix.aia.cn.imo.mapper.AnnouncementMaintenance;
 import com.quix.aia.cn.imo.mapper.BUMaintenance;
 import com.quix.aia.cn.imo.mapper.BranchMaintenance;
 import com.quix.aia.cn.imo.mapper.ChannelMaintenance;
+import com.quix.aia.cn.imo.mapper.CityDistrictMaintenance;
 import com.quix.aia.cn.imo.mapper.CityMaintenance;
 import com.quix.aia.cn.imo.mapper.DepartmentMaintenance;
 import com.quix.aia.cn.imo.mapper.DistrictMaintenance;
@@ -764,6 +766,26 @@ public class FormActionController {
 			            {
 			                if(formObj.getIndex() == 1)
 			                    return goalConfigMaintenance.mapForm1((GoalConfig)objToBeMapped, req);
+			            }
+			        }
+				 
+				 if(formObj.getKey().equals("CITY_DIST_Add"))
+			        {
+					  
+					 CityDistrictMaintenance cityDistMain=new CityDistrictMaintenance();
+			          
+			            if(formObj.isCanCreate())
+			            {
+			                if(formObj.getIndex() == 1)
+  				            return cityDistMain.createNewCity((City_Dist)objToBeMapped, req);
+			            }else
+			                  if(objToBeMapped == null && formObj.getFormType().equals("DELETE"))
+			                	  cityDistMain.deleteCity(Integer.parseInt(req.getParameter("CITY_CODE")),req);
+			                	
+			            else
+			            {
+			                if(formObj.getIndex() == 1)
+			                    return cityDistMain.mapForm1((City_Dist)objToBeMapped, req);
 			            }
 			        }
 				

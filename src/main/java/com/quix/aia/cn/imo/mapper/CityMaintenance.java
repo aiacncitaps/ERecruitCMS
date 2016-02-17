@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -44,8 +43,7 @@ import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.announcement.Announcement;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.branch.Branch;
-import com.quix.aia.cn.imo.data.bu.Bu;
-import com.quix.aia.cn.imo.data.city.*;
+import com.quix.aia.cn.imo.data.city.City;
 import com.quix.aia.cn.imo.data.district.District;
 import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.holiday.Holiday;
@@ -57,8 +55,6 @@ import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.ErrorObject;
 import com.quix.aia.cn.imo.utilities.FormObj;
-import com.quix.aia.cn.imo.utilities.ImoUtilityData;
-import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.MsgObject;
 import com.quix.aia.cn.imo.utilities.Pager;
  
@@ -329,7 +325,7 @@ public class CityMaintenance {
 	 * @return ArrayList
 	 */
 	
-	private ArrayList getAllCity() {
+	public ArrayList getAllCity() {
 
 		log.log(Level.INFO, "CityMaintanence --> getAllCity");
 		Session session = null;
@@ -1118,7 +1114,59 @@ public class CityMaintenance {
 		}
 
 	}
+	
+	public ArrayList<City> getcityDropDown() {
 
+		log.log(Level.INFO, "CityMaintanence --> getAllCity");
+		Session session = null;
+
+		ArrayList arrActivity = new ArrayList();
+		try {
+
+			session = HibernateFactory.openSession();
+
+			Query query = session.createQuery("from City");
+			arrActivity = (ArrayList<City>) query.list();
+
+		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("CityMaintenance",Level.SEVERE+"",errors.toString());
+		} finally {
+			HibernateFactory.close(session);
+		}
+
+		return arrActivity;
+	}
+	
+	public ArrayList<District> getdistDropDown() {
+
+		log.log(Level.INFO, "CityMaintanence --> getdistDropDown");
+		Session session = null;
+
+		ArrayList arrActivity = new ArrayList();
+		try {
+
+			session = HibernateFactory.openSession();
+
+			Query query = session.createQuery("from District where status=1");
+			arrActivity = (ArrayList<District>) query.list();
+
+		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("CityMaintenance",Level.SEVERE+"",errors.toString());
+		} finally {
+			HibernateFactory.close(session);
+		}
+
+		return arrActivity;
+	}
+	
 
 
 	public static final String BU_PARAM = "bu";

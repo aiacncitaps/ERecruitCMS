@@ -86,6 +86,7 @@
  			        <mapping resource="com/quix/aia/cn/imo/data/hbm/AgentTeam.hbm.xml" />
  			           <mapping resource="com/quix/aia/cn/imo/data/hbm/LogedInDetails.hbm.xml" />
  			           <mapping resource="com/quix/aia/cn/imo/data/hbm/DownloadDetails.hbm.xml" />
+ 			            <mapping resource="com/quix/aia/cn/imo/data/hbm/City_dist.hbm.xml" />
  			       
  			    
       		

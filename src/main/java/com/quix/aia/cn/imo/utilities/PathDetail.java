@@ -127,6 +127,11 @@ public class PathDetail {
 		    //Plist Configuration
 	        pathDetail.add(new KeyObjPair("configuration", new PageObj("configuration", dir + "configuration" + dir + "configuration1", jsp, "configuration", "/images/title_pruad.jpg", HeaderNames.HEADER_NONE)));
 	        pathDetail.add(new KeyObjPair("plistDownload", new PageObj("plistDownload", dir + "configuration" + dir + "plistDownload1", jsp, "plistDownload", "/images/title_pruad.jpg", HeaderNames.HEADER_NONE)));
+	        
+	        // City & District 
+	        pathDetail.add(new KeyObjPair(PageNames.CITY_DIST, new PageObj(FunctionNames.CITY_DIST, dir + FolderNames.UTILITY_FOLDER + dir +"CITY_DIST", jsp, PageNames.CITY_DIST, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
+	        formDetail.add(new KeyObjPair(PageNames.CITY_DIST_ADD, new FormObj(FunctionNames.CITY_DIST_ADD, dir + FolderNames.UTILITY_FOLDER + dir +"CITY_DISTAdd", jsp, PageNames.CITY_DIST_ADD, 1, ImageNames.IMAGE_NONE, HeaderNames.HEADER_NONE)));
+	        
 
 	    }
 	 

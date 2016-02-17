@@ -11,6 +11,7 @@ import com.quix.aia.cn.imo.mapper.BUMaintenance;
 import com.quix.aia.cn.imo.mapper.BranchMaintenance;
 import com.quix.aia.cn.imo.mapper.CCTestMaintenance;
 import com.quix.aia.cn.imo.mapper.ChannelMaintenance;
+import com.quix.aia.cn.imo.mapper.CityDistrictMaintenance;
 import com.quix.aia.cn.imo.mapper.CityMaintenance;
 import com.quix.aia.cn.imo.mapper.DepartmentMaintenance;
 import com.quix.aia.cn.imo.mapper.DistrictMaintenance;
@@ -245,6 +246,13 @@ public class PageActionController {
 				 }
 			  
 			  
+			  if(pageObj.getKey().equals("CITY_DIST"))
+				 {
+						CityDistrictMaintenance cityDistMain=new CityDistrictMaintenance();
+					    return cityDistMain.getAllCityListing(requestParamters);
+				 }
+			  
+			  
 			 if(requestParamters.getSession().getAttribute("HOL_SEARCH_OBJ")!=null)
 				 requestParamters.getSession().removeAttribute("HOL_SEARCH_OBJ");
 			 if(requestParamters.getSession().getAttribute("INT_SEARCH_OBJ")!=null)
@@ -420,6 +428,12 @@ public class PageActionController {
 				    return loginMain.getAllLogedInListing(requestParamters);
 			 }
 		  
+		  
+		  if(pageObj.getKey().equals("CITY_DIST"))
+			 {
+					CityDistrictMaintenance cityDistMain=new CityDistrictMaintenance();
+				    return cityDistMain.getAllCityListing(requestParamters);
+			 }
 		  
 		  return null;
 
