@@ -229,4 +229,5 @@ public class AuditTrail
     public static String MODULE_INSERT_CC_TEST = "INSERT_CC_TEST";
     public static String MODULE_ADDRESS_BOOK = "ADDRESS_BOOK";
     public static String MODULE_TRAINING = "TRAINING";
+    public static String MODULE_GROUP_DETAIL = "GROUP_DETAIL";
 }
