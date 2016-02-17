@@ -725,4 +725,56 @@ public class EventRest {
 		}
 		
 	}
+	
+	@GET
+	@Path("/getAllEopLatestMerge")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getAllEopLatestMerge(@Context HttpServletRequest request,
+						   @Context ServletContext context)
+	{
+		
+		log.log(Level.INFO,"EventRest --> getAllEopLatestMerge ");
+		MsgBeans beans = new MsgBeans();
+		String agentId = request.getParameter("agentId");
+		String coBranch = request.getParameter("co");
+		String candidateCode = request.getParameter("candidateCode");
+		candidateCode = null == candidateCode?"":candidateCode;
+		ArrayList<Event> list1 = null;
+		ArrayList<Event> list2 = null;
+		ArrayList mergedList = new ArrayList();
+		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
+		try{	
+
+			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
+			EopMaintenance objEopMaintenance=new EopMaintenance();
+			
+			list1 = objEopMaintenance.getAllEopRest(aamData, agentId, candidateCode, context);
+			mergedList.addAll(list1);
+			
+			list2 = objEopMaintenance.getAllEopRestPast(agentId, candidateCode, context);
+			for(Event event: list2){
+				event.setIsRegistered(true);
+				mergedList.add(event);
+			}
+			
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setExclusionStrategies().create(); //.serializeNulls()
+		    String json = gson.toJson(mergedList);
+		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			return Response.status(200).entity(json).build();
+			
+		}catch(Exception e){
+			log.log(Level.INFO,"EventRest --> getAllEopLatestMerge --> Exception..... ");
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
+			logsMain.insertLogs("EventRest",Level.SEVERE+"",errors.toString());
+			
+			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_FAIL, "FAILED"));
+			beans.setCode("500");
+			beans.setMassage("Database Error");
+			return Response.status(500).entity(new Gson().toJson(beans)).build();
+		}
+	}
 }
