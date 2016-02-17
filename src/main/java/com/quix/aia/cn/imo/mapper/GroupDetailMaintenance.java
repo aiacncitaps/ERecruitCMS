@@ -40,10 +40,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
-import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.group.GroupDetail;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
@@ -86,24 +84,22 @@ public class GroupDetailMaintenance {
 		try {
 			session = HibernateFactory.openSession();
 			int count = 0;
-
+			
+			tx = session.beginTransaction();
 			for (GroupDetail groupDetail : groupDetailList) {
-
-				tx = session.beginTransaction();
+				
 				key = (int) groupDetail.getGroupCode();
 				if (0 == key) {
 					groupDetail.setGroupCode(null);
 				}
 				session.saveOrUpdate(groupDetail);
-				
 				if (++count % 10 == 0) {
 					session.flush();
 					session.clear();
 				}
-				tx.commit();
-				
 				groupDetailListUpdated.add(groupDetail);
 			}
+			tx.commit();
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -124,7 +120,6 @@ public class GroupDetailMaintenance {
 			if(!groupDetail.isGroupIsDelete()){
 				groupCandidateDetailMaintenance.saveOrUpdate(groupDetail);
 			}
-
 			if (flag) {
 				flag = false;
 			} else {
@@ -174,7 +169,7 @@ public class GroupDetailMaintenance {
 			criteria.add(Restrictions.eq("agentCode", agentId));
 			criteria.add(Restrictions.eq("groupIsDelete", false));
 			if (null != date) {
-				criteria.add(Expression.ge("groupModifiedDate", date));
+				criteria.add(Restrictions.ge("groupModifiedDate", date));
 			}
 			if (null != coBranch && !"".equals(coBranch)) {
 				criteria.add(Restrictions.eq("branchCode", coBranch));

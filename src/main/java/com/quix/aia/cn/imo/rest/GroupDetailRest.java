@@ -184,7 +184,7 @@ public class GroupDetailRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getGroupDetails(@Context HttpServletRequest request,
 			   @Context ServletContext context) {
-		log.log(Level.INFO, "GroupDetail --> getAgentAddressBook ");
+		log.log(Level.INFO, "GroupDetail --> getGroupDetails ");
 		
 		GsonBuilder builder = new GsonBuilder();
 		GroupDetailMaintenance groupDetailMaintenance = new GroupDetailMaintenance();
