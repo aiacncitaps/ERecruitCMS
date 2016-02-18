@@ -370,6 +370,7 @@ public class EventRest {
 	    log.log(Level.INFO,"EventRest --> candidateRegister --> Data ...  ::::: "+jsonString);
 		boolean status=false;
 		boolean isDuplicate = false;
+		boolean isDeleted = false;
 		Integer registeredCount = 0;
 		MsgBeans beans = new MsgBeans();
 		String agentId = request.getParameter("agentId");
@@ -412,7 +413,9 @@ public class EventRest {
 	       
 	        	
 //	        candidate.setAgencyLeaderName(aamData.getTeamName());
-
+	        if(!objMaintenance.checkEventDeleted(candidate.getEventCode())){
+	        	
+	       
 	        List<EventCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getEventCode());
 	        registeredCount = list1.size();
 	        
@@ -437,7 +440,10 @@ public class EventRest {
 	            auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "FAIL"));
 			    isDuplicate =true; 
 	        }
-	        
+	        }else{
+	        	auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "FAIL"));
+	        	isDeleted =true; 
+	        }
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> candidateRegister --> Exception..... ");
@@ -453,7 +459,7 @@ public class EventRest {
 			beans.setMassage("Database Error");
 		}
 		
-		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"registeredCount\":"+registeredCount+"}]").build();
+		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"isDeleted\":"+isDeleted+",\"registeredCount\":"+registeredCount+"}]").build();
 	}
 	
 	@GET

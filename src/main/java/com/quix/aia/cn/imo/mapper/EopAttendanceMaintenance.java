@@ -994,6 +994,45 @@ public class EopAttendanceMaintenance {
 	  return false;
 	 }
 	 
+	 
+	 public boolean checkEventDeleted(int eventCode) {
+			// TODO Auto-generated method stub
+		 Session session = null;
+		  try{
+		   session = HibernateFactory.openSession();
+		   session.setDefaultReadOnly(true);
+		   Query selectQ = session.createQuery("from Event where event_code =:eventCode and status=:status");
+		   selectQ.setParameter("eventCode",eventCode);
+		   selectQ.setParameter("status", false);
+		   
+		   List list = selectQ.list();
+		   if(list!=null && list.size() > 0)
+		    return true;
+		   else 
+		    return false;
+		  }catch(Exception e){
+		   log.log(Level.SEVERE, e.getMessage());
+		   e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		  }finally{
+		   try{
+			   session.setDefaultReadOnly(false);
+		    HibernateFactory.close(session);
+		    
+		   }catch(Exception e){
+		    log.log(Level.SEVERE, e.getMessage());
+		    e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		   }
+		   }
+		  return false;
+		}
+	 
+	 
 	 /**
 	  * <p>Duplicate Registration checked</p>
 	  * @param eventCode
@@ -1347,6 +1386,7 @@ public class EopAttendanceMaintenance {
 	public static final String WECHATID = "weChatID";
 	public static final String MAILID = "mailId";
 	public static final String NRIC = "nric";
+	
 	
 	
 }

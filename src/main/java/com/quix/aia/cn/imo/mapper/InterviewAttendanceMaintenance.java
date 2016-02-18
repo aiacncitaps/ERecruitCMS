@@ -1111,6 +1111,46 @@ public class InterviewAttendanceMaintenance {
 	  }
 
 
+	public boolean checkInterviewDeleted(int interviewCode) {
+
+		// TODO Auto-generated method stub
+	 Session session = null;
+	  try{
+	   session = HibernateFactory.openSession();
+	   session.setDefaultReadOnly(true);
+	   Query selectQ = session.createQuery("from Interview where interview_code =:interviewCode and status=:status");
+	   selectQ.setParameter("interviewCode",interviewCode);
+	   selectQ.setParameter("status", false);
+	   
+	   List list = selectQ.list();
+	   if(list!=null && list.size() > 0)
+	    return true;
+	   else 
+	    return false;
+	  }catch(Exception e){
+	   log.log(Level.SEVERE, e.getMessage());
+	   e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
+	  }finally{
+	   try{
+		   session.setDefaultReadOnly(false);
+	    HibernateFactory.close(session);
+	    
+	   }catch(Exception e){
+	    log.log(Level.SEVERE, e.getMessage());
+	    e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
+	   }
+	   }
+	  return false;
+	
+	}
+
+
 	
 	 
 	 

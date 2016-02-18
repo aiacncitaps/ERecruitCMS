@@ -288,97 +288,103 @@ public class InterviewRest {
 	public Response candidateRegister(@Context HttpServletRequest request,
 						   		   @Context ServletContext context,
 						   		   String jsonString)
-	{
-		log.log(Level.INFO,"InterviewRest --> candidateRegister");
-	    log.log(Level.INFO,"InterviewRest --> candidateRegister --> Data for Candidate Registration...  ::::: "+jsonString);
-		boolean status=false;
-		boolean isDuplicate = false;
-		Integer registeredCount = 0;
-		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
-		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		try{
-			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
-			InterviewAttendanceMaintenance objMaintenance = new InterviewAttendanceMaintenance();
-			GsonBuilder builder = new GsonBuilder();
-	        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
-	               @Override  
-	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed(json.getAsString());
-            	   		if(null != date){
-            	   			return date;
-            	   		}else{
-            	   			return  LMSUtil.convertDateToyyyy_mm_dd(json.getAsString());
-            	   		}
-	               }
-	           });
-	        
-	        Gson googleJson  = builder.create();
-	        Type listType = new TypeToken<List<InterviewCandidate>>(){}.getType();
-	        List<InterviewCandidate> jsonObjList = googleJson.fromJson(jsonString, listType);
-	        InterviewCandidate candidate = jsonObjList.get(0);  
-	        candidate.setAgentName(aamData.getAgentName());
-	        candidate.setBuName(aamData.getBu());
-	        candidate.setDistName(aamData.getDistrict());
-	        candidate.setCityName(aamData.getCity());
-	        candidate.setSscName(aamData.getSsc());
-	        candidate.setAgencyLeaderCode(aamData.getLeaderCode());
-	        candidate.setInterviewCandidateCode(""+candidate.getCandidateCode());
-	        candidate.setBuCode(aamData.getBuCode());
-	        candidate.setDistrictCode(aamData.getDistrictCode());
-	        candidate.setCityCode(aamData.getCity());
-	        candidate.setSscCode(aamData.getSsc());
-	        candidate.setOfficeCode(aamData.getOfficeCode());
-	        candidate.setBranchCode(aamData.getBranchCode());
-	        
-	        if(candidate.getStatusStr() != null && candidate.getStatusStr().equalsIgnoreCase("true"))
-	        	candidate.setStatus(true);
-	        else
-	        	candidate.setStatus(false);
-	        
-	        AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
-	        String nric = addrBookMain.getNric(Integer.parseInt(candidate.getInterviewCandidateCode()));
-	        candidate.setNric(nric);
-	        
-//	        candidate.setAgencyLeaderName(aamData.getTeamName());
-	      
-	        if(!objMaintenance.checkDuplicateCandiadteReg(""+candidate.getInterviewCode(), candidate.getServicingAgent(), candidate.getInterviewCandidateCode())){
-		        objMaintenance.createNewCandidate(candidate,request);
-		        String emailAddrs = addrBookMain.getEmailAddress(Integer.parseInt(candidate.getInterviewCandidateCode()));
-		        if(emailAddrs!=null && emailAddrs.length()>0){
-		        	EmailNotification.sendInterviewRegEmailNotification(candidate,emailAddrs,aamData);
-		        }
-
-		        String conditionFieldName[]={"addressCode"};
-		        String conditionFieldValue[]={candidate.getInterviewCandidateCode()};
-		        new AddressBookMaintenance().updateAddressBookStatus("6/9", conditionFieldName, conditionFieldValue);
-		        new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidate.getInterviewCandidateCode()), "Interview Registration", "Candidate Registered in Interview");
-		        
-		        List<InterviewCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getInterviewCode());
-		        registeredCount = list1.size();
-		        auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "SUCCESS"));
-			    status=true; 
-	        }else{
-	            auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "FAIL"));
-			    isDuplicate =true; 
+	{log.log(Level.INFO,"InterviewRest --> candidateRegister");
+    log.log(Level.INFO,"InterviewRest --> candidateRegister --> Data for Candidate Registration...  ::::: "+jsonString);
+	boolean status=false;
+	boolean isDuplicate = false;
+	boolean isDeleted = false;
+	Integer registeredCount = 0;
+	MsgBeans beans = new MsgBeans();
+	String agentId = request.getParameter("agentId");
+	String coBranch = request.getParameter("co");
+	 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
+	try{
+		AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
+		InterviewAttendanceMaintenance objMaintenance = new InterviewAttendanceMaintenance();
+		GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
+               @Override  
+               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed(json.getAsString());
+        	   		if(null != date){
+        	   			return date;
+        	   		}else{
+        	   			return  LMSUtil.convertDateToyyyy_mm_dd(json.getAsString());
+        	   		}
+               }
+           });
+        
+        Gson googleJson  = builder.create();
+        Type listType = new TypeToken<List<InterviewCandidate>>(){}.getType();
+        List<InterviewCandidate> jsonObjList = googleJson.fromJson(jsonString, listType);
+        InterviewCandidate candidate = jsonObjList.get(0);  
+        candidate.setAgentName(aamData.getAgentName());
+        candidate.setBuName(aamData.getBu());
+        candidate.setDistName(aamData.getDistrict());
+        candidate.setCityName(aamData.getCity());
+        candidate.setSscName(aamData.getSsc());
+        candidate.setAgencyLeaderCode(aamData.getLeaderCode());
+        candidate.setInterviewCandidateCode(""+candidate.getCandidateCode());
+        candidate.setBuCode(aamData.getBuCode());
+        candidate.setDistrictCode(aamData.getDistrictCode());
+        candidate.setCityCode(aamData.getCity());
+        candidate.setSscCode(aamData.getSsc());
+        candidate.setOfficeCode(aamData.getOfficeCode());
+        candidate.setBranchCode(aamData.getBranchCode());
+        
+        if(candidate.getStatusStr() != null && candidate.getStatusStr().equalsIgnoreCase("true"))
+        	candidate.setStatus(true);
+        else
+        	candidate.setStatus(false);
+        
+        AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
+        String nric = addrBookMain.getNric(Integer.parseInt(candidate.getInterviewCandidateCode()));
+        candidate.setNric(nric);
+        
+//        candidate.setAgencyLeaderName(aamData.getTeamName());
+        if(!objMaintenance.checkInterviewDeleted(candidate.getInterviewCode())){
+        	
+        
+        if(!objMaintenance.checkDuplicateCandiadteReg(""+candidate.getInterviewCode(), candidate.getServicingAgent(), candidate.getInterviewCandidateCode())){
+	        objMaintenance.createNewCandidate(candidate,request);
+	        String emailAddrs = addrBookMain.getEmailAddress(Integer.parseInt(candidate.getInterviewCandidateCode()));
+	        if(emailAddrs!=null && emailAddrs.length()>0){
+	        	EmailNotification.sendInterviewRegEmailNotification(candidate,emailAddrs,aamData);
 	        }
-		}
-		catch(Exception e){
-			log.log(Level.INFO,"InterviewRest --> candidateRegister --> Exception..... ");
-			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
-			StringWriter errors = new StringWriter();
-			e.printStackTrace(new PrintWriter(errors));
-			LogsMaintenance logsMain=new LogsMaintenance();
-			logsMain.insertLogs("InterviewRest",Level.SEVERE+"",errors.toString());
-			
-			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_FAIL, "FAILED"));
-			beans.setCode("500");
-			beans.setMassage("Database Error");
-		}
+
+	        String conditionFieldName[]={"addressCode"};
+	        String conditionFieldValue[]={candidate.getInterviewCandidateCode()};
+	        new AddressBookMaintenance().updateAddressBookStatus("6/9", conditionFieldName, conditionFieldValue);
+	        new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidate.getInterviewCandidateCode()), "Interview Registration", "Candidate Registered in Interview");
+	        
+	        List<InterviewCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getInterviewCode());
+	        registeredCount = list1.size();
+	        auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "SUCCESS"));
+		    status=true; 
+        }else{
+            auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "FAIL"));
+		    isDuplicate =true; 
+        }
+        }else{
+        	 auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "FAIL"));
+        	 isDeleted =true; 
+        }
+	}
+	catch(Exception e){
+		log.log(Level.INFO,"InterviewRest --> candidateRegister --> Exception..... ");
+		log.log(Level.SEVERE, e.getMessage());
+		e.printStackTrace();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		LogsMaintenance logsMain=new LogsMaintenance();
+		logsMain.insertLogs("InterviewRest",Level.SEVERE+"",errors.toString());
 		
-		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"registeredCount\":"+registeredCount+"}]").build();
+		auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_FAIL, "FAILED"));
+		beans.setCode("500");
+		beans.setMassage("Database Error");
+	}
+	
+		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"isDeleted\":"+isDeleted+",\"registeredCount\":"+registeredCount+"}]").build();
 	}
 	
 	@GET
