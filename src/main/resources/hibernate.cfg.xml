@@ -3,93 +3,84 @@
 	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory name="IMOFactory">
-	       
-	         
-	     <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
-       	   <property name="hibernate.cache.use_second_level_cache">true</property>
-       	   <property name="hibernate.cache.use_structured_entries">true</property>
-       	   <property name="hibernate.cache.use_query_cache">true</property>
-       	   <property name="current_session_context_class">thread</property>
-           <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
-           <property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
-			<!-- <property name="hbm2ddl.auto">create</property>  -->  
-		
-			
-			
-				<!--   MSSQL --> 
-			
-	 		<property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-			<!-- <property name="connection.datasource">java:comp/env/jdbc/IMOCN</property> -->
-        <property name="hibernate.connection.url">jdbc:sqlserver://202.150.218.108:1433;databaseName=DEMOIMOCN2;instanceName=MSSQLSERVER;</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password">5!ngap0re</property> 
-<!--
-        <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=aia_icalendar;instanceName=MSSQLSERVER;</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password">abc123.</property>
--->
-		    <property name="hibernate.connection.pool_size">20</property>
-		    <property name="show_sql">true</property>
-		    <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-      		<property name="hibernate.jdbc.batch_size">10</property> 
-      		
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Announcement.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Bu.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Channel.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/City.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Event.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Holiday.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Interview.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Ssc.hbm.xml" />
-				<mapping resource="com/quix/aia/cn/imo/data/hbm/User.hbm.xml" /> 
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/District.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Department.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/AuditTrail.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Version.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/Presenter.hbm.xml" />
- 				<mapping resource="com/quix/aia/cn/imo/data/hbm/PresenterCategory.hbm.xml" /> 
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/FestiveCategory.hbm.xml"/> 
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/E-Greeting.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/Individual_Goal.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/SpecialGroup.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/GoalBreakDown.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/History.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/EventCandidate.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewCandidate.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewCandidateMaterial.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/AddressBook.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateEducation.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateESignature.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateFamilyInfo.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateGroup.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateProfessionalCertification.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateWorkExperience.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateNote.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateTrainingDetail.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateTrainingResult.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateFirstInterview.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/GoalConfig.hbm.xml" />
- 			    
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/Emp.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/Office.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/Branch.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/ConfigurationProperties.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/MailProperties.hbm.xml" />
- 			    
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/AnnouncementMaterial.hbm.xml" />  
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/EventMaterial.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewMaterial.hbm.xml" />
- 			    <mapping resource="com/quix/aia/cn/imo/data/hbm/PresenterMaterial.hbm.xml" />
- 			      <mapping resource="com/quix/aia/cn/imo/data/hbm/E_GreetingMaterial.hbm.xml" />
- 			       <mapping resource="com/quix/aia/cn/imo/data/hbm/ApplicationForm.hbm.xml" />
- 			       <mapping resource="com/quix/aia/cn/imo/data/hbm/Logs.hbm.xml" />
- 			        <mapping resource="com/quix/aia/cn/imo/data/hbm/AgentTeam.hbm.xml" />
- 			           <mapping resource="com/quix/aia/cn/imo/data/hbm/LogedInDetails.hbm.xml" />
- 			           <mapping resource="com/quix/aia/cn/imo/data/hbm/DownloadDetails.hbm.xml" />
- 			            <mapping resource="com/quix/aia/cn/imo/data/hbm/City_dist.hbm.xml" />
- 			       
- 			    
-      		
 
+
+		<property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_structured_entries">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="current_session_context_class">thread</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
+		<!-- <property name="hbm2ddl.auto">create</property> -->
+
+		<!-- MSSQL -->
+		<property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<!-- <property name="connection.datasource">java:comp/env/jdbc/IMOCN</property> -->
+		<property name="hibernate.connection.url">jdbc:sqlserver://202.150.218.108:1433;databaseName=DEMOIMOCN2;instanceName=MSSQLSERVER;</property>
+		<property name="hibernate.connection.username">sa</property>
+		<property name="hibernate.connection.password">5!ngap0re</property>
+		
+		<property name="hibernate.connection.pool_size">20</property>
+		<property name="show_sql">true</property>
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="hibernate.jdbc.batch_size">10</property>
+
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Announcement.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Bu.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Channel.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/City.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Event.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Holiday.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Interview.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Ssc.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/User.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/District.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Department.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/AuditTrail.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Version.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Presenter.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/PresenterCategory.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/FestiveCategory.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/E-Greeting.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Individual_Goal.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/SpecialGroup.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/GoalBreakDown.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/History.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/EventCandidate.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewCandidate.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewCandidateMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/AddressBook.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateEducation.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateESignature.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateFamilyInfo.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateGroup.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateProfessionalCertification.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateWorkExperience.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateNote.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateTrainingDetail.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateTrainingResult.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateFirstInterview.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/GoalConfig.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Emp.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Office.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Branch.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/ConfigurationProperties.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/MailProperties.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/AnnouncementMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/EventMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/InterviewMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/PresenterMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/E_GreetingMaterial.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/ApplicationForm.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/Logs.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/AgentTeam.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/LogedInDetails.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/DownloadDetails.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/City_dist.hbm.xml" />
+		
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/GroupDetail.hbm.xml" />
+		<mapping resource="com/quix/aia/cn/imo/data/hbm/GroupCandidateDetail.hbm.xml" />
+		
 	</session-factory>
 </hibernate-configuration>
