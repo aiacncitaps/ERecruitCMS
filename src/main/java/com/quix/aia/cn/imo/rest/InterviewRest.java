@@ -58,6 +58,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.interview.Interview;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidate;
 import com.quix.aia.cn.imo.data.interview.InterviewMaterial;
 import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
@@ -589,6 +590,58 @@ public class InterviewRest {
 			e.printStackTrace(new PrintWriter(errors));
 			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("InterviewRest",Level.SEVERE+"",errors.toString());
+			
+			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW, AuditTrail.FUNCTION_FAIL, "FAILED"));
+			beans.setCode("500");
+			beans.setMassage("Database Error");
+			return Response.status(500).entity(new Gson().toJson(beans)).build();
+		}
+	}
+	
+	@GET
+	@Path("/getAllInterviewLatestMerge")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getAllEopLatestMerge(@Context HttpServletRequest request,
+						   @Context ServletContext context)
+	{
+		
+		log.log(Level.INFO,"InterviewRest --> getAllInterviewLatestMerge ");
+		MsgBeans beans = new MsgBeans();
+		String agentId = request.getParameter("agentId");
+		String coBranch = request.getParameter("co");
+		String candidateCode = request.getParameter("candidateCode");
+		candidateCode = null == candidateCode?"":candidateCode;
+		ArrayList<Interview> list1 = null;
+		ArrayList<Interview> list2 = null;
+		ArrayList mergedList = new ArrayList();
+		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
+		try{	
+
+			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
+			InterviewMaintenance objEopMaintenance=new InterviewMaintenance();
+			
+			list1 = objEopMaintenance.getAllInterviewRest(aamData, agentId, candidateCode);
+			mergedList.addAll(list1);
+			
+			list2 = objEopMaintenance.getAllInterviewRestPast(agentId, candidateCode);
+			for(Interview event: list2){
+				event.setIsRegistered(true);
+				mergedList.add(event);
+			}
+			
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setExclusionStrategies().create(); //.serializeNulls()
+		    String json = gson.toJson(mergedList);
+		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			return Response.status(200).entity(json).build();
+			
+		}catch(Exception e){
+			log.log(Level.INFO,"InterviewRest --> getAllInterviewLatestMerge --> Exception..... ");
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
+			logsMain.insertLogs("EventRest",Level.SEVERE+"",errors.toString());
 			
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW, AuditTrail.FUNCTION_FAIL, "FAILED"));
 			beans.setCode("500");
