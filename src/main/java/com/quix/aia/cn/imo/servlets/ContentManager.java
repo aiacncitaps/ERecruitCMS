@@ -231,6 +231,7 @@ public class ContentManager extends HttpServlet {
                     String userID = request.getParameter("userID");
                     String password = request.getParameter("password");
                     String branch = request.getParameter("branch");
+                   /* request.getSession().setMaxInactiveInterval(5);*/
                     
                 	String locale=request.getParameter("SelectLang");
 
