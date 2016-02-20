@@ -118,6 +118,7 @@ public class AddressBook implements Serializable {
 	private Set<CandidateESignature> candidateESignatures;
 	private Set<CandidateGroup> candidateGroups;
 	private Set<CandidateNote> candidateNotes;
+	private String finalprogress;
 	
 	private byte[] presenterImg;
 	private Date presenterDate;
@@ -184,7 +185,7 @@ public class AddressBook implements Serializable {
 		remarks = null;
 		weibo = null;
 		weChat = null;
-
+		finalprogress="";
 		idType = null;
 		age = null;
 		birthPlace = null;
@@ -1349,5 +1350,13 @@ public class AddressBook implements Serializable {
 				+ "<td style='padding:5px 5px' ><div style='text-align:center'>" + completeStrCombo + "</div></td>"
 				+ "<td><div style='text-align:center'>" + interviewResultText + "</div></td>" + "</tr>";
 		return returnStr;
+	}
+
+	public String getFinalprogress() {
+		return finalprogress;
+	}
+
+	public void setFinalprogress(String finalprogress) {
+		this.finalprogress = finalprogress;
 	}
 }
