@@ -42,7 +42,7 @@
         
    
          <property name="distName" formula="(SELECT b.DISTRICT_NAME FROM T_DISTRICT b WHERE b.DISTRICT_CODE=DIST_CODE AND b.STATUS=1 ) " update="false"></property>
-         <property name="cityName" formula="(SELECT b.CITYNAME FROM CITY_ER b WHERE b.CITYCOD=CITYCOD ) " update="false"></property>
+         <!-- <property name="cityName" formula="(SELECT b.CITYNAME FROM CITY_ER b WHERE b.CITYCOD=CITYCOD ) " update="false"></property> -->
        
     </class>
 </hibernate-mapping>

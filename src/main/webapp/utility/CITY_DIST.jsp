@@ -116,7 +116,7 @@ function submitForm(){
                   			<%if(listcity!=null){ 
                   				for(City city:listcity){
                   			%>
-                  					<option  value="<%=city.getCityName() %>" ><%=city.getCityFullName() %> </option>
+                  					<option  value="<%=city.getCityName() %>" ><%=city.getCityName()+"-"+city.getCityFullName() %> </option>
                   			
                   			<%}} %>
                   				

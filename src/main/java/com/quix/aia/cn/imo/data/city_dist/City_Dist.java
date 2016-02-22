@@ -91,8 +91,8 @@ public class City_Dist {
        
             returnStr = "<tr> "+
         		
-                  "<td  ><div align=center>"+ this.cityDistCode+"-"+this.distName	+"</div></td>"+
-                  "<td >"+SecurityAPI.encodeHTML(this.cityName)+"</td>"+
+                  "<td  ><div align=center>"+this.distName	+"</div></td>"+
+                  "<td >"+SecurityAPI.encodeHTML(this.cityCode)+"-"+SecurityAPI.encodeHTML(this.cityFullName)+"</td>"+
       			"<td ><div align=center><a href=\"" + deleteLink + "\"><img src=images/delete.png border=0></a></div></td>"+
       			"</tr>"  ;
         

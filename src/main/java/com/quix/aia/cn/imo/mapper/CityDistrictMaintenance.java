@@ -15,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.city_dist.City_Dist;
@@ -39,7 +40,7 @@ public class CityDistrictMaintenance {
 		}
 
 		FormObj formObj = (FormObj) requestParameters.getSession().getAttribute("formObj");
-		
+		String strname="",strfullname="";
 		if (requestParameters.getParameter("district") == null
 				|| requestParameters.getParameter("district").equals("0"))
 		return new ErrorObject("District Name", " field is required",localeObj);
@@ -49,15 +50,20 @@ public class CityDistrictMaintenance {
 		return new ErrorObject("City Name", " field is required",localeObj);
 		
 		
+		String[] str=requestParameters.getParameter("city").split("-");
+		
+			strname=str[0];
+			strfullname=str[1];
 		
 		
-		boolean flag=checkDuplicate(requestParameters);
+		boolean flag=checkDuplicate(requestParameters,strname);
 		if(flag==true){
 			return new ErrorObject("City Already exists", "",localeObj);
 		}
 		
 		Cityobj.setDistCode(Integer.parseInt(requestParameters.getParameter("district")));
-		Cityobj.setCityCode(requestParameters.getParameter("city"));
+		Cityobj.setCityCode(strname);
+		Cityobj.setCityFullName(strfullname);
 		
 		
 		return Cityobj;
@@ -65,7 +71,7 @@ public class CityDistrictMaintenance {
 	}
 	
 	
-	private boolean checkDuplicate(HttpServletRequest req) {
+	private boolean checkDuplicate(HttpServletRequest req, String str) {
 		// TODO Auto-generated method stub
 		
 
@@ -81,7 +87,7 @@ public class CityDistrictMaintenance {
 			 Criteria criteria = session.createCriteria(City_Dist.class);
 			
 			criteria.add(Restrictions.eq("distCode", Integer.parseInt(req.getParameter("district"))));
-			criteria.add(Restrictions.eq("cityCode", req.getParameter("city")));
+			criteria.add(Restrictions.eq("cityCode", str));
 			criteria.add(Restrictions.eq("status", true));
 			arrActivity = (ArrayList) criteria.list();
 			
@@ -215,7 +221,7 @@ public class CityDistrictMaintenance {
 				
 				if (null != req.getParameter("city1")){
 					if(!req.getParameter("city1").equals("0")){
-						criteria.add(Restrictions.eq("cityCode", req.getParameter("city")));
+						criteria.add(Restrictions.eq("cityCode", req.getParameter("city1")));
 					}
 					
 				}

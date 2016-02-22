@@ -165,7 +165,7 @@ $( document ).ready(function() {
                   			<%if(listcity!=null){ 
                   				for(City city:listcity){
                   			%>
-                  					<option <%= cty==city.getCityName()?"selected=selected":"" %> value="<%=city.getCityName() %>" ><%=city.getCityFullName() %> </option>
+                  					<option <%= cty==city.getCityName()?"selected=selected":"" %> value="<%=city.getCityName()+"-"+city.getCityFullName() %>" ><%=city.getCityName()+"-"+city.getCityFullName() %> </option>
                   			
                   			<%}}else{ %>
                   					<option value="0" ><%=localeObj.getTranslatedText("All")%></option>
@@ -183,7 +183,7 @@ $( document ).ready(function() {
                   			<%if(listcity!=null){ 
                   				for(City city:listcity){
                   			%>
-                  					<option  value="<%=city.getCityName() %>" ><%=city.getCityFullName() %> </option>
+                  					<option  value="<%=city.getCityName()+"-"+city.getCityFullName() %>" ><%=city.getCityName()+"-"+city.getCityFullName() %> </option>
                   				
                   			<%}} %>
                   					
