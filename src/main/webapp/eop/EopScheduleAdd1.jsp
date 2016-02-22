@@ -961,7 +961,7 @@ function uploadEopTopic(){
                             								<option value="0"><%=localeObj.getTranslatedText("ALL")%></option> 	                                 	
                             	 		  				 </select>
                             	 		  			 <%}else{ %>
-                            	 		  			 	<select name="branch" id="branch"  class="comboObj"  onchange="getCity(this.value,0,'E');">
+                            	 		  			 	<select name="branch" id="branch"  class="comboObj"  onchange="getCity($('#district').val(),0,'E');">
                             								<option value="<%=userObj.getBranchCode() %>" ><%= imoUtilityDate.getBranchCode(userObj.getBranchCode()) %></option>
                             								                         	
                             	 		  				</select>

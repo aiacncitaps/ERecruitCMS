@@ -36,7 +36,7 @@ ArrayList<District> listDist=citymain.getdistDropDown();
 %>
 <script type="text/javascript">
 function confirmDelete(code){
-	var str="<%=localeObj.getTranslatedText("Are you sure you want to delete this City?")%>";
+	var str="<%=localeObj.getTranslatedText("Are you sure you want to delete this City of District?")%>";
 	var dialog = $('<p>'+str+'</p>').dialog({
    	 width: 550,
     	 cache: false,
@@ -142,7 +142,7 @@ function submitForm(){
 								  {
 									noOfAnnouncements = ((com.quix.aia.cn.imo.utilities.Pager)request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.PAGING_OBJECT)).getActualSize();
 							  	  }%>								
-								<tr><td align="left"><a href="FormManager?key=CITY_DIST_Add&type=NEW" class="ML10 btn1" ><%=localeObj.getTranslatedText("Add City")%></a></td>
+								<tr><td align="left"><a href="FormManager?key=CITY_DIST_Add&type=NEW" class="ML10 btn1" ><%=localeObj.getTranslatedText("Add City Of District")%></a></td>
 								<td align="right" style="font-weight:bold;padding-right:10px"><%=localeObj.getTranslatedText("Search Result")%> : <%=noOfAnnouncements %></td></tr>
 						</table>
 					</div>
