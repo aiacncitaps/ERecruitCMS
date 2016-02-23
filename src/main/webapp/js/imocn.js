@@ -252,9 +252,9 @@ function getAgentTeam(city, ssc, branch,office){
 				 for(var i=0; i<list.length;i++)
 				 {
 					 if(ssc==list[i].aamTeamCode){
-						 slist += '<option  selected="selected" value='+list[i].aamTeamCode+'>'+list[i].name+'</option>';
+						 slist += '<option  selected="selected" value='+list[i].codeStr+'>'+list[i].name+'</option>';
 					 }else{
-						slist += '<option value='+list[i].aamTeamCode+'>'+list[i].name+'</option>';
+						slist += '<option value='+list[i].codeStr+'>'+list[i].name+'</option>';
 				     }
 		         }         
 
