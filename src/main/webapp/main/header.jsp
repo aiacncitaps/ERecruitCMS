@@ -23,8 +23,14 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 	              			</div>
 	  					 </div>
 	 				</div>
-    				<div id="showMenu" class="naviga" >
+	 				<%if(!user.getUserType().equals("AG")){ %>
+    				<div id="showMenu" class="naviga">
+    				
 						<b><%=localeObj.getTranslatedText("Menu")%></b> 
+						<%}else{ %>
+						<div id="showMenu" class="naviga"  style="background-image : none;" >
+    						<b>&nbsp;&nbsp;</b>
+						<%} %>
 						<div style="float:right;margin-top:-1%;margin-right:1%">
 						<%-- <a href="ContentManager?key=refresh"  style="text-decoration:none;color: #ffffff;font-weight:bold"><%=localeObj.getTranslatedText("Refresh")%></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --%>
 						<%if(user.isCho()){%>
@@ -32,7 +38,9 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 						<%} %>	
 							<a href="ContentManager?key=login" style="text-decoration:none;color: #ffffff;font-weight:bold"><%=localeObj.getTranslatedText("Logout")%></a>
 						</div>
+						
 						<div id="showMe" style="display: none;">
+					
 							<table width="80%">
 							<%
 								if(!"AG".equalsIgnoreCase(user.getUserType())){
@@ -119,7 +127,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 								
 								 %>	
 								 <tr>
-									<td style="padding:10px"><a href="ContentManager?key=home"><%=localeObj.getTranslatedText("Home")%></a></td>
+									<%-- <td style="padding:10px"><a href="ContentManager?key=home"><%=localeObj.getTranslatedText("Home")%></a></td> --%>
 								 	<%-- <td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td> --%>
 								 	<tr>
 								 <%
@@ -136,8 +144,11 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 <script>
 $(document).ready(function(){
 // 	$("#showMe").hide(0); 
-    $("#showMenu").click(function(){
-        $("#showMe").toggle(10);
-    });
+<%if(!user.getUserType().equals("AG")){%>
+$("#showMenu").click(function(){
+    $("#showMe").toggle(10);
+});
+	<%} %>
+    
 });
 </script>
