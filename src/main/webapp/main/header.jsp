@@ -60,7 +60,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 								    <td style="padding:10px"><a href="ContentManager?key=E_Greeting"><%=localeObj.getTranslatedText("E-Greeting")%></a></td>
 								    <td style="padding:10px"><a href="ContentManager?key=FestiveCategory" ><%=localeObj.getTranslatedText("Festive Category")%></a></td>
 									
-									<%if(!user.getUserType().equals("AD") || !user.isCho() || !user.getUserType().equals("AG")){ %>
+									<%if(user.getUserType().equals("ST")){ %>
 									<td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td>
 									<%} %>
 									
@@ -120,7 +120,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 								 %>	
 								 <tr>
 									<td style="padding:10px"><a href="ContentManager?key=home"><%=localeObj.getTranslatedText("Home")%></a></td>
-								 	<td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td>
+								 	<%-- <td style="padding:10px"><a href="ContentManager?key=plistDownload" ><%=localeObj.getTranslatedText("Download PLIST")%></a></td> --%>
 								 	<tr>
 								 <%
 								
