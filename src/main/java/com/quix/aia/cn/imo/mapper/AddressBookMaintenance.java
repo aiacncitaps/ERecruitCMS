@@ -1083,4 +1083,36 @@ public class AddressBookMaintenance {
 		
 		return key;
 	}
+
+	public String getccTestResult(int code) {
+		// TODO Auto-generated method stub
+		Session session = null;
+		String ccTestResult = "";
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Query selectQ = session.createQuery("select  ccTestResult  from  AddressBook where addressCode =:addressCode");
+			selectQ.setParameter("addressCode", code);
+			List list = selectQ.list();
+			if(list!=null && list.size() > 0)
+				ccTestResult = (String)list.get(0);
+		}catch(Exception e){
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	  }
+		return ccTestResult;
+	}
 }

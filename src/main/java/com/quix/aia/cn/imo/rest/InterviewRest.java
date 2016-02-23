@@ -340,6 +340,8 @@ public class InterviewRest {
         AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
         String nric = addrBookMain.getNric(Integer.parseInt(candidate.getInterviewCandidateCode()));
         candidate.setNric(nric);
+        String ccTest=addrBookMain.getccTestResult(Integer.parseInt(candidate.getInterviewCandidateCode()));
+        candidate.setCcTestResult(ccTest);
         
 //        candidate.setAgencyLeaderName(aamData.getTeamName());
         if(!objMaintenance.checkInterviewDeleted(candidate.getInterviewCode())){
@@ -348,6 +350,7 @@ public class InterviewRest {
         if(!objMaintenance.checkDuplicateCandiadteReg(""+candidate.getInterviewCode(), candidate.getServicingAgent(), candidate.getInterviewCandidateCode())){
 	        objMaintenance.createNewCandidate(candidate,request);
 	        String emailAddrs = addrBookMain.getEmailAddress(Integer.parseInt(candidate.getInterviewCandidateCode()));
+	       
 	        if(emailAddrs!=null && emailAddrs.length()>0){
 	        	EmailNotification.sendInterviewRegEmailNotification(candidate,emailAddrs,aamData);
 	        }
