@@ -319,7 +319,7 @@ $(function() {
                                     				</td>
                                         			<td>
                                         			<% if(userObj.getUserType().equals("AD") || userObj.isDistrictLevel() || userObj.isBuLevel()){ %>
-                                        				<select name="branch" id="branch" class="comboObj" onchange="getCity($('#district').val(),'<%=city %>','E');"  >
+                                        				<select name="branch" id="branch" class="comboObj" onchange="getCity(this.value,'<%=city %>',$('#district').val(),'E');"  >
                                        						<option value="0" ><%=localeObj.getTranslatedText("All") %></option>
                                        						                          	
                                        	 			   </select>
@@ -570,7 +570,7 @@ $(function() {
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() ){ %>
 				 
-					getCity('<%=dis %>','<%=city %>','L');
+					getCity('<%=branch %>','<%=city %>','<%=dis %>','L');
 				<% }%>
 				
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>

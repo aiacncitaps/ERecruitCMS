@@ -115,7 +115,7 @@ $(document).ready(function(){
 			
 				<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() ){ %>
 				 
-				getCity('<%=dis %>','<%=city %>','L');
+				getCity('<%=branch %>','<%=city %>','<%=dis %>','L');
 			<% }%>
 			
 			<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>
@@ -505,7 +505,7 @@ function interviewFormSubmit ( action )
 						<td>
 							<% if(userObj.getUserType().equals("AD") || userObj.isBuLevel() ||  userObj.isDistrictLevel()){ %>
 							<select name="branch" id="branch" class="comboObj"
-							onchange="getCity($('#district').val(),'<%=city %>','E');">
+							onchange="getCity(this.value,'<%=city %>',$('#district').val(),'E');">
 								<option value="0"><%=localeObj.getTranslatedText("ALL")%></option>
 						</select> <% }else{ %> <select name="branch" id="branch" class="comboObj">
 								<option value="<%=userObj.getBranchCode() %>"><%= imoUtility.getBranchCode(userObj.getBranchCode()) %></option>

@@ -250,31 +250,35 @@ public class ImoUtilityData {
 		    return map;
 	}
 	
-	public static Map  getCity(int dist){
+	public static Map  getCity(int co,int dist){
 		 ArrayList<ImoUtilityData> listData =  new  ArrayList<ImoUtilityData>();
 		 Session session= null;
 			try{
 				
 				session = HibernateFactory.openSession();
 				ImoUtilityData imoData = null;
-				
-				Query  query = session.createQuery("SELECT  cityCode,cityFullName FROM City_Dist where distCode=:dist and status=1" );
-						query.setParameter("dist", dist);
-						List list = query.list();
+			   
+				Query query = session.createQuery("SELECT  branchName  FROM Branch where branchCode=:code" );
+				query.setParameter("code", co);
+				List list=query.list();
+				if(list.size()>0){
+				     query = session.createQuery("SELECT  c.cityName,c.cityFullName FROM City c where c.co=:branchcode and c.cityName in (select d.cityCode from City_Dist d where d.distCode=:distCode ) " );
+						query.setParameter("branchcode", list.get(0));
+						query.setParameter("distCode", dist);
+						 list = query.list();
 						Iterator ite = list.iterator();
 						if(list !=null  && list.size() > 0){
 							  for(int i=0;i<list.size();i++){
 								  if(ite.hasNext()){
 									  Object [] objectBu = (Object []) ite.next();
 									  imoData = new ImoUtilityData();
-									  String cityname=getCityName((String)objectBu[0]);
 									  imoData.setCodeStr(SecurityAPI.encodeHTML((String)objectBu[0]));
-									  imoData.setName(SecurityAPI.encodeHTML(cityname).trim());
+									  imoData.setName(SecurityAPI.encodeHTML((String)objectBu[1]).trim());
 									  
 									  listData.add(imoData);
 								  }
 							  }
-						
+						}
 				}
 				
             

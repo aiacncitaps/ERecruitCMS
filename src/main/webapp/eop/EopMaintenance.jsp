@@ -97,7 +97,7 @@ if(userObj.getUserType().equals("AD") ){ %>
 	
 		<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() ){ %>
 		 
-		getCity('<%=distCode %>','<%=cityCode %>','L');
+		getCity('<%=branch %>','<%=cityCode %>','<%=distCode %>','L');
 	<% }%>
 	
 	<%if(userObj.getUserType().equals("AD") || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>
@@ -292,7 +292,7 @@ function resetSearchForm(){
                          				</td>
                              			<td>	
                              		<% if(userObj.getUserType().equals("AD") || userObj.isBuLevel() ||  userObj.isDistrictLevel()){ %>
-                             				<select name="branch" id="branch" class="comboObj"   onchange="getCity($('#district').val(),0,'E');">
+                             				<select name="branch" id="branch" class="comboObj"   onchange="getCity(this.value,0,$('#district').val(),'E');">
                             					<option value="0"><%=localeObj.getTranslatedText("ALL")%></option> 	                                 	
                             	 		   </select>
                             	 		 <%}else{ %>
