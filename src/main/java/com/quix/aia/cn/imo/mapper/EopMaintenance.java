@@ -2205,7 +2205,7 @@ public class EopMaintenance {
 					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and  e.cityCode='0')"
 					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode='0')"
 					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode = '0')"
-					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode )"
+					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode and e.agentTeam ='0'  )"
 					+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode and e.agentTeam =:agentTeam )  ) "
 					+ "and s.eventCode=e.event_code and s.agencyUnit=:leadcode) ");
 			
@@ -2253,7 +2253,7 @@ public class EopMaintenance {
 		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and  cityCode='0')"
 		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
 		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
-		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode ) "
+		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode and agentTeam ='0') "
 		                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode  and agentTeam =:agentTeam )"
 		                    + " )");
 					
@@ -2311,7 +2311,7 @@ public class EopMaintenance {
 						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and  e.cityCode='0')"
 						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode='0')"
 						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode = '0')"
-						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode )"
+						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode  and e.agentTeam ='0' )"
 						+ "or (e.buCode=:bucode  and e.district=:distcode and e.branchCode=:branchCode and e.cityCode=:citycode and e.sscCode=:ssccode and e.officeCode =:officeCode and e.agentTeam =:agentTeam )  ) "
 						+ "and s.eventCode=e.event_code and s.agencyUnit=:leadcode) ");
 				
@@ -2361,7 +2361,7 @@ public class EopMaintenance {
 			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and  cityCode='0')"
 			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
 			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
-			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode )  "
+			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode  and agentTeam ='0' )  "
 			                    + "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode and agentTeam =:agentTeam )"
 			                    + ")");
 						

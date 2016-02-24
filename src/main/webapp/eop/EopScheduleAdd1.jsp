@@ -37,7 +37,7 @@ if(request.getSession().getAttribute(SessionAttributes.FORM_OBJ)!=null)
 event = (Event)request.getSession().getAttribute(SessionAttributes.FUNCTION_OBJ);
 
 int buCode = 0,distCode = 0,branch=0;
-String cityCode = 0+"",sscCode = 0+"",office=0+"";
+String cityCode = 0+"",sscCode = 0+"",office=0+"",agentTeam="";
 buCode=userObj.getBuCode();
 distCode=userObj.getDistrict();
 cityCode=userObj.getCityCode();
@@ -52,9 +52,11 @@ if (formDetail.getFormType().equals(FormInfo.MODIFY_FORM))
 	buCode = Integer.parseInt(SecurityAPI.encodeHTML(String.valueOf(event.getBuCode())));
 	distCode = Integer.parseInt(SecurityAPI.encodeHTML(String.valueOf(event.getDistrict())));
 	cityCode = SecurityAPI.encodeHTML(String.valueOf(event.getCityCode()));
-	sscCode = SecurityAPI.encodeHTML(String.valueOf(event.getSscCode()));
+	sscCode = SecurityAPI.encodeHTML(String.valueOf(event.getSscCode().trim()));
 	branch=Integer.parseInt(SecurityAPI.encodeHTML(String.valueOf(event.getBranchCode())));
 	office=SecurityAPI.encodeHTML(String.valueOf(event.getOfficeCode()));
+	agentTeam=SecurityAPI.encodeHTML(String.valueOf(event.getAgentTeam()));
+	
 	
 }
 
@@ -162,7 +164,12 @@ if(userObj.getUserType().equals("AD") ){ %>
 	<%if(userObj.getUserType().equals("AD") || userObj.isSscLevel() || userObj.isBranchLevel() || userObj.isDistrictLevel() || userObj.isBuLevel() || userObj.isCityLevel() ){%>
 	
 	getOffice('<%=sscCode %>','<%=office %>');
-	getAgentTeam1();
+	//getAgentTeam1();
+	<%if(modifyFlag==true){%>
+		getAgentTeam('<%=cityCode %>', '<%=sscCode %>', '<%=branch %>','<%=office %>','<%=agentTeam %>');
+	<%}else{%>
+			getAgentTeam('<%=cityCode %>', '<%=sscCode %>', '<%=branch %>','<%=office %>','E');
+	<%}%>
 <% }%>
 
 <%if("SG".equals(openTo)){%>
@@ -579,7 +586,7 @@ function uploadEopTopic(){
 	var city = $('#city option:selected').val();
 	var ssc = $('#ssc option:selected').val();
 	var office = $('#office option:selected').val();
-	getAgentTeam(city, ssc, branch,office);
+	getAgentTeam(city, ssc, branch,office,'E');
  }
 </script>
 
@@ -1022,12 +1029,12 @@ function uploadEopTopic(){
                                       			    <tr>                         
                                     				<td><label ><%=localeObj.getTranslatedText("Agent Team")%></label></td>                                  				
                                     				
-                                    				<%String agentTeam = "";
+                                    			<%-- 	<%String agentTeam = "";
 						                          	if(request.getAttribute(com.quix.aia.cn.imo.constants.RequestAttributes.ERROR_OBJ) != null){
 						                          		agentTeam = SecurityAPI.encodeHTML(request.getParameter(EopMaintenance.AGENT_TEAM_PARAM));
 						                          	}else{
 						                          		agentTeam = SecurityAPI.encodeHTML(String.valueOf(event.getAgentTeam()));
-						                          	}%>
+						                          	}%> --%>
                                         			<td>	
                                         				<select name="<%=EopMaintenance.AGENT_TEAM_PARAM %>" id="<%=EopMaintenance.AGENT_TEAM_PARAM %>"  class="comboObj" >
                                        						   <option value="0"><%=localeObj.getTranslatedText("Select")%></option>                                        	

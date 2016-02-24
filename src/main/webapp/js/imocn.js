@@ -240,7 +240,7 @@ function getOffice(ssc,office){
 	}
 
 
-function getAgentTeam(city, ssc, branch,office){
+function getAgentTeam(city, ssc, branch,office,agentTeam){
 	 
 	if('全部' != ssc){
 		 $('#ajaxLoader').find(".lightbox").show();
@@ -251,7 +251,7 @@ function getAgentTeam(city, ssc, branch,office){
 				 var slist ='<option value="0">全部</option>';
 				 for(var i=0; i<list.length;i++)
 				 {
-					 if(ssc==list[i].aamTeamCode){
+					 if(agentTeam==list[i].codeStr.trim()){
 						 slist += '<option  selected="selected" value='+list[i].codeStr+'>'+list[i].name+'</option>';
 					 }else{
 						slist += '<option value='+list[i].codeStr+'>'+list[i].name+'</option>';
