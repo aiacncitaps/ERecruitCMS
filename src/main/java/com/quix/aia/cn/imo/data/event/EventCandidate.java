@@ -71,6 +71,8 @@ public class EventCandidate {
     private String nric;
     private String education;
     private String teamName;
+    private String iosAddressCode;
+    
 	  
 	
 	public String getOfficeCode() {
@@ -637,6 +639,12 @@ public class EventCandidate {
 	 */
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
+	}
+	public String getIosAddressCode() {
+		return iosAddressCode;
+	}
+	public void setIosAddressCode(String iosAddressCode) {
+		this.iosAddressCode = iosAddressCode;
 	}
 	
 }

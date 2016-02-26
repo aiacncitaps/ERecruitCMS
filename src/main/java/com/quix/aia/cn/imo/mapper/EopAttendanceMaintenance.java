@@ -370,7 +370,8 @@ public class EopAttendanceMaintenance {
 		addressBook.setWeChat(candidate.getWeChat());
 		addressBook.setNric(candidate.getNric());
 		addressBook.setMobilePhoneNo(candidate.getContactNumber());
-
+		addressBook.setIosAddressCode(candidate.getIosAddressCode());
+		
 		AddressBook addressBookObj = new AddressBookMaintenance().insertAddressBook(addressBook,requestParameters);
 		
 		//

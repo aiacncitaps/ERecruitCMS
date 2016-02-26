@@ -1037,6 +1037,13 @@ public class AddressBookMaintenance {
 			if(null != addressBook.getCo() && !"".equals(addressBook.getCo())){
 				queryString +=" and co=:co";
 			}
+			
+			/*if(null != addressBook.getIosAddressCode() && !"".equals(addressBook.getIosAddressCode())){
+				queryString +=" and iosAddressCode=:iosAddressCode";
+			}*/
+
+			
+			
 			Query query = session.createQuery(queryString);
 			query.setParameter("name",addressBook.getName());
 //			query.setParameter("gender",addressBook.getGender());
@@ -1045,6 +1052,10 @@ public class AddressBookMaintenance {
 			if(null != addressBook.getCo() && !"".equals(addressBook.getCo())){
 				query.setParameter("co",addressBook.getCo());
 			}
+			
+			/*if(null != addressBook.getIosAddressCode() && !"".equals(addressBook.getIosAddressCode())){
+				query.setParameter("iosAddressCode",addressBook.getIosAddressCode());
+			}*/
 			
 		    List<Object[]> l = query.list();
 		    Date date = new Date();

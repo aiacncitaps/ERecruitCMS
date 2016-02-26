@@ -375,6 +375,7 @@ public class EventRest {
 		MsgBeans beans = new MsgBeans();
 		String agentId = request.getParameter("agentId");
 		String coBranch = request.getParameter("co");
+		String addressCode="";
 		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
@@ -425,7 +426,7 @@ public class EventRest {
 		        registeredCount++;
 		        AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
 		        String emailAddrs = addrBookMain.getEmailAddress(Integer.parseInt(candidate.getEventCandidateCode()));		        
-
+		        addressCode=candidate.getEventCandidateCode();
 		        if(emailAddrs!=null && emailAddrs.length()>0){
 		        	EmailNotification.sendEopRegEmailNotification(candidate,emailAddrs, aamData);
 		        }
@@ -459,7 +460,7 @@ public class EventRest {
 			beans.setMassage("Database Error");
 		}
 		
-		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"isDeleted\":"+isDeleted+",\"registeredCount\":"+registeredCount+"}]").build();
+		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"isDeleted\":"+isDeleted+",\"addressCode\":"+addressCode+",\"registeredCount\":"+registeredCount+"}]").build();
 	}
 	
 	@GET
