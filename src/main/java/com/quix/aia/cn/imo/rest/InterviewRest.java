@@ -360,8 +360,12 @@ public class InterviewRest {
 	        new AddressBookMaintenance().updateAddressBookStatus("6/9", conditionFieldName, conditionFieldValue);
 	        new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidate.getInterviewCandidateCode()), "Interview Registration", "Candidate Registered in Interview");
 	        
-	        List<InterviewCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getInterviewCode());
-	        registeredCount = list1.size();
+	       // List<InterviewCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getInterviewCode());
+	        registeredCount = objMaintenance.getAttendanceListCount(request,candidate.getInterviewCode());
+	        //registeredCount = list1.size();
+	        
+	        
+	        
 	        auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW_REG, AuditTrail.FUNCTION_REST, "SUCCESS"));
 		    status=true; 
         }else{

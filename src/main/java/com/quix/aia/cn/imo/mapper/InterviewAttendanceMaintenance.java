@@ -41,6 +41,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.constants.SessionAttributes;
@@ -296,6 +297,48 @@ public class InterviewAttendanceMaintenance {
 		return attendanceList;
 	}
 	 
+	 
+	/**
+	 * <p>get all attendance registered for particular interview</p>
+	 * @param req   Servlet Request Parameter
+	 * @param interviewCode
+	 * @return List of Candidates
+	 */
+	public Integer getAttendanceListCount(HttpServletRequest req,int interviewCode)
+	{
+		Session session = null;
+		Integer count=0;
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Criteria crit = session.createCriteria(InterviewCandidate.class);
+			
+			crit.add(Restrictions.eq("interviewCode", interviewCode));
+			crit.add(Restrictions.eq("status", true));
+			crit.setProjection(Projections.rowCount());
+			count = ((Long) crit.uniqueResult()).intValue();
+			
+			
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	}
+		return count;
+	}
 	 
 	/**
 	 * <p>get all attendance registered for particular interview</p>

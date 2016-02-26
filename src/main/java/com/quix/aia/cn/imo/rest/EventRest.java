@@ -417,8 +417,11 @@ public class EventRest {
 	        if(!objMaintenance.checkEventDeleted(candidate.getEventCode())){
 	        	
 	       
-	        List<EventCandidate> list1 = objMaintenance.getAttendanceList(request,candidate.getEventCode());
-	        registeredCount = list1.size();
+	        	registeredCount = objMaintenance.getAttendanceListCount(request,candidate.getEventCode());
+	       // registeredCount = list1.size();
+	        
+	        
+	        
 	        
 	        if(!objMaintenance.checkDuplicateCandiadteReg(""+candidate.getEventCode(), candidate.getServicingAgent(), candidate.getEventCandidateCode())){
 			    status=true; 
