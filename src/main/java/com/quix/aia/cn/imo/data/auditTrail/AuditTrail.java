@@ -153,7 +153,7 @@ public class AuditTrail
     private String userName;
     public static String FUNCTION_CREATE = "CREATED";
     public static String FUNCTION_REST = "RESTCALL";
-    public static String FUNCTION_FAIL = "RESTCALLFAILED";
+    public static String FUNCTION_FAIL = "FAILED";
     public static String FUNCTION_LOGIN = "USER LOGIN";
     public static String FUNCTION_ACCESS = "ACCESS";
     public static String FUNCTION_LOGOUT = "LOGOUT";
