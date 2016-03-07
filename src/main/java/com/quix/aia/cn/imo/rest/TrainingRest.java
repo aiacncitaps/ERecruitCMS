@@ -54,6 +54,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.addressbook.CandidateTrainingDetail;
+import com.quix.aia.cn.imo.data.addressbook.CandidateTrainingDetailView;
 import com.quix.aia.cn.imo.data.addressbook.CandidateTrainingResult;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
@@ -99,6 +100,7 @@ public class TrainingRest {
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		CandidateTrainingDetailMaintenance candidateTrainingDetailMaint = new CandidateTrainingDetailMaintenance();
         CandidateTrainingDetail candidateTrainingDetail = null;
+        CandidateTrainingDetailView candidateTrainingDetailView = null;
         int isSuccessful=0;
         
 		try {
@@ -121,6 +123,7 @@ public class TrainingRest {
 	        List<CandidateTrainingDetail> jsonObjList = googleJson.fromJson(jsonString, listType);
 	        candidateTrainingDetail = jsonObjList.get(0);  
 	        candidateTrainingDetail.setCreationDate(new Date());
+	        
 	        
 	        candidateTrainingDetailMaint.createNewCandidateTrainingDetail(candidateTrainingDetail,request);
 			

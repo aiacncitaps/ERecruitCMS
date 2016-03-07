@@ -81,6 +81,7 @@
 		
 		<mapping resource="com/quix/aia/cn/imo/data/hbm/GroupDetail.hbm.xml" />
 		<mapping resource="com/quix/aia/cn/imo/data/hbm/GroupCandidateDetail.hbm.xml" />
+			<mapping resource="com/quix/aia/cn/imo/data/hbm/CandidateTrainingDetailView.hbm.xml" />
 		
 	</session-factory>
 </hibernate-configuration>

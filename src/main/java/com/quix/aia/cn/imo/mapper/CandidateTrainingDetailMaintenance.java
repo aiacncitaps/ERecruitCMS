@@ -27,6 +27,7 @@ package com.quix.aia.cn.imo.mapper;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,9 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 
 import com.quix.aia.cn.imo.data.addressbook.CandidateTrainingDetail;
+import com.quix.aia.cn.imo.data.addressbook.CandidateTrainingDetailView;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.user.User;
@@ -62,6 +68,7 @@ public class CandidateTrainingDetailMaintenance {
 	 *<p>New Candidate Training Detail</p>
 	 * @param candidate
 	 * @param requestParameters
+	 * @param candidateTrainingDetailView 
 	 * @return
 	 */
 	public String createNewCandidateTrainingDetail(CandidateTrainingDetail candidateTrainingDetail, HttpServletRequest requestParameters)
@@ -148,14 +155,39 @@ public class CandidateTrainingDetailMaintenance {
 	public List getAllCandidateTrainingDetail()
 	{
 		Session session = null;
-		ArrayList eventList = new ArrayList();
+		ArrayList<CandidateTrainingDetailView> eventList = new ArrayList<CandidateTrainingDetailView>();
+		ArrayList<CandidateTrainingDetailView> eventListSkipped = new ArrayList<CandidateTrainingDetailView>();
 		
 		try{
 			session = HibernateFactory.openSession();
 			session.setDefaultReadOnly(true);
-		
-			Criteria crit = session.createCriteria(CandidateTrainingDetail.class);
-			eventList = (ArrayList)crit.list();
+			Criteria crit = session.createCriteria(CandidateTrainingDetailView.class);
+			eventList = (ArrayList<CandidateTrainingDetailView>)crit.list();
+			
+			
+			for(CandidateTrainingDetailView ctd:eventList){
+				boolean flag=false;
+				
+					if(eventListSkipped.size()>0){
+						for(CandidateTrainingDetailView ctd2 : eventListSkipped){
+							if(ctd2.getStartDate().compareTo(ctd.getStartDate())==0){
+								flag=true;
+								break;
+							}
+						}
+						
+						if(flag==false){
+							eventListSkipped.add(ctd);
+						}
+						
+					}else{
+						eventListSkipped.add(ctd);
+					}
+				
+				
+				
+			}
+			
 		  
 			}catch(Exception e)
 			{
@@ -176,7 +208,7 @@ public class CandidateTrainingDetailMaintenance {
 				}
 		}
 		
-		return eventList;
+		return eventListSkipped;
 	}
 
 	public static final String Name = "name";
