@@ -113,14 +113,14 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 						<tr >
 						<td><label><%=localeObj.getTranslatedText("E-Recruitment")%></label></td>
 						<td>
-							<input type="button" class="ML10 btn1" name="erAppType" id="erAppType" value="Install">
+							<input type="button" class="ML10 btn1" name="erAppType" id="erAppType" value="<%=localeObj.getTranslatedText("Install")%>">
 						</td>
 						
 						<td  style="padding-right : 30%;"  > </td>
 						<%if(!userObj.getUserType().equals("AG") || userObj.getUserType().equals("AD")){ %>
 						<td><label><%=localeObj.getTranslatedText("EOP Scan")%></label></td>
 						<td>
-							<input type="button" class="ML10 btn1" name="eopAppType" id="eopAppType" value="Install">
+							<input type="button" class="ML10 btn1" name="eopAppType" id="eopAppType" value="<%=localeObj.getTranslatedText("Install")%>">
 						</td>
 						<%} %>
 					</tr>
