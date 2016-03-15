@@ -42,7 +42,7 @@ public class ConfigurationProperties {
 	private String changeLog;
 
 	public String getVersion() {
-		return version;
+		return (null != version ? version : "");
 	}
 
 	public void setVersion(String version) {
@@ -50,7 +50,7 @@ public class ConfigurationProperties {
 	}
 
 	public String getBuild() {
-		return build;
+		return (null != build ? build : "");
 	}
 
 	public void setBuild(String build) {
@@ -58,7 +58,7 @@ public class ConfigurationProperties {
 	}
 
 	public String getChangeLog() {
-		return changeLog;
+		return (null != changeLog ? changeLog : "");
 	}
 
 	public void setChangeLog(String changeLog) {
@@ -73,8 +73,8 @@ public class ConfigurationProperties {
 	 */
 	public ConfigurationProperties() {
 		configurationCode = null;
-		configurationKey = null;
-		configurationValue = null;
+		configurationKey = "";
+		configurationValue = "";
 		
 	}
 	

@@ -166,7 +166,7 @@ public class PropertiesMaintenance {
 		try{
 			if(null == configurationProperties){
 				configurationProperties = new ConfigurationProperties();
-				configurationProperties.setConfigurationKey(ConfigurationProperties.E_RECRUITMENT_APP_URL);
+				configurationProperties.setConfigurationKey(appType);
 			}
 			configurationProperties.setConfigurationValue(appURL);
 			configurationProperties.setVersion(version);

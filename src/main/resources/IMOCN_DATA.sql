@@ -17,7 +17,7 @@ INSERT INTO dbo.T_CONFIGURATION_PROPERTIES (CONFIGURATION_KEY, CONFIGURATION_VAL
 INSERT INTO dbo.T_CONFIGURATION_PROPERTIES (CONFIGURATION_KEY, CONFIGURATION_VALUE) VALUES('APP_URL','http://202.150.215.194/IMOCN_CLIENT/');
 INSERT INTO dbo.T_CONFIGURATION_PROPERTIES (CONFIGURATION_KEY, CONFIGURATION_VALUE) VALUES('ssoUserAuthUrl','http://211.144.219.243/SSO/loginAction.do');
 INSERT INTO dbo.T_CONFIGURATION_PROPERTIES (CONFIGURATION_KEY, CONFIGURATION_VALUE) VALUES('iCalendarServiceUrl','http://211.144.219.243/AIATouchBE/IService.do');
-
+INSERT INTO dbo.T_CONFIGURATION_PROPERTIES (CONFIGURATION_KEY, CONFIGURATION_VALUE) VALUES('iosLeadingAppURL', 'itms-services://?action=download-manifest&url=');
 
 --------------------------------------------------------------------------------------	Mail Properties ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

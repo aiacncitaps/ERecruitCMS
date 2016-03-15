@@ -53,8 +53,8 @@ PropertiesMaintenance propMain=new PropertiesMaintenance();
 ArrayList<ConfigurationProperties> configPropertyList=propMain.getConfigData();
 
 System.out.println("********************************     user type "+userObj.getUserType());
-ConfigurationProperties eRequitConfig=null;
-ConfigurationProperties eopRequitConfig=null;
+ConfigurationProperties eRequitConfig=new ConfigurationProperties();
+ConfigurationProperties eopRequitConfig=new ConfigurationProperties();
 for(ConfigurationProperties eRequitConfig1 : configPropertyList){
 	if(eRequitConfig1.getConfigurationKey().equals(ConfigurationProperties.E_RECRUITMENT_APP_URL)){
 		eRequitConfig=new ConfigurationProperties();
@@ -78,8 +78,14 @@ for(ConfigurationProperties eRequitConfig1 : configPropertyList){
 
 //appUrl="http://localhost:8080/IMOCN_MAVEN/";
 iosLeadingAppURL += appUrl;
-eRecruitmentAppURL = iosLeadingAppURL + eRecruitmentAppURL;
-eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
+
+if(null != eRecruitmentAppURL && !"".equals(eRecruitmentAppURL)){
+	eRecruitmentAppURL = iosLeadingAppURL + eRecruitmentAppURL;	
+}
+
+if(null != eopScanAppURL && !"".equals(eopScanAppURL)){
+	eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
+}
 %>
 
 <div id="maincontainer">
@@ -113,14 +119,22 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 						<tr >
 						<td><label><%=localeObj.getTranslatedText("E-Recruitment")%></label></td>
 						<td>
-							<input type="button" class="ML10 btn1" name="erAppType" id="erAppType" value="<%=localeObj.getTranslatedText("Install")%>">
+							<%if(null != eRecruitmentAppURL && !"".equals(eRecruitmentAppURL)){ %>
+								<input type="button" class="ML10 btn1" name="erAppType" id="erAppType" value="<%=localeObj.getTranslatedText("Install")%>">
+							<%}else{ %>
+							<label>&nbsp;&nbsp;&nbsp;Please Upload PLIST File</label>
+							<%} %>
 						</td>
 						
 						<td  style="padding-right : 30%;"  > </td>
 						<%if(!userObj.getUserType().equals("AG") || userObj.getUserType().equals("AD")){ %>
 						<td><label><%=localeObj.getTranslatedText("EOP Scan")%></label></td>
 						<td>
-							<input type="button" class="ML10 btn1" name="eopAppType" id="eopAppType" value="<%=localeObj.getTranslatedText("Install")%>">
+							<%if(null != eopScanAppURL && !"".equals(eopScanAppURL)){ %>
+								<input type="button" class="ML10 btn1" name="eopAppType" id="eopAppType" value="<%=localeObj.getTranslatedText("Install")%>">
+							<%}else{ %>
+							<label>&nbsp;&nbsp;&nbsp;Please Upload PLIST File</label>
+							<%} %>
 						</td>
 						<%} %>
 					</tr>
@@ -200,15 +214,15 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
 	    	    }	
 	        });                
 	    	
-	    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){
+<%-- 	    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){ --%>
 				window.location.href = '<%=eRecruitmentAppURL%>';
-	    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){ 
-				window.location.href = '<%=eopScanAppURL%>';
-	    	}
+<%-- 	    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){  --%>
+<%-- 				window.location.href = '<%=eopScanAppURL%>'; --%>
+// 	    	}
 	});
 	
 	$('#eopAppType').click(function(){
-    	var appType='<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>';
+    	var appType='<%=ConfigurationProperties.EOP_SCAN_APP_URL%>';
     	
     	var logedInId = "<%=userObj.getClientRestUserID()%>";
     	var co = "<%=userObj.getClientRestUserBranch()%>";
@@ -220,11 +234,11 @@ eopScanAppURL = iosLeadingAppURL + eopScanAppURL;
     	    }	
         });                
     	
-    	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){
-			window.location.href = '<%=eRecruitmentAppURL%>';
-    	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){ 
+<%--     	if(appType == '<%=ConfigurationProperties.E_RECRUITMENT_APP_URL%>'){ --%>
+<%-- 			window.location.href = '<%=eRecruitmentAppURL%>'; --%>
+<%--     	}else if(appType == '<%=ConfigurationProperties.EOP_SCAN_APP_URL%>'){  --%>
 			window.location.href = '<%=eopScanAppURL%>';
-    	}
+//     	}
 });
 	</script>
  <%}catch(Exception e) {
