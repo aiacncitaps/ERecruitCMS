@@ -42,7 +42,9 @@ import javax.ws.rs.core.Response;
 import cn.aia.tools.security.AESPasswordManager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 
 @Path("/encryptDecrypt")
 public class EncryptDecryptRest {
@@ -57,7 +59,12 @@ public class EncryptDecryptRest {
 		{
 			log.log(Level.INFO,"EncryptDecryptRest --> encrypt");
 		    log.log(Level.INFO,"EncryptDecryptRest --> encrypt --> Data ...  ::::: "+textStr);
-			MsgBeans beans = new MsgBeans();
+		   // boolean flag=LMSUtil.isJSONValid(textStr);
+		    GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+		    MsgBeans beans = new MsgBeans();
+		   
+			
 			if(textStr == null || (textStr!=null && textStr.length() == 0)){
 				beans.setCode("500");
 				beans.setMassage("Text to be encrypt is empty ");
@@ -83,9 +90,9 @@ public class EncryptDecryptRest {
 				}
 			
 				return Response.status(200).entity(new Gson().toJson(obj)).build();
-				
+			 
 			}
-		
+			
 		}
 	@POST
 	@Path("/decrypt")
@@ -97,7 +104,12 @@ public class EncryptDecryptRest {
 		{
 			log.log(Level.INFO,"EncryptDecryptRest --> decrypt");
 		    log.log(Level.INFO,"EncryptDecryptRest --> encrypt --> Data ...  ::::: "+textStr);
+		  
+		    GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+		    
 			MsgBeans beans = new MsgBeans();
+			
 			if(textStr == null || (textStr!=null && textStr.length() == 0)){
 				beans.setCode("500");
 				beans.setMassage("Text to be decrypt is empty ");
@@ -123,6 +135,6 @@ public class EncryptDecryptRest {
 				return Response.status(200).entity(new Gson().toJson(obj)).build();
 				
 			}
-		
+			 
 		}
 }

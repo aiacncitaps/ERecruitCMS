@@ -135,21 +135,20 @@ public class GroupDetailMaintenance {
 	 * <p>
 	 * This method retrieves all GroupDetails
 	 * <p>
+	 * @param coBranch2 
+	 * @param dateTime2 
+	 * @param agentId2 
 	 * 
 	 * @param agentID
 	 * @return List<GroupDetail> List of Class Object
 	 * 
 	 */
-	public List<GroupDetail> getGroupDetails(HttpServletRequest request, ServletContext context) {
+	public List<GroupDetail> getGroupDetails(HttpServletRequest request, ServletContext context, String agentId, String dateTime, String coBranch) {
 
 		Session session = null;
 		ArrayList<GroupDetail> list = null;
 		Criteria criteria = null;
 		
-		String agentId = request.getParameter("agentCode");
-		String dateTime = request.getParameter("dateTime");
-		String coBranch = request.getParameter("branchCode");
-
 		agentId = agentId == null ? "" : agentId;
 		Date date = null;
 		if (null != dateTime && !"".equals(dateTime)) {
@@ -202,23 +201,21 @@ public class GroupDetailMaintenance {
 	 * <p>
 	 * This method retrieves all GroupDetails of Particular Agent
 	 * <p>
+	 * @param coBranch2 
+	 * @param dateTime2 
+	 * @param agentId2 
 	 * 
 	 * @param agentID
 	 * @return List<GroupDetail> List of Class Object
 	 * 
 	 */
-	public String getDeletedGroupDetails(HttpServletRequest request, ServletContext context) {
+	public String getDeletedGroupDetails(HttpServletRequest request, ServletContext context, String agentId, String dateTime, String coBranch) {
 
 		Session session = null;
 		ArrayList<GroupDetail> list = null;
 		ArrayList<Object[]> tempList = new ArrayList<Object[]>();
 		Query query = null;
 		String jsonString = ""; 
-
-		String agentId = request.getParameter("agentCode");
-		String dateTime = request.getParameter("dateTime");
-		String coBranch = request.getParameter("branchCode");
-
 		agentId = agentId == null ? "" : agentId;
 		Date date = null;
 		if (null != dateTime && !"".equals(dateTime)) {

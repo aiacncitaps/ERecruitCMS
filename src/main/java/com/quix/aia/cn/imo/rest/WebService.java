@@ -36,6 +36,7 @@ public class WebService {
 	private String url;
 	private String description;
 	private Host host;
+	private String jsonString;
 	
 	
 	/**
@@ -104,6 +105,14 @@ public class WebService {
 	 */
 	public void setHost(Host host) {
 		this.host = host;
+	}
+
+	public String getJsonString() {
+		return jsonString;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 	
 

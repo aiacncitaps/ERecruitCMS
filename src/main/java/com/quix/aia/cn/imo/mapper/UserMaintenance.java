@@ -46,13 +46,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.bouncycastle.ocsp.Req;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -353,16 +358,32 @@ public class UserMaintenance {
 
 		            if ("internet".equalsIgnoreCase(userAuthEnvironment))
 		            {
-		                userAuthUrlFinal = map.get("userAuthUrlInternet") + "&co=" + co + "&account=" + userID + "&password=" + password;
+		                userAuthUrlFinal = map.get("userAuthUrlInternet");// + "&co=" + co + "&account=" + userID + "&password=" + password;
 		            }
 		            else
 		            {
-		                userAuthUrlFinal = map.get("userAuthUrl") + "&co=" + co + "&account=" + userID + "&password=" + password;
+		                userAuthUrlFinal = map.get("userAuthUrl");// + "&co=" + co + "&account=" + userID + "&password=" + password;
 		            }
 		            log.log(Level.INFO, "UserAuthUrl : " + userAuthUrlFinal + " :- userAuthEnvironment : " + userAuthEnvironment, "");
-		            HttpGet getRequest = new HttpGet(userAuthUrlFinal);
+		            /*HttpGet getRequest = new HttpGet(userAuthUrlFinal);
 		            getRequest.addHeader("accept", "application/json");
+		            HttpResponse response = httpClient.execute(getRequest);*/
+		            ArrayList<NameValuePair> postParameters;
+		            HttpPost getRequest =new HttpPost(userAuthUrlFinal);
+		            getRequest.addHeader("accept", "application/json");
+		          /*  getRequest.getParams().setParameter("co", co);
+		            getRequest.getParams().setParameter("account", userID);
+		            getRequest.getParams().setParameter("password", password);*/
+		            
+		            postParameters = new ArrayList<NameValuePair>();
+		            postParameters.add(new BasicNameValuePair("co", co));
+		            postParameters.add(new BasicNameValuePair("account", userID));
+		            postParameters.add(new BasicNameValuePair("password", password));
+
+		            getRequest.setEntity(new UrlEncodedFormEntity(postParameters));
+		            
 		            HttpResponse response = httpClient.execute(getRequest);
+		            
 
 		            if (response.getStatusLine().getStatusCode() != 200)
 		            {
@@ -523,7 +544,7 @@ public class UserMaintenance {
 		            httpClient.getConnectionManager().shutdown();
 		            HibernateFactory.close(session);
 		        }
-
+		        
 		        return user;
 		    }
 

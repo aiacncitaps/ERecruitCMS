@@ -26,13 +26,17 @@ package com.quix.aia.cn.imo.rest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -41,12 +45,15 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.HolidayMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 
 
 /**
@@ -60,19 +67,31 @@ import com.quix.aia.cn.imo.mapper.LogsMaintenance;
 @Path("/holiday")
 public class HolidayRest {
 	static Logger log = Logger.getLogger(HolidayRest.class.getName());
-	@GET
+	@POST
 	@Path("/getAllHoliday")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getHoliday(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"HolidayRest --> getHoliday ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
 		ArrayList list = new ArrayList();
 		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 
+			 if(flag==true){
+				 
+				/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);*/
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+					String coBranch =restForm.getCo();
+					
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			HolidayMaintenance objHolidayMaintenance = new HolidayMaintenance();
 			list = objHolidayMaintenance.getAllHolidayRest(aamData,agentId);
@@ -81,6 +100,11 @@ public class HolidayRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_HOLIDAY, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		}catch(Exception e){
 			log.log(Level.INFO,"HolidayRest --> getHoliday --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());

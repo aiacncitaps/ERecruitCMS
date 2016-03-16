@@ -26,13 +26,17 @@ package com.quix.aia.cn.imo.rest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -40,13 +44,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.interview.InterviewCandidateMaterial;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.ApplicationFormPDFMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 
 
 
@@ -54,18 +62,32 @@ import com.quix.aia.cn.imo.mapper.LogsMaintenance;
 public class ApplicationFormRest {
 	static Logger log = Logger.getLogger(ApplicationFormRest.class.getName());
 	
-	@GET
+	@POST
 	@Path("/getApplicationForm")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getApplicationForm(@Context HttpServletRequest request,@Context HttpServletResponse response,
-			   @Context ServletContext context){
+			   @Context ServletContext context,String jsonString){
 		log.log(Level.INFO,"ApplicationFormRest --> getApplicationForm ");	
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String candidateCode = request.getParameter("candidateCode");
-		String interviewCode=request.getParameter("interviewCode");
 		
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			if(flag==true){
+				
+			
+			/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+	        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+	        RestForm restForm = jsonObjList.get(0); */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+	        String candidateCode = restForm.getCandidateCode();
+			String interviewCode=restForm.getInterviewCode();
+			
+			
 			AddressBookMaintenance addressMain=new AddressBookMaintenance();
 			AddressBook addressbook=new AddressBook();
 			addressbook.setAddressCode(Integer.parseInt(candidateCode));
@@ -82,6 +104,11 @@ public class ApplicationFormRest {
 				 response.setHeader("Content-Disposition","attachment; filename="+material.getMaterialFileName());
 				 response.getOutputStream().write(material.getFormContent(), 0,material.getFormContent().length);
 				 response.getOutputStream().flush();
+			}
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
 			}
 			
 		}catch(Exception e){

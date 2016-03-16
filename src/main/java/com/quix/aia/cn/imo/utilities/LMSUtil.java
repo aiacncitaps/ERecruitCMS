@@ -36,6 +36,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class LMSUtil
 {
@@ -585,6 +589,27 @@ public class LMSUtil
 			}
 			
 		return null;
+	}
+	
+	
+	public static boolean isJSONValid(String test) {
+		if(test!=null && !test.equals("")){
+		try {
+	        new JSONObject(test);
+	    } catch (JSONException ex) {
+	        // edited, to include @Arthur's comment
+	        // e.g. in case JSONArray is valid as well...
+	        try {
+	            new JSONArray(test);
+	        } catch (JSONException ex1) {
+	            return false;
+	        }
+	    }
+		}else{
+			return true;
+		}
+		
+	    return true;
 	}
 }
 

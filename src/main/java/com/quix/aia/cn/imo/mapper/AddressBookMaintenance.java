@@ -49,6 +49,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.LMSUtil;
@@ -221,12 +222,13 @@ public class AddressBookMaintenance {
 	 * <p>
 	 * This method retrieves all AddressBooks of Particular Agent
 	 * <p>
+	 * @param restForm 
 	 * 
 	 * @param agentID
 	 * @return List<AddressBook> List of Class Object
 	 * 
 	 */
-	public List<AddressBook> getAgentAddressBook(HttpServletRequest request, ServletContext context) {
+	public List<AddressBook> getAgentAddressBook(HttpServletRequest request, ServletContext context, RestForm restForm) {
 
 		Session session = null;
 		ArrayList<AddressBook> list = null;
@@ -245,11 +247,10 @@ public class AddressBookMaintenance {
 		int addressBookListingOffset = 0;
 		addressBookListingOffset = Integer.parseInt(configurationMap.get("addressBookListingOffset"));
 
-		String agentId = request.getParameter("agentId");
-		String pageNo = request.getParameter("pageNo");
-		String dateTime = request.getParameter("dateTime");
-		
-		String coBranch = request.getParameter("co");
+		String agentId = restForm.getAgentId();
+		String pageNo = restForm.getPageNo();
+		String dateTime = restForm.getDateTime();
+		String coBranch = restForm.getCo();
 
 		int firstRecordNo = 0;
 		agentId = agentId == null ? "" : agentId;
@@ -323,12 +324,13 @@ public class AddressBookMaintenance {
 	 * <p>
 	 * This method retrieves all AddressBooks of Particular Agent
 	 * <p>
+	 * @param restForm 
 	 * 
 	 * @param agentID
 	 * @return List<AddressBook> List of Class Object
 	 * 
 	 */
-	public String getAgentDeletedAddressBook(HttpServletRequest request, ServletContext context) {
+	public String getAgentDeletedAddressBook(HttpServletRequest request, ServletContext context, RestForm restForm) {
 
 		Session session = null;
 		ArrayList<AddressBook> list = null;
@@ -336,11 +338,10 @@ public class AddressBookMaintenance {
 		Query query = null;
 		String jsonString = ""; 
 
-		String agentId = request.getParameter("agentId");
-		String pageNo = request.getParameter("pageNo");
-		String dateTime = request.getParameter("dateTime");
-		
-		String coBranch = request.getParameter("co");
+		String agentId = restForm.getAgentId();
+		String pageNo = restForm.getPageNo();
+		String dateTime = restForm.getDateTime();
+		String coBranch = restForm.getCo();
 
 		agentId = agentId == null ? "" : agentId;
 		Date date = null;

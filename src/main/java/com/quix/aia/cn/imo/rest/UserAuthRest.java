@@ -30,6 +30,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +51,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.properties.ConfigurationProperties;
 import com.quix.aia.cn.imo.data.user.User;
@@ -65,32 +68,50 @@ public class UserAuthRest {
 
 	static Logger log = Logger.getLogger(UserAuthRest.class.getName());
 
-	@GET
+	@POST
 	@Path("/getUserAuth")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getUser(@Context HttpServletRequest request,
-			@Context ServletContext context) {
+			@Context ServletContext context,String jsonString) {
 
 		log.log(Level.INFO, "UserAuthRest --> getUser ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String userID = request.getParameter("agentId");
-		String psw = request.getParameter("psw");
-		String branch = request.getParameter("branch");
+		
 
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 
 		try {
 
-			UserMaintenance userMaintenance = new UserMaintenance();
-			User user = userMaintenance.authenticateUser(userID, psw, branch, context);
-			ArrayList<User> list = new ArrayList<User>();
-			list.add(user);
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setExclusionStrategies().create(); // .serializeNulls()
-			String json = gson.toJson(list);
-			// auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",
-			// AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST,
-			// "SUCCESS"));
-			return Response.status(200).entity(json).build();
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			 
+			if(flag==true){ 
+				 
+				/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0); */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String userID =restForm.getAgentId();
+					String psw = restForm.getPsw();
+					String branch = restForm.getBranch();
+				
+				UserMaintenance userMaintenance = new UserMaintenance();
+				User user = userMaintenance.authenticateUser(userID, psw, branch, context);
+				ArrayList<User> list = new ArrayList<User>();
+				list.add(user);
+				Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setExclusionStrategies().create(); // .serializeNulls()
+				String json = gson.toJson(list);
+				// auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",
+				// AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST,
+				// "SUCCESS"));
+				return Response.status(200).entity(json).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 
 		} catch (Exception e) {
 			log.log(Level.INFO, "UserAuthRest --> getUserAuth --> Exception..... ");
@@ -124,12 +145,17 @@ public class UserAuthRest {
 	{
 		log.log(Level.INFO,"UserAuthRest --> agentLoginDetails");
 	    log.log(Level.INFO,"UserAuthRest --> agentLoginDetails --> Data ...  ::::: "+jsonString);
+	    boolean flag=LMSUtil.isJSONValid(jsonString);
+	    String sessionId="";
 		boolean status=false;
 		UserMaintenance userMaintenance = new UserMaintenance();
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();	
 		try{
 			GsonBuilder builder = new GsonBuilder();
+			if(flag==true){
+				
+			
 	        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
                @Override  
                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -147,9 +173,12 @@ public class UserAuthRest {
 	        Gson googleJson  = builder.create();
 	        LogedInDetails logedInDetails = googleJson.fromJson(jsonString, LogedInDetails.class);
 	        userMaintenance.insertUserDetails(logedInDetails.getCo(), logedInDetails.getLogedInId(), logedInDetails.getLogedInDate(),"AG");    
-	        
+	       
 	        status = true;
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			}else{
+				status = false;
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"UserAuthRest --> agentLoginDetails --> Exception..... ");
@@ -166,18 +195,19 @@ public class UserAuthRest {
 			status = false;
 		}
 		
-		return Response.status(200).entity("{\"status\":"+status+"}").build();
+		return Response.status(200).entity("{\"status\":\""+status+"\"}").build();
 	}
 	
-	@GET
+	@POST
 	@Path("/validateVersion")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response validateVersion(@Context HttpServletRequest request,
-			@Context ServletContext context) {
+			@Context ServletContext context,String jsonString) {
 
 		log.log(Level.INFO, "UserAuthRest --> validateVersion ");
-		String versionNo = request.getParameter("versionNo");
-		String appType = request.getParameter("appType");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
+		MsgBeans beans = new MsgBeans();
 		String json = "";
 		String appURL = "";
 		String mergedAppURL = "";
@@ -187,19 +217,39 @@ public class UserAuthRest {
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		PropertiesMaintenance propertiesMaintenance = new PropertiesMaintenance();
 		try {
-			ConfigurationProperties configurationProperties = propertiesMaintenance.fetchConfigurationProperty("APP_URL");
-			appURL = configurationProperties.getConfigurationValue();
 			
-			configurationProperties = propertiesMaintenance.fetchConfigurationProperty(appType);
-			currentAppVersion = configurationProperties.getVersion();
-			if(currentAppVersion.equals(versionNo)){
-				json="{\"isValidVersion\":"+true+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
-			}else{
-				json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
-			}
-			
-		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_USER, AuditTrail.FUNCTION_REST, "SUCCESS"));
-			return Response.status(200).entity(json).build();
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 
+			 if(flag==true){
+				
+				 /* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0); */
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String versionNo = restForm.getVersionNo();
+					String appType =restForm.getAppType();
+			        
+				ConfigurationProperties configurationProperties = propertiesMaintenance.fetchConfigurationProperty("APP_URL");
+				appURL = configurationProperties.getConfigurationValue();
+				
+				configurationProperties = propertiesMaintenance.fetchConfigurationProperty(appType);
+				currentAppVersion = configurationProperties.getVersion();
+				if(currentAppVersion.equals(versionNo)){
+					json="{\"isValidVersion\":"+true+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
+				}else{
+					json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
+				}
+				String sessionId= request.getSession().getId();
+				
+				request.getSession().setAttribute("sessionIDRest", sessionId);
+			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_USER, AuditTrail.FUNCTION_REST, "SUCCESS"));
+				return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		} catch (Exception e) {
 			log.log(Level.INFO, "UserAuthRest --> validateVersion --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());

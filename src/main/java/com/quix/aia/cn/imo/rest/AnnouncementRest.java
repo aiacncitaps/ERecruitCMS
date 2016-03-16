@@ -29,14 +29,18 @@ package com.quix.aia.cn.imo.rest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -45,13 +49,18 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.announcement.AnnouncementMaterial;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.common.RestForm;
+import com.quix.aia.cn.imo.data.event.EventCandidate;
 import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AnnouncementMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 
 /**
  * <p>Logic to get announcement for Rest service.</p>
@@ -65,19 +74,34 @@ import com.quix.aia.cn.imo.mapper.LogsMaintenance;
 @Path("/announcement")
 public class AnnouncementRest {
 	static Logger log = Logger.getLogger(AnnouncementRest.class.getName());
-	@GET
+	
+	@POST
 	@Path("/getAllannouncement")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAnnouncement(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
+	
 		log.log(Level.INFO,"AnnouncementRest --> getAnnouncement ");
+		log.log(Level.INFO,"AnnouncementRest --> getAnnouncement "+jsonString);
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+		if(flag==true){
 			
+		
+			/*  Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);  */
+			RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String agentId = restForm.getAgentId();
+				String coBranch =restForm.getCo();
+		        
+		        
 			ArrayList list = new ArrayList();
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			AnnouncementMaintenance objAnnouncementMaintenanceMaintenance = new AnnouncementMaintenance();
@@ -90,7 +114,11 @@ public class AnnouncementRest {
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST, "SUCCESS"));
 		
 			return Response.status(200).entity(json).build();
-			
+		}else{
+			beans.setCode("500");
+			beans.setMassage("Json not valid");
+			return Response.status(500).entity(googleJson.toJson(beans)).build();
+		}	
 		}catch(Exception e){
 			log.log(Level.INFO,"AnnouncementRest --> getAnnouncement --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());
@@ -109,11 +137,12 @@ public class AnnouncementRest {
 		
 	}
 	
-	@GET
+	@POST
 	@Path("/getAllDeletedAnnouncement")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAllDeletedannouncement(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"AnnouncementRest --> getAllDeletedannouncement ");
 		MsgBeans beans = new MsgBeans();
@@ -145,16 +174,18 @@ public class AnnouncementRest {
 		
 	}
 	
-	@GET
+	@POST
 	@Path("/downloadFile")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response downloadFile(@Context HttpServletRequest request,@Context HttpServletResponse response,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"AnnouncementRest --> download File ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String announcementCode = request.getParameter("announcementCode");
+		//String announcementCode = request.getParameter("announcementCode");
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
 			
@@ -172,7 +203,15 @@ public class AnnouncementRest {
 		    }else{
 		    	fileName = announcement.getSubject();
 		    }*/
-		
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);  */
+			 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String announcementCode= restForm.getAnnouncementCode();
+		      if(flag==true){
+		    	  
 			AnnouncementMaterial annMat   = new AnnouncementMaintenance().getAnnouncementMaterial(Integer.parseInt(announcementCode));
 			if(annMat!=null && (annMat.getMaterialName() !=null && annMat.getMaterialName().length()>0)){
 			    response.setContentLength((int)annMat.getMaterial().length);
@@ -189,6 +228,11 @@ public class AnnouncementRest {
 				return Response.status(500).entity(new Gson().toJson(beans)).build();
 
 			}
+		      }else{
+		    	  beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+		      }
 			    return Response.status(200).build();
 			
 		}catch(Exception e){

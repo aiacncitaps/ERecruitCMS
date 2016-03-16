@@ -62,6 +62,8 @@ import com.quix.aia.cn.imo.data.addressbook.AddressBook;
 import com.quix.aia.cn.imo.data.addressbook.CandidateNote;
 import com.quix.aia.cn.imo.data.addressbook.ContractDetail;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
+import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.CandidateNoteMaintenance;
@@ -81,7 +83,7 @@ import com.quix.aia.cn.imo.utilities.LMSUtil;
 @Path("/addressBook")
 public class AddressBookRest {
 	static Logger log = Logger.getLogger(AddressBookRest.class.getName());
-
+	
 	/**
 	 * <p>
 	 * Address Book Synchronization rest service post method which gets Json
@@ -100,6 +102,7 @@ public class AddressBookRest {
 	public Response syncAddressBook(String jsonAddressBookListString) {
 		log.log(Level.INFO, "Address Book --> Sync Record ");
 		log.log(Level.INFO,"Address Book --> Sync Record --> Data for Sync...  ::::: "+jsonAddressBookListString);
+		boolean flag=LMSUtil.isJSONValid(jsonAddressBookListString);
 		
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
@@ -110,6 +113,10 @@ public class AddressBookRest {
 		Type listType = null;
 		String returnJsonString = "";
 		try {
+			
+			if(flag==true){
+				
+			
 			returnJsonString = "[";
 
 			builder.registerTypeAdapter(Date.class,
@@ -145,7 +152,11 @@ public class AddressBookRest {
 			log.log(Level.INFO, "Address Book --> saved successfully ");
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",AuditTrail.MODULE_ADDRESS_BOOK,AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
 			return Response.status(200).entity(returnJsonString).build();
-
+		}else{
+			beans.setCode("500");
+			beans.setMassage("Json not valid");
+			return Response.status(500).entity(googleJson.toJson(beans)).build();
+		}
 		} catch (Exception e) {
 
 			beans.setCode("500");
@@ -182,53 +193,64 @@ public class AddressBookRest {
 	 * @param agentId
 	 * 
 	 */
-	@GET
+	@POST
 	@Path("/getAgentAddressBook")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAgentAddressBook(@Context HttpServletRequest request,
-			   @Context ServletContext context) {
+			   @Context ServletContext context,String jsonString) {
 		log.log(Level.INFO, "Address Book --> getAgentAddressBook ");
-		
+		boolean flag=LMSUtil.isJSONValid(jsonString);
+	
 		GsonBuilder builder = new GsonBuilder();
 		AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
-		Gson googleJson = null;
+		 Gson googleJson  = builder.create();
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		List<AddressBook> addressBookList = new ArrayList();
-		String jsonString = "";
 		try {
 			
-			builder.registerTypeHierarchyAdapter(byte[].class,
-	                new JsonSerializer<byte[]>(){
-				public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
-		            return new JsonPrimitive(Base64.encodeBase64String(src));
-		        }
-			});
+			if(flag==true){
+				
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        //RestForm restForm = jsonObjList.get(0);  
 			
-			googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-			log.log(Level.INFO, "Address Book --> fetching Information ... ");
-			addressBookList = addressBookMaintenance.getAgentAddressBook(request,context);
-			
-			String deletedList = "";
-			// Convert the object to a JSON string
-			log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
-			jsonString = googleJson.toJson(addressBookList);
-
-			String dateTime = request.getParameter("dateTime");
-			if (null != dateTime && !"".equals(dateTime)) {
-				deletedList = addressBookMaintenance.getAgentDeletedAddressBook(request, context);
-				if(!"".equals(deletedList)){
-					jsonString = jsonString.substring(0, jsonString.length()-1);
-					if(!addressBookList.isEmpty()){
-						deletedList = ","+deletedList;
+				builder.registerTypeHierarchyAdapter(byte[].class,
+		                new JsonSerializer<byte[]>(){
+					public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
+			            return new JsonPrimitive(Base64.encodeBase64String(src));
+			        }
+				});
+				
+				googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	
+				log.log(Level.INFO, "Address Book --> fetching Information ... ");
+				addressBookList = addressBookMaintenance.getAgentAddressBook(request,context,restForm);
+				
+				String deletedList = "";
+				// Convert the object to a JSON string
+				log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
+				jsonString = googleJson.toJson(addressBookList);
+	
+				String dateTime = request.getParameter("dateTime");
+				if (null != dateTime && !"".equals(dateTime)) {
+					deletedList = addressBookMaintenance.getAgentDeletedAddressBook(request, context,restForm);
+					if(!"".equals(deletedList)){
+						jsonString = jsonString.substring(0, jsonString.length()-1);
+						if(!addressBookList.isEmpty()){
+							deletedList = ","+deletedList;
+						}
+						deletedList+="]";
+						jsonString +=deletedList;
 					}
-					deletedList+="]";
-					jsonString +=deletedList;
 				}
+	
+				return Response.status(200).entity(jsonString).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
 			}
-
-			return Response.status(200).entity(jsonString).build();
 		} catch (Exception e) {
 
 			beans.setCode("500");
@@ -272,7 +294,7 @@ public class AddressBookRest {
 		log.log(Level.INFO, "Address Book --> syncNotes ");
 		log.log(Level.INFO,"Address Book --> syncNotes --> Data for Sync Notes...  ::::: "+jsonString);
 //		String responseString = "[{\"status\":";
-		
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		Gson googleJson = null;
@@ -283,6 +305,8 @@ public class AddressBookRest {
 		CandidateNoteMaintenance candidateNoteMaint = new CandidateNoteMaintenance();
 		try {
 			log.log(Level.INFO, "Address Book --> Saving Candidate Notes ... ");
+			if(flag==true){
+				
 			
 			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
@@ -306,6 +330,11 @@ public class AddressBookRest {
 //		    responseString +=true;
 			
 			return Response.status(200).entity(googleJson.toJson(list)).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity("[{\"status\":\"false\"}]").build();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			beans.setCode("500");
@@ -355,11 +384,15 @@ public class AddressBookRest {
 		ContractDetail contractDetail;
 		AddressBook addressBook;
 		Gson googleJson = null;
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		String responseString = "[{\"status\":";
 		MsgBeans beans = new MsgBeans();
 		AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			if(flag==true){
+				
+			
 			GsonBuilder builder = new GsonBuilder();
 	        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
@@ -394,6 +427,12 @@ public class AddressBookRest {
 	        }
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 		    responseString +=true; 
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				 responseString +=false; 
+				return Response.status(500).entity(responseString).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> candidateRegister --> Exception..... ");
@@ -414,31 +453,40 @@ public class AddressBookRest {
 		return Response.status(200).entity(responseString).build();
 	}
 	
-	@GET
+	@POST
 	@Path("/getContractDetail")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getContractDetails(@Context HttpServletRequest request) {
+	public Response getContractDetails(@Context HttpServletRequest request,String jsonString) {
 		log.log(Level.INFO, "Address Book --> getContractDetail ");
 
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		ContractDetail contractDetail = new ContractDetail();
 		AddressBook addressBook;
 		Object[] obj;
 		GsonBuilder builder = new GsonBuilder();
 		AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
 		
-		Gson googleJson = null;
+		Gson googleJson = builder.create();
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
-		String jsonString = "";
 		try {
 			
+			if(flag==true){
 			googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 			log.log(Level.INFO, "Address Book --> fetching Information ... ");
 			addressBook = new AddressBook();
-			String candidateAgentCode = request.getParameter("candidateAgentCode");
-			candidateAgentCode = null != candidateAgentCode ? candidateAgentCode:"";
+			 String candidateAgentCode=null;
+			if(!jsonString.equals("")){
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		         candidateAgentCode = restForm.getCandidateAgentCode();
+				
+			}
 			
+			candidateAgentCode = null != candidateAgentCode ? candidateAgentCode:"";
+	        
+	       
 			
 			String[] fetchFields={"branchCode","candidateAgentCode","recruitmentType","contractDate","addressCode"};
 			String[] conditionFieldName={"addressCode"};
@@ -463,6 +511,11 @@ public class AddressBookRest {
 			jsonString = googleJson.toJson(contractDetail);
 
 			return Response.status(200).entity(jsonString).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		} catch (Exception e) {
 
 			beans.setCode("500");
@@ -489,63 +542,78 @@ public class AddressBookRest {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/getCCTestResults")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCCTestResults(@Context HttpServletRequest request) {
+	public Response getCCTestResults(@Context HttpServletRequest request,String jsonString) {
 		log.log(Level.INFO, "Address Book --> getCCTestResults ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		LogsMaintenance logsMain=new LogsMaintenance();
 		ContractDetail contractDetail = new ContractDetail();
 		AddressBook addressBook;
 		GsonBuilder builder = new GsonBuilder();
 		AddressBookMaintenance addressBookMaintenance = new AddressBookMaintenance();
 		
-		Gson googleJson = null;
+		Gson googleJson = builder.create();
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		List<AddressBook> addressBookList = new ArrayList();
-		String jsonString = "";
+
 		try {
 			
-			builder.registerTypeHierarchyAdapter(byte[].class,
-	                new JsonSerializer<byte[]>(){
-				public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
-		            return new JsonPrimitive(Base64.encodeBase64String(src));
-		        }
-			});
+			if(flag==true){
 			
-			googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-			log.log(Level.INFO, "Address Book --> fetching Information ... ");
-			addressBook = new AddressBook();
-			String candidateCode = request.getParameter("candidateCode");
-			candidateCode = null != candidateCode ? candidateCode:"";
-			String agentId = request.getParameter("agentId");
-			agentId = null != agentId ? agentId:"";
-			
-			//addressBook = addressBookMaintenance.getAddressBook(candidateCode, agentId);
-			String[] fetchFields={"ccTestResult","ccTestResultDate"};
-			String[] conditionFieldName={"addressCode","agentId"};
-			String[] conditionFieldValue={candidateCode,agentId};
-			List<Object []> list = addressBookMaintenance.getAddressBookSelectedField(fetchFields, conditionFieldName, conditionFieldValue);
-			if(!list.isEmpty()){
-				Object[] obj = list.get(0);
-				addressBook.setCcTestResult(""+obj[0]);
-				addressBook.setCcTestResultDate((Date)obj[1]);
+				builder.registerTypeHierarchyAdapter(byte[].class,
+		                new JsonSerializer<byte[]>(){
+					public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
+			            return new JsonPrimitive(Base64.encodeBase64String(src));
+			        }
+				});
+				
+				googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	
+				log.log(Level.INFO, "Address Book --> fetching Information ... ");
+				addressBook = new AddressBook();
+				
+				/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);*/
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String candidateCode = restForm.getCandidateCode();
+					candidateCode = null != candidateCode ? candidateCode:"";
+					String agentId = restForm.getAgentId();
+					agentId = null != agentId ? agentId:"";
+			        
+				
+				//addressBook = addressBookMaintenance.getAddressBook(candidateCode, agentId);
+				String[] fetchFields={"ccTestResult","ccTestResultDate"};
+				String[] conditionFieldName={"addressCode","agentId"};
+				String[] conditionFieldValue={candidateCode,agentId};
+				List<Object []> list = addressBookMaintenance.getAddressBookSelectedField(fetchFields, conditionFieldName, conditionFieldValue);
+				if(!list.isEmpty()){
+					Object[] obj = list.get(0);
+					addressBook.setCcTestResult(""+obj[0]);
+					addressBook.setCcTestResultDate((Date)obj[1]);
+				}
+				
+				addressBookMaintenance.updateAddressBookStatus("5/9", conditionFieldName, conditionFieldValue);
+				new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidateCode), "CC Test", "CC Test Results : "+addressBook.getCcTestResult());
+				
+				String date="";
+				if(addressBook.getCcTestResultDate()!=null)
+					date=LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
+				jsonString="";
+				jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+date+"\"}]";
+				// Convert the object to a JSON string
+				log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
+	
+				return Response.status(200).entity(jsonString).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
 			}
-			
-			addressBookMaintenance.updateAddressBookStatus("5/9", conditionFieldName, conditionFieldValue);
-			new CandidateNoteMaintenance().insertSystemNotes(Integer.parseInt(candidateCode), "CC Test", "CC Test Results : "+addressBook.getCcTestResult());
-			
-			String date="";
-			if(addressBook.getCcTestResultDate()!=null)
-				date=LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
-			
-			jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+date+"\"}]";
-			// Convert the object to a JSON string
-			log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
-
-			return Response.status(200).entity(jsonString).build();
 		} catch (Exception e) {
 			beans.setCode("500");
 			beans.setMassage("Something wrong happens, please contact administrator. Error Message : "+ e.getMessage());
@@ -574,47 +642,65 @@ public class AddressBookRest {
 
 
 
-@GET
+@POST
 @Path("/insertCCTestResults")
+@Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
-public Response insertCCTestResults(@Context HttpServletRequest request) {
+
+public Response insertCCTestResults(@Context HttpServletRequest request,String jsonString) {
 	log.log(Level.INFO, "Address Book --> insertCCTestResults ");
+	boolean flag=LMSUtil.isJSONValid(jsonString);
 	MsgBeans beans = new MsgBeans();
-	String agentId = request.getParameter("agentId");
-	String candidateCode=request.getParameter("candidateCode");
-	String ccTestResult=request.getParameter("ccTestResult");
-	String ccTestResultDateStr = request.getParameter("ccTestResultDate");
 	AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 	Date ccTestResultDate = new Date();
 	
-	if(null != ccTestResultDateStr && !"".equals(ccTestResultDateStr)){
-		ccTestResultDate = LMSUtil.convertDateToyyyymmddhhmmssDashed(ccTestResultDateStr);
-	}
 	try{
-		if(agentId!=null && candidateCode!=null && ccTestResult!=null){
-			
-			if(!ccTestResult.equalsIgnoreCase("Urgent") && !ccTestResult.equalsIgnoreCase("Normal") && !ccTestResult.equalsIgnoreCase("Caution")  ){
-				beans.setCode("500");
-				beans.setMassage("CC Test Result Sould be Urgent,Normal,Caution");
-				return Response.status(500).entity(new Gson().toJson(beans)).build();
-			}else{
-				AddressBookMaintenance addressBookMain=new AddressBookMaintenance();
-				AddressBook addressbook=addressBookMain.getaddressDataForCCTest(candidateCode);
-				addressbook.setCcTestResult(ccTestResult);
-				addressbook.setCcTestResultDate(ccTestResultDate);
-				addressBookMain.updateAddressBook(addressbook);
-				auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INSERT_CC_TEST, AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
-				beans.setCode("200");
-				beans.setMassage("Success");
-				return Response.status(200).entity(new Gson().toJson(beans)).build();
+		
+		GsonBuilder builder = new GsonBuilder();
+		 Gson googleJson  = builder.create();
+		 if(flag==true){
+		
+			/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0); */
+			 	RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String agentId = restForm.getAgentId();
+		    	String candidateCode=restForm.getCandidateCode();
+		    	String ccTestResult=restForm.getCcTestResult();
+		    	String ccTestResultDateStr = restForm.getCcTestResultDate();
+		        
+		    	if(null != ccTestResultDateStr && !"".equals(ccTestResultDateStr)){
+		    		ccTestResultDate = LMSUtil.convertDateToyyyymmddhhmmssDashed(ccTestResultDateStr);
+		    	}
+			if(agentId!=null && candidateCode!=null && ccTestResult!=null){
 				
+				if(!ccTestResult.equalsIgnoreCase("Urgent") && !ccTestResult.equalsIgnoreCase("Normal") && !ccTestResult.equalsIgnoreCase("Caution")  ){
+					beans.setCode("500");
+					beans.setMassage("CC Test Result Sould be Urgent,Normal,Caution");
+					return Response.status(500).entity(new Gson().toJson(beans)).build();
+				}else{
+					AddressBookMaintenance addressBookMain=new AddressBookMaintenance();
+					AddressBook addressbook=addressBookMain.getaddressDataForCCTest(candidateCode);
+					addressbook.setCcTestResult(ccTestResult);
+					addressbook.setCcTestResultDate(ccTestResultDate);
+					addressBookMain.updateAddressBook(addressbook);
+					auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INSERT_CC_TEST, AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
+					beans.setCode("200");
+					beans.setMassage("Success");
+					return Response.status(200).entity(new Gson().toJson(beans)).build();
+					
+				}
+				
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Agent Id and Candidate Code must be required ");
+				return Response.status(500).entity(new Gson().toJson(beans)).build();
 			}
-			
-		}else{
-			beans.setCode("500");
-			beans.setMassage("Agent Id and Candidate Code must be required ");
-			return Response.status(500).entity(new Gson().toJson(beans)).build();
-		}
+		 }else{
+			 beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+		 }
 		
 	}catch(Exception e){
 			log.log(Level.INFO,"Iddress Book --> insertCCTestResults --> Exception..... ");

@@ -52,6 +52,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.mapper.AddressBookMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.CandidateFirstInterviewMaintenance;
@@ -88,7 +89,7 @@ public class FirstInterviewRest {
 	   		   String jsonString) {
 		log.log(Level.INFO, " First Interview --> push Details ");
 	    log.log(Level.INFO," First Interview --> push Details  --> Data ...  ::::: "+jsonString);
-		
+	    boolean flag=LMSUtil.isJSONValid(jsonString);
 		Gson googleJson = null;
         GsonBuilder builder = new GsonBuilder();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
@@ -98,6 +99,8 @@ public class FirstInterviewRest {
         
 		try {
 			log.log(Level.INFO, "First Interview --> Saving Candidate First Interview Details ... ");
+			if(flag==true){
+				
 			
 			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
@@ -125,6 +128,10 @@ public class FirstInterviewRest {
 			
 			log.log(Level.INFO,"First Interview --> Candidate First Interview Details Saved successfully... ");
 			status=true;
+			}else{
+				status=false;
+				return Response.status(200).entity("[{\"status\":"+status+"}]").build();
+			}
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "First Interview --> Error in Saving Candidate First Interview Details.");
 			log.log(Level.SEVERE, e.getMessage());
@@ -153,27 +160,33 @@ public class FirstInterviewRest {
 	 * This method gets Candidate First Interview Results.
 	 * </p>
 	 */
-	@GET
+	@POST
 	@Path("/getFirstInterview")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getALEExamResults(@Context HttpServletRequest request,
-	   		   @Context ServletContext context) {
+	   		   @Context ServletContext context,String jsonString) {
 		
 		log.log(Level.INFO, "First Interview --> get ALE Exam Results.");
-		
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		Gson googleJson = null;
+		
         GsonBuilder builder = new GsonBuilder();
+        Gson googleJson = builder.create();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		CandidateFirstInterviewMaintenance candidateFirstInterviewMaint = new CandidateFirstInterviewMaintenance();
         CandidateFirstInterview candidateFirstInterview = null;
-		String jsonString = "";
+		//String jsonString = "";
 		
 		try {
 			
-			String candidateCode = request.getParameter("candidateCode");
-			String agentId = request.getParameter("agentId");
-			
+			  /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);  */
+			RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String agentId = restForm.getAgentId();
+		        String candidateCode = restForm.getCandidateCode();
+			 if(flag==true){
 			log.log(Level.INFO, "First Interview --> fetching Information ... ");
 			
 			candidateFirstInterview = candidateFirstInterviewMaint.getCandidateFirstinterview(agentId, candidateCode);
@@ -213,6 +226,11 @@ public class FirstInterviewRest {
 			log.log(Level.INFO,"First Interview --> Information fetched successfully... ");
 			
 			return Response.status(200).entity(builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(candidateFirstInterview)).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		} catch (Exception e) {
 			beans.setCode("500");
 			beans.setMassage("Something wrong happens, please contact administrator. Error Message : "+ e.getMessage());

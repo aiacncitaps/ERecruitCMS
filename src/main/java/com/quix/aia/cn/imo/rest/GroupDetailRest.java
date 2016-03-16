@@ -58,6 +58,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.group.GroupDetail;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.GroupDetailMaintenance;
@@ -96,7 +97,7 @@ public class GroupDetailRest {
 	public Response syncGroupDetail(String jsonGroupDetailListString) {
 		log.log(Level.INFO, "GroupDetail --> Sync Record ");
 		log.log(Level.INFO,"GroupDetail --> Sync Record --> Data for Sync...  ::::: "+jsonGroupDetailListString);
-		
+		boolean flag=LMSUtil.isJSONValid(jsonGroupDetailListString);
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		List<GroupDetail> jsonObjList = new ArrayList();
@@ -106,6 +107,10 @@ public class GroupDetailRest {
 		Type listType = null;
 		String returnJsonString = "";
 		try {
+			
+			if(flag==true){
+				
+			
 			returnJsonString = "[";
 
 			builder.registerTypeAdapter(Date.class,
@@ -142,7 +147,10 @@ public class GroupDetailRest {
 			log.log(Level.INFO, "GroupDetail --> saved successfully ");
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",AuditTrail.MODULE_GROUP_DETAIL,AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
 			return Response.status(200).entity(returnJsonString).build();
-
+			}else{
+				boolean status=false;
+				return Response.status(200).entity("[{\"status\":"+status+"}]").build();
+			}
 		} catch (Exception e) {
 
 			beans.setCode("500");
@@ -179,21 +187,36 @@ public class GroupDetailRest {
 	 * @param agentId
 	 * 
 	 */
-	@GET
+	@POST
 	@Path("/getGroupDetails")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getGroupDetails(@Context HttpServletRequest request,
-			   @Context ServletContext context) {
+			   @Context ServletContext context,String jsonString) {
 		log.log(Level.INFO, "GroupDetail --> getGroupDetails ");
-		
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		GsonBuilder builder = new GsonBuilder();
 		GroupDetailMaintenance groupDetailMaintenance = new GroupDetailMaintenance();
-		Gson googleJson = null;
+		Gson googleJson = builder.create();
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		List<GroupDetail> addressBookList = new ArrayList();
-		String jsonString = "";
+	//String jsonString = "";
 		try {
+			
+			if(flag==true){
+			
+			
+			
+			/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+	        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+	        RestForm restForm = jsonObjList.get(0);  */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+	        String agentId = restForm.getAgentId();
+			String coBranch =restForm.getCo();
+			String dateTime = restForm.getDateTime();
+	        
+			
 			
 			builder.registerTypeHierarchyAdapter(byte[].class,
 	                new JsonSerializer<byte[]>(){
@@ -205,16 +228,17 @@ public class GroupDetailRest {
 			googleJson = builder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 			log.log(Level.INFO, "GroupDetail --> fetching Information ... ");
-			addressBookList = groupDetailMaintenance.getGroupDetails(request, context);
+			addressBookList = groupDetailMaintenance.getGroupDetails(request, context,agentId,dateTime,coBranch);
 			
 			String deletedList = "";
 			// Convert the object to a JSON string
 			log.log(Level.INFO,"GroupDetail --> Information fetched successfully... ");
+			jsonString="";
 			jsonString = googleJson.toJson(addressBookList);
 
-			String dateTime = request.getParameter("dateTime");
+			//String dateTime = request.getParameter("dateTime");
 			if (null != dateTime && !"".equals(dateTime)) {
-				deletedList = groupDetailMaintenance.getDeletedGroupDetails(request, context);
+				deletedList = groupDetailMaintenance.getDeletedGroupDetails(request, context,agentId,dateTime,coBranch);
 				if(!"".equals(deletedList)){
 					jsonString = jsonString.substring(0, jsonString.length()-1);
 					if(!addressBookList.isEmpty()){
@@ -224,7 +248,11 @@ public class GroupDetailRest {
 					jsonString +=deletedList;
 				}
 			}
-
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 			return Response.status(200).entity(jsonString).build();
 		} catch (Exception e) {
 

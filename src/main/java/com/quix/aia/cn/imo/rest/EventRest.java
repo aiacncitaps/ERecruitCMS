@@ -59,6 +59,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.event.EventCandidate;
 import com.quix.aia.cn.imo.data.event.EventMaterial;
@@ -83,23 +84,35 @@ import com.quix.aia.cn.imo.utilities.LMSUtil;
 public class EventRest {
 
 	static Logger log = Logger.getLogger(EventRest.class.getName());
-	@GET
+	@POST
 	@Path("/getAllEop")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getEvent(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"EventRest --> getEvent ");
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = null == candidateCode?"":candidateCode;
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		ArrayList list = new ArrayList();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{	
 
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+				 
+
+				 /* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);  */
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+					String coBranch =restForm.getCo();
+					String candidateCode = restForm.getCandidateCode();
+					candidateCode = null == candidateCode?"":candidateCode;
+				 
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			EopMaintenance objEopMaintenance=new EopMaintenance();
 			list = objEopMaintenance.getAllEopRest(aamData, agentId, candidateCode,context);
@@ -109,7 +122,11 @@ public class EventRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
-			
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		}catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getEvent --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());
@@ -126,23 +143,35 @@ public class EventRest {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/getAllDeletedEop")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getDeletedEop(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"EventRest --> getDeletedEop ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{	
+			
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 
+			 if(flag==true){
 			ArrayList list = new ArrayList();
 			list = new EopMaintenance().getAllDeletedEopRest();
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setExclusionStrategies().create(); //.serializeNulls()
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 			
 		}catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getDeletedEop --> Exception..... ");
@@ -160,23 +189,33 @@ public class EventRest {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/getAllEopPast")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAllEopPast(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"EventRest --> getAllEopPast ");
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = null == candidateCode?"":candidateCode;
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		ArrayList list = new ArrayList();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{	
-
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+				 
+				 	/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);  */
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+					String coBranch =restForm.getCo();
+					String candidateCode = restForm.getCandidateCode();
+					candidateCode = null == candidateCode?"":candidateCode; 
+				 
+				 
 //			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			EopMaintenance objEopMaintenance=new EopMaintenance();
 //			list = objEopMaintenance.getAllEopRestPast(aamData, agentId, candidateCode, context);
@@ -187,6 +226,11 @@ public class EventRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 			
 		}catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getEvent --> Exception..... ");
@@ -204,20 +248,30 @@ public class EventRest {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/getAllEopForBranch")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAllEopForBranch(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"EventRest --> getAllEopForBranch ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String branchCode = request.getParameter("branchCode");
 		ArrayList list = new ArrayList();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{	
-
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+				 
+				/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			     List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			     RestForm restForm = jsonObjList.get(0); */
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			     String branchCode = restForm.getBranchCode();
+			        
 			EopMaintenance objEopMaintenance=new EopMaintenance();
 			list = objEopMaintenance.getAllEopBranchRest(branchCode);
 			
@@ -225,6 +279,11 @@ public class EventRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			}else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 			
 		}catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getAllEopForBranch --> Exception..... ");
@@ -253,6 +312,7 @@ public class EventRest {
 	{
 		log.log(Level.INFO,"EventRest --> candidateAttend");
 	    log.log(Level.INFO,"EventRest --> candidateAttend --> Data ...  ::::: "+jsonString);
+	    boolean flag=LMSUtil.isJSONValid(jsonString);
 		boolean status=false;
 		MsgBeans beans = new MsgBeans();
 		String agentId = request.getParameter("agentId");
@@ -262,6 +322,7 @@ public class EventRest {
 			
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
 			GsonBuilder builder = new GsonBuilder();
+			if(flag==true){
 	        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
 	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -290,6 +351,12 @@ public class EventRest {
 		    
 		    status=true;
 	        auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			}else{
+				 status=false;
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity("[{\"status\":"+status+"}]").build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> candidateAttend --> Exception..... ");
@@ -309,20 +376,32 @@ public class EventRest {
 	}
 	
 	
-	@GET
+	@POST
 	@Path("/getEOPRegisteredCandidate")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getEOPRegistration(@Context HttpServletRequest request,
-						   		 	   @Context ServletContext context)
+						   		 	   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EventRest --> getEOPRegisteredCandidate");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		String eventCode = request.getParameter("eventCode");
-		eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
 		try
 		{
+			
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			if(flag==true){
+			 
+				/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);  */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String agentId = restForm.getAgentId();
+				String eventCode = restForm.getEventCode();
+				eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
+				
 			request.setAttribute("isRest", true);
 			ArrayList list = new ArrayList();
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
@@ -339,6 +418,11 @@ public class EventRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getEOPRegisteredCandidate --> Exception..... ");
@@ -368,6 +452,7 @@ public class EventRest {
 	{
 		log.log(Level.INFO,"EventRest --> candidateRegister");
 	    log.log(Level.INFO,"EventRest --> candidateRegister --> Data ...  ::::: "+jsonString);
+	    boolean flag=LMSUtil.isJSONValid(jsonString);
 		boolean status=false;
 		boolean isDuplicate = false;
 		boolean isDeleted = false;
@@ -378,9 +463,14 @@ public class EventRest {
 		String addressCode="";
 		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			if(flag==true){
+				
+			
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
-			GsonBuilder builder = new GsonBuilder();
+			
 	        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
 	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -393,7 +483,7 @@ public class EventRest {
 	               }
 	           });
 	        
-	        Gson googleJson  = builder.create();
+	       
 	        Type listType = new TypeToken<List<EventCandidate>>(){}.getType();
 	        List<EventCandidate> jsonObjList = googleJson.fromJson(jsonString, listType);
 	        EventCandidate candidate = jsonObjList.get(0);  
@@ -448,6 +538,11 @@ public class EventRest {
 	        	auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "FAIL"));
 	        	isDeleted =true; 
 	        }
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> candidateRegister --> Exception..... ");
@@ -466,8 +561,9 @@ public class EventRest {
 		return Response.status(200).entity("[{\"status\":"+status+",\"isDuplicate\":"+isDuplicate+",\"isDeleted\":"+isDeleted+",\"addressCode\":"+addressCode+",\"registeredCount\":"+registeredCount+"}]").build();
 	}
 	
-	@GET
+	@POST
 	@Path("/getEOPRegistrationStatus")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getEOPRegistrationStatus(@Context HttpServletRequest request,
 						   		   @Context ServletContext context,
@@ -475,21 +571,38 @@ public class EventRest {
 	{
 		log.log(Level.INFO,"EventRest --> getEOPRegistrationStatus");
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		String eventCode = request.getParameter("eventCode");
-		eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
+		
 		try
 		{
-			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
-			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
-			boolean isExist = objMaintenance.checkDuplicateCandiadteReg(eventCode, agentId, candidateCode);
-			String responseJsonString="[{\"agentId\":\""+agentId+"\",\"eventCode\":\""+eventCode+"\",\"isExist\":"+isExist+"}]";
-		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
-			return Response.status(200).entity(responseJsonString).build();
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			 
+			if(flag==true){
+				
+				/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);*/
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+		        String agentId = restForm.getAgentId();
+				String coBranch =restForm.getCo();
+				String eventCode = restForm.getEventCode();
+				eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
+				String candidateCode = restForm.getCandidateCode();
+				candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
+				
+				AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
+				EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
+				boolean isExist = objMaintenance.checkDuplicateCandiadteReg(eventCode, agentId, candidateCode);
+				String responseJsonString="[{\"agentId\":\""+agentId+"\",\"eventCode\":\""+eventCode+"\",\"isExist\":"+isExist+"}]";
+			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+				return Response.status(200).entity(responseJsonString).build();
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getEOPRegistrationStatus --> Exception..... ");
@@ -507,8 +620,9 @@ public class EventRest {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/deleteEOPRegistration")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response deleteEOPRegistration(@Context HttpServletRequest request,
 						   		   @Context ServletContext context,
@@ -517,18 +631,34 @@ public class EventRest {
 		log.log(Level.INFO,"EventRest --> deleteEOPRegistration");
 		String responseString = "[{\"status\":";
 		MsgBeans beans = new MsgBeans();
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
-		String eventCode = request.getParameter("eventCode");
-		eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
 		request.setAttribute("isRest", true);
 		try
 		{
-			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
-			objMaintenance.deleteCandidateReg(Integer.parseInt(candidateCode), Integer.parseInt(eventCode), request);
-		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
-		    responseString +=true; 
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			if(flag==true){
+				
+				/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+		        RestForm restForm = jsonObjList.get(0);  */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+				String candidateCode = restForm.getCandidateCode();
+				candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
+				String eventCode = restForm.getEventCode();
+				eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
+				
+				
+				EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
+				objMaintenance.deleteCandidateReg(Integer.parseInt(candidateCode), Integer.parseInt(eventCode), request);
+			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			    responseString +=true; 
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> deleteEOPRegistration --> Exception..... ");
@@ -549,20 +679,32 @@ public class EventRest {
 		return Response.status(200).entity(responseString).build();
 	}
 	
-	@GET
+	@POST
 	@Path("/getEOPRegisteredCandidateCount")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getEOPRegisteredCandidateCount(@Context HttpServletRequest request,
-						   		 	   @Context ServletContext context)
+						   		 	   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EventRest --> getEOPRegisteredCandidateCount");
-		String agentId = request.getParameter("agentId");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		String eventCode = request.getParameter("eventCode");
-		eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
+		MsgBeans beans = new MsgBeans();
 		Integer registeredCount = 0;
 		try
 		{
+			GsonBuilder builder = new GsonBuilder();
+			Gson googleJson  = builder.create();
+			if(flag==true){
+			
+				 /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);  */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+					String eventCode = restForm.getEventCode();
+					eventCode = eventCode==null||eventCode.equals("")?"0":eventCode;
+				
 			request.setAttribute("isRest", true);
 			ArrayList list = new ArrayList();
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
@@ -570,6 +712,11 @@ public class EventRest {
 			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode));
 			registeredCount = list.size();
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
+			}else{
+				beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			}
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getEOPRegisteredCandidateCount --> Exception..... ");
@@ -616,24 +763,37 @@ public class EventRest {
 //		}
 //	}
 	
-	@GET
+	@POST
 	@Path("/getCandidateRegisteredEOP")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getCandidateRegisteredEOP(@Context HttpServletRequest request,
-						   		   @Context ServletContext context)
+						   		   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EventRest --> getCandidateRegisteredEOP");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
 		List<Event> eventList = new ArrayList();
 		Event event = null;
 		EventCandidate candidate = new EventCandidate();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
-		String agentId = request.getParameter("agentId");
-		agentId = agentId==null||agentId.equals("")?"0":agentId;
+		
 		try
 		{
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+			
+				 /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);*/
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+			        agentId = agentId==null||agentId.equals("")?"0":agentId;
+					
+			String candidateCode = restForm.getCandidateCode();
+			candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
+			
 			EopMaintenance objEopMaintenance=new EopMaintenance();
 			EopAttendanceMaintenance objEopAttendanceMaintenance=new EopAttendanceMaintenance();
 			List<EventCandidate> list= objEopAttendanceMaintenance.getCandidateRegisteredEOP(candidateCode, agentId);
@@ -658,6 +818,11 @@ public class EventRest {
 		    
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP_REG, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		}
 		catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getCandidateRegisteredEOP --> Exception..... ");
@@ -674,20 +839,35 @@ public class EventRest {
 			return Response.status(500).entity(new Gson().toJson(beans)).build();
 		}
 	}
-	@GET
+	@POST
 	@Path("/downloadFile")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response downloadFile(@Context HttpServletRequest request,@Context HttpServletResponse response,@Context HttpServletResponse response2,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EventRest --> download File ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String eventCode = request.getParameter("eventCode");
+		/*String eventCode = request.getParameter("eventCode");
 		String materialName=request.getParameter("material");
-		
+		*/
 		
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
+			
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			if(flag==true){
+				
+				/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0); */
+				RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String eventCode = restForm.getEventCode();
+					String materialName=restForm.getMaterial();
+					
+					
 			if(eventCode!=null){
 			
 				EventMaterial  eventMat = new EopMaintenance().getEventMaterial(Integer.parseInt(eventCode),materialName);
@@ -716,6 +896,11 @@ public class EventRest {
 				return Response.status(500).entity(new Gson().toJson(beans)).build(); 
 		    
 		    }
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		   return Response.status(200).build();
 			
 		}catch(Exception e){
@@ -736,25 +921,36 @@ public class EventRest {
 		
 	}
 	
-	@GET
+	@POST
 	@Path("/getAllEopLatestMerge")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAllEopLatestMerge(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		
 		log.log(Level.INFO,"EventRest --> getAllEopLatestMerge ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
-		String candidateCode = request.getParameter("candidateCode");
-		candidateCode = null == candidateCode?"":candidateCode;
 		ArrayList<Event> list1 = null;
 		ArrayList<Event> list2 = null;
 		ArrayList mergedList = new ArrayList();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{	
 
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+
+				 /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);  */
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String agentId = restForm.getAgentId();
+					String coBranch = restForm.getCo();
+					String candidateCode = restForm.getCandidateCode();
+					candidateCode = null == candidateCode?"":candidateCode;
+			        
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 			EopMaintenance objEopMaintenance=new EopMaintenance();
 			
@@ -772,6 +968,11 @@ public class EventRest {
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
 			
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 		}catch(Exception e){
 			log.log(Level.INFO,"EventRest --> getAllEopLatestMerge --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());

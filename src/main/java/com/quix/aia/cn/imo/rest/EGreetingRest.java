@@ -27,14 +27,18 @@ package com.quix.aia.cn.imo.rest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -43,13 +47,16 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.egreeting.E_GreetingMaterial;
 import com.quix.aia.cn.imo.mapper.AamDataMaintenance;
 import com.quix.aia.cn.imo.mapper.AuditTrailMaintenance;
 import com.quix.aia.cn.imo.mapper.EgreetingMaintenance;
 import com.quix.aia.cn.imo.mapper.LogsMaintenance;
+import com.quix.aia.cn.imo.utilities.LMSUtil;
 
 
 /**
@@ -64,18 +71,35 @@ import com.quix.aia.cn.imo.mapper.LogsMaintenance;
 public class EGreetingRest {
 	static Logger log = Logger.getLogger(AnnouncementRest.class.getName());
 	
-	@GET
+	@POST
 	@Path("/getAllegreeting")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getEgreeting(@Context HttpServletRequest request,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EGreetingRest --> getEgreeting ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String agentId = request.getParameter("agentId");
-		String coBranch = request.getParameter("co");
+		/*String agentId = request.getParameter("agentId");
+		String coBranch = request.getParameter("co");*/
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
+		
+		
 		try{
+			
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 
+		if(flag==true){
+			
+			/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
+	        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+	        RestForm restForm = jsonObjList.get(0);  */
+			RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+	        String agentId = restForm.getAgentId();
+			String coBranch =restForm.getCo();
+			
 			
 			ArrayList list = new ArrayList();
 			AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
@@ -86,7 +110,11 @@ public class EGreetingRest {
 		    String json = gson.toJson(list);
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			return Response.status(200).entity(json).build();
-			
+		}else{
+			beans.setCode("500");
+			beans.setMassage("Json not valid");
+			return Response.status(500).entity(googleJson.toJson(beans)).build();
+		}
 		}catch(Exception e){
 			log.log(Level.INFO,"EGreetingRest --> getEgreeting --> Exception..... ");
 			log.log(Level.SEVERE, e.getMessage());
@@ -103,18 +131,29 @@ public class EGreetingRest {
 		}
 		
 	}
-	@GET
+	@POST
 	@Path("/downloadFile")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response downloadFile(@Context HttpServletRequest request,@Context HttpServletResponse response,
-						   @Context ServletContext context)
+						   @Context ServletContext context,String jsonString)
 	{
 		log.log(Level.INFO,"EGreetingRest --> download File ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
-		String egreetingCode = request.getParameter("egreetingCode");
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
-		
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 if(flag==true){
+				 
+				/* Type listType = new TypeToken<List<RestForm>>(){}.getType();
+			        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
+			        RestForm restForm = jsonObjList.get(0);  */
+				 
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			        String egreetingCode = restForm.getEgreetingCode();
+				 
 			E_GreetingMaterial  egreetMat = new  EgreetingMaintenance().getEgreetingMaterial(Integer.parseInt(egreetingCode));
 			  if(egreetMat!=null && (egreetMat.getMaterialName() !=null && egreetMat.getMaterialName().length()>0)){
 				    response.setContentLength((int)egreetMat.getMaterial().length);
@@ -132,6 +171,11 @@ public class EGreetingRest {
 				return Response.status(500).entity(new Gson().toJson(beans)).build(); 
 		    
 		    }
+			 }else{
+				 beans.setCode("500");
+				beans.setMassage("Json not valid");
+				return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
 			  return Response.status(200).build();
 			
 		}catch(Exception e){
