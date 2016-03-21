@@ -464,7 +464,7 @@ public class EventRest {
 		 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		try{
 			GsonBuilder builder = new GsonBuilder();
-			 Gson googleJson  = builder.create();
+			 Gson googleJson =null;
 			if(flag==true){
 				
 			
@@ -483,7 +483,7 @@ public class EventRest {
 	               }
 	           });
 	        
-	       
+	        googleJson = builder.create();
 	        Type listType = new TypeToken<List<EventCandidate>>(){}.getType();
 	        List<EventCandidate> jsonObjList = googleJson.fromJson(jsonString, listType);
 	        EventCandidate candidate = jsonObjList.get(0);  
@@ -539,6 +539,7 @@ public class EventRest {
 	        	isDeleted =true; 
 	        }
 			}else{
+				 googleJson = builder.create();
 				beans.setCode("500");
 				beans.setMassage("Json not valid");
 				return Response.status(500).entity(googleJson.toJson(beans)).build();

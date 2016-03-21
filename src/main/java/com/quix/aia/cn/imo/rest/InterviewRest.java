@@ -384,7 +384,7 @@ public class InterviewRest {
 	 AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 	try{
 		GsonBuilder builder = new GsonBuilder();
-		 Gson googleJson  = builder.create();
+		 Gson googleJson  =null;
 		if(flag==true){
 			
 		
@@ -403,7 +403,7 @@ public class InterviewRest {
                }
            });
         
-       
+        googleJson = builder.create();
         Type listType = new TypeToken<List<InterviewCandidate>>(){}.getType();
         List<InterviewCandidate> jsonObjList = googleJson.fromJson(jsonString, listType);
         InterviewCandidate candidate = jsonObjList.get(0);  
@@ -466,6 +466,7 @@ public class InterviewRest {
         	 isDeleted =true; 
         }
 		}else{
+			googleJson = builder.create();
 			beans.setCode("500");
 			beans.setMassage("Json not valid");
 			return Response.status(500).entity(googleJson.toJson(beans)).build();
