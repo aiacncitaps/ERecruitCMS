@@ -600,7 +600,7 @@ public class EopAttendanceMaintenance {
 	    	ImoUtilityData imoutill=new ImoUtilityData();
 	
 		EventCandidate candidate = null;
-		listAllCandidates = getAttendanceList(req,event.getEvent_code());
+		listAllCandidates = getAttendanceList(req,event.getEvent_code(),"");
 		LocaleObject localeObj = (LocaleObject)req.getSession().getAttribute(SessionAttributes.LOCALE_OBJ);
 		if(listAllCandidates!=null && listAllCandidates.size() > 0){
 			for(int i = 0; i < listAllCandidates.size(); i++)
@@ -644,12 +644,19 @@ public class EopAttendanceMaintenance {
 	 * <p>get all attendance registered for particular event</p>
 	 * @param req   Servlet Request Parameter
 	 * @param eventCode
+	 * @param agentId2 
 	 * @return List of Candidates
 	 */
-	public  ArrayList<EventCandidate> getAttendanceList(HttpServletRequest req,int eventCode)
+	public  ArrayList<EventCandidate> getAttendanceList(HttpServletRequest req,int eventCode, String agentId2)
 	{
 		 Session session = null;
-			String agentId = req.getParameter("agentId");
+		 String agentId="";
+		 if(req.getParameter("agentId")!=null){
+			 agentId = req.getParameter("agentId");
+		 }else{
+			 agentId = agentId2;
+		 }
+			
 			Boolean isRest = (Boolean) req.getAttribute("isRest");
 		ArrayList<EventCandidate> attendanceList = new ArrayList<EventCandidate>();
 		try{

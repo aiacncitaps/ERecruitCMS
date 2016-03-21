@@ -405,7 +405,7 @@ public class EventRest {
 			request.setAttribute("isRest", true);
 			ArrayList list = new ArrayList();
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
-			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode));
+			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode),agentId);
 			for(Iterator itr=list.iterator();itr.hasNext();){
 				EventCandidate eventCandidate = (EventCandidate) itr.next();
 				if(null == eventCandidate.getTimeIn()){
@@ -710,7 +710,7 @@ public class EventRest {
 			ArrayList list = new ArrayList();
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
 			
-			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode));
+			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode),agentId);
 			registeredCount = list.size();
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			}else{
