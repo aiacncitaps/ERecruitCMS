@@ -24,6 +24,7 @@
 package com.quix.aia.cn.imo.data.holiday;
 
 import java.util.Date;
+
 import com.quix.aia.cn.imo.utilities.LMSUtil;
 import com.quix.aia.cn.imo.utilities.SecurityAPI;
 /**
@@ -50,8 +51,34 @@ public class Holiday {
 	private String iconSelection;
 	private int branchCode;
 	private String branchName;
+	private String officeCode;
+	private String officeName;
+	private String buName;
+	private String distName;
+	private String cityName;
+	private String sscName;
+	private String postedBy;
 	
-	
+	public String getOfficeCode() {
+		return officeCode;
+	}
+
+
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
+	}
+
+
+	public String getOfficeName() {
+		return officeName;
+	}
+
+
+	public void setOfficeName(String officeName) {
+		this.officeName = officeName;
+	}
+
+
 	public int getBranchCode() {
 		return branchCode;
 	}
@@ -71,11 +98,7 @@ public class Holiday {
 		this.branchName = branchName;
 	}
 
-	private String buName;
-	private String distName;
-	private String cityName;
-	private String sscName;
-	private String postedBy;
+	
 	
 	/**
 	 * <p>Default Constructor.Setting default values for Holiday fields.</p>
@@ -99,6 +122,8 @@ public class Holiday {
 		iconSelection="";
 		branchCode=0;
 		branchName="";
+		officeCode="";
+		officeName="";
 		
 	}
 	

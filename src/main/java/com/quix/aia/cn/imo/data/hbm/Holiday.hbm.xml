@@ -33,11 +33,11 @@
             <column name="BU"  />
         </property>
         
-        <property  name="cityCode" type="java.lang.Integer">
+        <property  name="cityCode" type="java.lang.String">
             <column name="CITY"  />
         </property>
         
-        <property  name="sscCode" type="java.lang.Integer">
+        <property  name="sscCode" type="java.lang.String">
             <column name="SSC"  />
         </property>
      <property  name="branchCode" type="java.lang.Integer">
@@ -77,11 +77,20 @@
             <column name="STATUS"  />
         </property>
         
+        <property  name="officeCode" type="java.lang.String">
+            <column name="OFFICE"  />
+        </property>
+        
         <property name="buName" formula="(SELECT b.BU_NAME FROM T_BU b where b.BU_CODE=BU)" update="false"></property>
         <property name="distName" formula="(SELECT d.DISTRICT_NAME FROM T_DISTRICT d WHERE d.DISTRICT_CODE=DISTRICT) " update="false"></property>
-                <property name="cityName" formula="(SELECT c.CITY_FULLNAME FROM T_CITY c WHERE c.CITY_CODE=CITY) " update="false"></property>
-        <property name="sscName" formula="(SELECT s.SSC_FULLNAME FROM T_SSC s WHERE s.SSC_CODE=SSC) " update="false"></property>
-       <property name="branchName" formula="(SELECT b.BRANCH_FULLNAME FROM T_BRANCH b WHERE b.BRANCH_CODE=BRANCH) " update="false"></property>
+        <property name="branchName" formula="(SELECT b.BRANCH_FULLNAME FROM T_BRANCH b WHERE b.BRANCH_CODE=BRANCH) " update="false"></property>
+       <!--  <property name="cityName" formula="(SELECT c.CITY_FULLNAME FROM T_CITY c WHERE c.CITY_CODE=CITY) " update="false"></property> -->
+        <property name="cityName" formula="(SELECT c.CITYNAME FROM CITY_ER c WHERE c.CITYCOD=CITY) " update="false"></property>
+        <!-- <property name="sscName" formula="(SELECT s.SSC_FULLNAME FROM T_SSC s WHERE s.SSC_CODE=SSC) " update="false"></property> -->
+        <property name="sscName" formula="(SELECT  MAX(s.LOCNAME) FROM LOCAT_ER s WHERE s.LOCCODE=SSC AND s.CTYCOD=CITY ) " update="false"></property>
+        <property name="officeName" formula="(SELECT b.OFFNAME FROM OFFICE_ER b WHERE b.OFFCOD=OFFICE and b.CTYCOD=CITY AND b.LOCCODE=SSC AND b.CO=(SELECT TB.BRANCH_NAME FROM T_BRANCH TB WHERE TB.BRANCH_CODE=BRANCH)) " update="false"></property>
+       
+       
 
     </class>
 </hibernate-mapping>
