@@ -912,63 +912,6 @@ public class HolidayMaintenance {
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
-//			Criteria crit = session.createCriteria(Ssc.class);
-//			crit.add(Restrictions.eq("sscName", aamData.getSsc()));
-//			crit.add(Restrictions.eq("status", true));
-//			ssclist=(ArrayList<Ssc>) crit.list();
-//			Ssc ssc=ssclist.get(0);
-//			
-//			Query query=session.createQuery("FROM City where status = 1 and cityCode=:citycode ");
-//			query.setParameter("citycode", ssc.getCityCode());
-//			citylist=(ArrayList<City>) query.setCacheable(true).list();
-//			City city=citylist.get(0);
-//			
-//			query=session.createQuery("FROM District where status = 1 and districtCode=:distcode ");
-//			query.setParameter("distcode", city.getBranchCode());
-//			distlist=(ArrayList<District>) query.setCacheable(true).list();
-//			District dist=distlist.get(0);
-//			
-//			query = session.createQuery("FROM Bu where status = 1 and buCode=:bucode ");		
-//			query.setParameter("bucode", dist.getBuCode());
-//			bulist=(ArrayList<Bu>) query.setCacheable(true).list();
-//			Bu bu=bulist.get(0);
-
-			
-			
-			/*Query query=session.createQuery("FROM Holiday where status = 1 and buCode=:bucode  and district=0 ");
-			query.setParameter("bucode",aamData.getBuCode());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);
-			
-			query=session.createQuery("FROM Holiday where status = 1  and district=:distcode and  branchCode=0 ");
-			query.setParameter("distcode",aamData.getDistrictCode());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);
-			
-			
-			query=session.createQuery("FROM Holiday where status = 1  and branchCode=:branchCode and  cityCode=0 ");
-			query.setParameter("branchCode",aamData.getBranchCode());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);
-			
-			
-			
-			query=session.createQuery("FROM Holiday where status = 1  and cityCode=:citycode and sscCode=0 ");
-			query.setParameter("citycode", aamData.getCity());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);
-			
-			
-			query=session.createQuery("FROM Holiday where status = 1 and  sscCode=:ssccode ");
-			query.setParameter("ssccode", aamData.getSsc());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);
-			
-			query=session.createQuery("FROM Holiday where status = 1 and  sscCode=:ssccode ");
-			query.setParameter("ssccode", aamData.getSsc());
-			list=(ArrayList<Holiday>) query.setCacheable(true).list();
-			holidayList.addAll(list);*/
-			
 			
 			Query query=session.createQuery("FROM Holiday where status = 1 "
 					+ " AND ( (buCode=:bucode  and district=0) "
@@ -987,14 +930,6 @@ public class HolidayMaintenance {
 			
 			list=(ArrayList<Holiday>) query.setCacheable(true).list();
 			holidayList.addAll(list);
-			
-			
-			System.out.println(aamData.getBuCode());
-			System.out.println(aamData.getDistrictCode());
-			System.out.println(aamData.getBranchCode());
-			System.out.println(aamData.getCity());
-			System.out.println(aamData.getSsc());
-			System.out.println(aamData.getOfficeCode());
 			
 			
 			Date edate=new Date();
