@@ -512,14 +512,14 @@ public class EventRest {
 	        
 	        
 	        
-	        
+	        addressCode=candidate.getEventCandidateCode();
 	        if(!objMaintenance.checkDuplicateCandiadteReg(""+candidate.getEventCode(), candidate.getServicingAgent(), candidate.getEventCandidateCode())){
 			    status=true; 
 		        objMaintenance.createNewCandidateRest(candidate,request, aamData);
 		        registeredCount++;
 		        AddressBookMaintenance addrBookMain = new AddressBookMaintenance();
 		        String emailAddrs = addrBookMain.getEmailAddress(Integer.parseInt(candidate.getEventCandidateCode()));		        
-		        addressCode=candidate.getEventCandidateCode();
+		        
 		        if(emailAddrs!=null && emailAddrs.length()>0){
 		        	EmailNotification.sendEopRegEmailNotification(candidate,emailAddrs, aamData);
 		        }
