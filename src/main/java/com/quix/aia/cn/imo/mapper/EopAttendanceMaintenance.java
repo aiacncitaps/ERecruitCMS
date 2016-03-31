@@ -694,6 +694,61 @@ public class EopAttendanceMaintenance {
 		return attendanceList;
 	}
 	
+	/**
+	 * <p>get all attendance registered for particular event</p>
+	 * @param req   Servlet Request Parameter
+	 * @param eventCode
+	 * @param agentId2 
+	 * @return List of Candidates
+	 */
+	public  Integer getAttendanceListRest(HttpServletRequest req,int eventCode, String agentId2)
+	{
+		 Session session = null;
+		 String agentId="";
+		 Integer count =0;
+		 if(req.getParameter("agentId")!=null){
+			 agentId = req.getParameter("agentId");
+		 }else{
+			 agentId = agentId2;
+		 }
+			
+			Boolean isRest = (Boolean) req.getAttribute("isRest");
+		ArrayList<EventCandidate> attendanceList = new ArrayList<EventCandidate>();
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Criteria crit = session.createCriteria(EventCandidate.class);
+			
+			if(null != isRest && true == isRest){
+				crit.add(Restrictions.eq("servicingAgent", agentId));
+			}
+			
+			crit.add(Restrictions.eq("eventCode", eventCode));
+			crit.add(Restrictions.eq("status", true));
+			crit.addOrder(Order.desc("candidateCode"));
+			crit.setProjection(Projections.rowCount());
+			 count = ((Long) crit.uniqueResult()).intValue();
+			
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	}
+		//req.getSession().setAttribute("EOP_ATTENDANCE_LIST", attendanceList);
+		return count;
+	}
 	
 	
 	/**

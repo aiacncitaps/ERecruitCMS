@@ -710,8 +710,10 @@ public class EventRest {
 			ArrayList list = new ArrayList();
 			EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
 			
-			list = objMaintenance.getAttendanceList(request,Integer.parseInt(eventCode),agentId);
-			registeredCount = list.size();
+			registeredCount = objMaintenance.getAttendanceListRest(request,Integer.parseInt(eventCode),agentId);
+			
+			
+			//registeredCount = list.size();
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			}else{
 				beans.setCode("500");
