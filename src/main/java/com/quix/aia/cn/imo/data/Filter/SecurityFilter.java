@@ -125,7 +125,8 @@ public class SecurityFilter implements Filter {
 				
 			}
 			
-		/*if(FullPath != null && FullPath.contains("/rest") &&  !FullPath.contains("/validateVersion")){
+		if(FullPath != null && FullPath.contains("/rest") &&  !FullPath.contains("/validateVersion") && !FullPath.contains("/pushDetails")
+				&& !FullPath.contains("/pushResults") && !FullPath.contains("/pushContractedDetails")){
 				
 			
 			
@@ -143,19 +144,36 @@ public class SecurityFilter implements Filter {
 					Calendar c = Calendar.getInstance();
 					c.add(Calendar.MINUTE, 3);
 					String o = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz").format( c.getTime() );
-					httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
+				//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";Secure; HttpOnly");
+					
+				//	for our server
+				//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
 				}
 				
+			}else if(FullPath.contains("/pushDetails") || FullPath.contains("/pushResults") || FullPath.contains("/pushContractedDetails")){
+				
+			
 			}
+		// for our server
+		/*
 		else if (FullPath.contains("/validateVersion"))
 		{
 			String sessionid = httpRequest.getSession().getId();
-			// be careful overwriting: JSESSIONID may have been set with other flags
-			//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, 15);
 			String o = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz").format( c.getTime() );
-			httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
+		//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";Secure; HttpOnly");
+			//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
+			
+		}
+		else{
+		
+				httpRequest = (HttpServletRequest)request;
+				String sessionid = httpRequest.getSession().getId();
+				// be careful overwriting: JSESSIONID may have been set with other flags
+			//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
+				//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; ");
+				
 			
 		}*/
 			
@@ -170,12 +188,12 @@ public class SecurityFilter implements Filter {
 
 			// It can be done JBoss or web.xml. In this project we have done in web.xml
 			
-		//	HttpServletRequest  httpRequest = (HttpServletRequest)request;
-			//String sessionid = httpRequest.getSession().getId();
+			 /* httpRequest = (HttpServletRequest)request;
+			String sessionid = httpRequest.getSession().getId();
 			// be careful overwriting: JSESSIONID may have been set with other flags
-			//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
-				
+			httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
 			
+			*/
 			
 			/* SSLContext sc = SSLContext.getInstance("TLS");
 		     sc.init(null, trustAllCerts, new SecureRandom());
