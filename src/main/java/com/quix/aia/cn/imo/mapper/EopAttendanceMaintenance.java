@@ -725,7 +725,7 @@ public class EopAttendanceMaintenance {
 			
 			crit.add(Restrictions.eq("eventCode", eventCode));
 			crit.add(Restrictions.eq("status", true));
-			crit.addOrder(Order.desc("candidateCode"));
+//			crit.addOrder(Order.desc("candidateCode"));
 			crit.setProjection(Projections.rowCount());
 			 count = ((Long) crit.uniqueResult()).intValue();
 			
