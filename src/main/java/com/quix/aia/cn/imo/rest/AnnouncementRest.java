@@ -222,8 +222,8 @@ public class AnnouncementRest {
 				auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			}else{
 				log.log(Level.INFO,"File Not found to download ");
-				beans.setCode("500");
-				beans.setMassage("Download Error  ");
+				beans.setCode("404");
+				beans.setMassage("File not found");
 				auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_ANNOUNCEMENT, AuditTrail.FUNCTION_REST, "FAILED"));
 				return Response.status(500).entity(new Gson().toJson(beans)).build();
 

@@ -593,7 +593,7 @@ public class EventRest {
 				String candidateCode = restForm.getCandidateCode();
 				candidateCode = candidateCode==null||candidateCode.equals("")?"0":candidateCode;
 				
-				AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
+				//AamData aamData = AamDataMaintenance.retrieveDataToModel(agentId, coBranch); 
 				EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
 				boolean isExist = objMaintenance.checkDuplicateCandiadteReg(eventCode, agentId, candidateCode);
 				String responseJsonString="[{\"agentId\":\""+agentId+"\",\"eventCode\":\""+eventCode+"\",\"isExist\":"+isExist+"}]";
@@ -885,8 +885,8 @@ public class EventRest {
 				    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			    }else{	log.log(Level.INFO,"File Not found to download ");
 			    
-					beans.setCode("500");
-					beans.setMassage("Download Error");
+					beans.setCode("404");
+					beans.setMassage("File not found");
 					auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "FAILED"));
 					return Response.status(500).entity(new Gson().toJson(beans)).build(); 
 			    
