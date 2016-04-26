@@ -2654,9 +2654,12 @@ public class EopMaintenance {
 		session = HibernateFactory.openSession();
 		session.setDefaultReadOnly(true);
 		Query selectQ=null;
-		if(materialName!=null){
+		if(materialName!=null && materialName.length()>0){
 			if(materialName.equalsIgnoreCase("Profile")){
 				selectQ = session.createQuery("select materialName,material from EventMaterial where eventCode = "+eventCode+" and fieldName = 'ProfileMaterial'");
+			}
+			if(materialName.length()==0){
+				selectQ = session.createQuery("select materialName,material from EventMaterial where eventCode = "+eventCode+" and fieldName = 'TopicFile'");
 			}
 		}else{
 			selectQ = session.createQuery("select materialName,material from EventMaterial where eventCode = "+eventCode+" and fieldName = 'TopicFile'");
