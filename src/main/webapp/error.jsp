@@ -44,7 +44,9 @@
               				 <tr>
 	               				<td colspan="3" style="border: none;color:red"  >	 
 		               				
-        	Oops, Something wrong happen. Please contact administer or <a href="login.jsp" style="text-decoration: none">Login</a> again.
+        	<!-- Oops, Something wrong happen. Please contact administer or <a href="login.jsp" style="text-decoration: none">Login</a> again. -->
+        	系统异常/超时， 请重新<a href="login.jsp" style="text-decoration: none">登录 </a>
+        	
        
 				              	 </td>
 		               		</tr>     
