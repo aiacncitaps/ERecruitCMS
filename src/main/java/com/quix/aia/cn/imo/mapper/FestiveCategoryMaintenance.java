@@ -310,7 +310,7 @@ public class FestiveCategoryMaintenance {
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try {
 			session = HibernateFactory.openSession();
-
+			session.setDefaultReadOnly(true);
 			Query query = session
 					.createQuery("select count(*) from FestiveCategory where status=true and FestiveCategoryName=:FestiveCategoryName and festiveCategoryCode!=:festiveCategoryCode");
 			query.setParameter("FestiveCategoryName", name);

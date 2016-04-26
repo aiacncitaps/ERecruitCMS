@@ -712,7 +712,7 @@ public  AddressBook getInterviewCandidateCCTest(Interview interview,int candidat
 	 try
 		{
 		    session = HibernateFactory.openSession();
-		   
+		    session.setDefaultReadOnly(true);
 		    Query query= session.createQuery("from InterviewCandidate where candidateCode=:candidatecode and interviewCode=:interviewCode ");
 		    query.setParameter("candidatecode", candidateCode);
 		    query.setParameter("interviewCode", interview.getInterview_code());
@@ -759,6 +759,7 @@ public  InterviewCandidateMaterial getApplicationForm(int interview_code,HttpSer
 	try
 		{
 		    session = HibernateFactory.openSession();
+		    session.setDefaultReadOnly(true);
 		    Query query= session.createQuery("from InterviewCandidateMaterial where interviewCode=:code ");
 		    query.setParameter("code", interview_code);
 		     list= (ArrayList) query.list();
@@ -1549,6 +1550,7 @@ public boolean checkDuplicateInterview(Interview interviewObj){
 	Session session = null;
 	try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ = session.createQuery("select  interview_code from Interview  where interviewSessionName =:interviewSessionName and interview_code!=:interview_code");
 		selectQ.setParameter("interviewSessionName", interviewObj.getInterviewSessionName());
 		selectQ.setParameter("interview_code", interviewObj.getInterview_code());
@@ -1664,7 +1666,7 @@ public ArrayList getAllInterview() {
 	try {
 
 		session = HibernateFactory.openSession();
-
+		session.setDefaultReadOnly(true);
 		Query query = session
 				.createQuery(" from Interview where status = 1 ");
 		arrActivity = (ArrayList) query.list();
@@ -2028,6 +2030,7 @@ public List<Object[]> getRegisteredEmailAddressForParticularInterview(int code){
 	List  emailAddrs = null;
 	try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		Query selectQ = session.createQuery("select eMailId, addressCode, agentId, name, gender, qrCode, co from  AddressBook where addressCode in(select  interviewCandidateCode from InterviewCandidate where status=1 and interviewCode=:interviewCode)");
 		selectQ.setParameter("interviewCode", code);
 		emailAddrs =(ArrayList<String>) selectQ.list();
@@ -2637,6 +2640,7 @@ public   String  getmaterialFile(Interview interview,HttpServletRequest req)
 	String path="#";
 	try{
 		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		 Criteria criteria = session.createCriteria(InterviewMaterial.class);
 		 criteria.add(Restrictions.eq("interviewCode", interview.getInterview_code()));
 		 ArrayList list = (ArrayList) criteria.list();
@@ -2681,6 +2685,7 @@ public InterviewCandidate getInterviewCandidateCode(int interview_code) {
 	
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			 Criteria criteria = session.createCriteria(InterviewCandidate.class);
 			 criteria.add(Restrictions.eq("interviewCode", interview_code));
 			 ArrayList list = (ArrayList) criteria.list();
@@ -2717,6 +2722,7 @@ public String getRegisteredCandidatesFor2ndInterviewSession(
 	String csvPath = "";
 	try{
 	session = HibernateFactory.openSession();
+	session.setDefaultReadOnly(true);
 	Query selectQ = session.createQuery("select I.interviewSessionName,I.interviewDate,I.StartTime,I.EndTime,IC.candidateName,IC.servicingAgent,IC.agentName,IC.buName,IC.distName,IC.branchName,IC.cityName,IC.officeName,IC.sscName,IC.agencyLeaderCode,IC.agencyLeaderName,IC.sourceOfReferal,IC.age,IC.dob,IC.gender,IC.contactNumber,IC.ccTestResult,IC.recruitmentScheme from Interview I,InterviewCandidate IC  where I.interview_code = IC.interviewCode and I.status = 1 and I.interviewType = '2nd' and  IC.status =1");
 	ArrayList list = (ArrayList)selectQ.list();
 
@@ -2749,6 +2755,7 @@ public int getBranchCode(int interviewCode) {
 	 int code=0;
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Interview interview = (Interview) session.get(Interview.class,interviewCode) ;
 			if(interview!=null){
 				 code=interview.getBranchCode();

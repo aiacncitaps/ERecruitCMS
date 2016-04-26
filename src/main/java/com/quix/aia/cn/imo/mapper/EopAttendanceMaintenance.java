@@ -471,6 +471,7 @@ public class EopAttendanceMaintenance {
 		Session session = null;
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 		    Query selectQ = session.createQuery("select  candidateCode from EventCandidate  where eventCode =:eventCode and servicingAgent=:servicingAgent and eventCandidateCode=:eventCandidateCode and candidateCode<>:candidateCode and status=:status");
 			selectQ.setParameter("eventCode",Integer.parseInt(eventCode));
 			selectQ.setParameter("servicingAgent", servicingAgent);
@@ -807,6 +808,7 @@ public class EopAttendanceMaintenance {
 		 EventCandidate candidate = new EventCandidate();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			candidate = (EventCandidate)session.get(EventCandidate.class,candidateCode);
 	  
 		}catch(Exception e)

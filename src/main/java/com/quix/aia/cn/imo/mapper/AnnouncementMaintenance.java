@@ -858,6 +858,7 @@ public class AnnouncementMaintenance {
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Query selectQ = session.createQuery("select  annoucement_code from Announcement  where subject =:subject and publishedDate=:publishedDate and annoucement_code<>:annoucement_code");
 			selectQ.setParameter("subject", announcement.getSubject());
 			selectQ.setParameter("publishedDate", announcement.getPublishedDate());
@@ -941,6 +942,7 @@ public class AnnouncementMaintenance {
 		LogsMaintenance logsMain=new LogsMaintenance();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			 Criteria criteria = session.createCriteria(AnnouncementMaterial.class);
 			 criteria.add(Restrictions.eq("annoucementCode", announcement.getAnnoucement_code()));
 			 ArrayList list = (ArrayList) criteria.list();

@@ -815,7 +815,7 @@ public class UserMaintenance {
 			{
 				List arrActivity = new ArrayList();
 				session = HibernateFactory.openSession();
-				
+				session.setDefaultReadOnly(true);
 				
 				Query query = session.createQuery(" from User  where staffLoginId=:staffLoginId and status = 1  "+str+" ");
 				query.setParameter("staffLoginId", staffLoginId.toUpperCase());
@@ -868,7 +868,7 @@ public class UserMaintenance {
 			{
 				List arrActivity = new ArrayList();
 				session = HibernateFactory.openSession();
-				
+				session.setDefaultReadOnly(true);
 				Query query = session.createQuery(" from User  where email=:email and status = 1 "+str+" ");
 				query.setParameter("email", mailId);
 				if(i!=0){
@@ -1456,7 +1456,7 @@ public class UserMaintenance {
 		 try
 		 {
 			 session = HibernateFactory.openSession();
-			 
+			 session.setDefaultReadOnly(true);
 			 Query query = session.createQuery("from Version where ver_date in(select max(ver_date) from Version)");
 			 list=(ArrayList) query.list();
 			 

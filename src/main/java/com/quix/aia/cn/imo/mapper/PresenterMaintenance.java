@@ -586,6 +586,7 @@ public class PresenterMaintenance
 			String office = req.getParameter("office");
 			String branchCode=req.getParameter("branchCode");
 			Session session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			try
 			{
 				Criteria crit = session.createCriteria(Presenter.class);
@@ -704,6 +705,7 @@ public class PresenterMaintenance
 			  log.log(Level.INFO,"PresenterMaintenance --> get presneter detail ");
 				Presenter presenter = new Presenter();
 				Session session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				try{
 				presenter = (Presenter)session.get(Presenter.class,presenterCode);
 				}catch(Exception e)
@@ -738,6 +740,7 @@ public class PresenterMaintenance
 				try {
 
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					Criteria crit = session.createCriteria(Presenter.class);
 					crit.add(Restrictions.sqlRestriction("MONTH(START_DATE)=?",month,IntegerType.INSTANCE));
 					crit.add(Restrictions.sqlRestriction("YEAR(START_DATE)=?", year,IntegerType.INSTANCE));

@@ -153,6 +153,7 @@ public  ArrayList getAllCCTest(HttpServletRequest req)
 	try
 	{
 		session = HibernateFactory.openSession();   
+		session.setDefaultReadOnly(true);
 		/*Criteria criteria = session.createCriteria(AddressBook.class);
 		if(agent_code!=null && agent_code.length() > 0){
 			criteria.add(Restrictions.like("agentId", agent_code));
@@ -226,7 +227,8 @@ public  ArrayList getCCTest(HttpServletRequest req,String agentId)
 	Session session = null;
 	try
 	{
-		session = HibernateFactory.openSession();   
+		session = HibernateFactory.openSession(); 
+		session.setDefaultReadOnly(true);
 		/*Criteria criteria = session.createCriteria(AddressBook.class);
 		if(agent_code!=null && agent_code.length() > 0){
 			criteria.add(Restrictions.like("agentId", agent_code));

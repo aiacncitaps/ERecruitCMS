@@ -393,6 +393,7 @@ public class InterviewAttendanceMaintenance {
 		ArrayList<InterviewCandidate> attendanceList = new ArrayList<InterviewCandidate>();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			
 			crit.add(Restrictions.eq("interviewCode", interviewCode));
@@ -444,6 +445,7 @@ public class InterviewAttendanceMaintenance {
 		ArrayList<InterviewCandidateMaterial> list = new ArrayList<InterviewCandidateMaterial>();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidateMaterial.class);
 			
 			crit.add(Restrictions.eq("candidateCode", candidateCode));
@@ -525,6 +527,7 @@ public class InterviewAttendanceMaintenance {
 		ArrayList<InterviewCandidateMaterial> materialList = new ArrayList<InterviewCandidateMaterial>();
 		try{
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			
 			crit.add(Restrictions.eq("nric", nric));
@@ -861,6 +864,7 @@ public class InterviewAttendanceMaintenance {
 		 try
 			{
 			    session = HibernateFactory.openSession();
+			    session.setDefaultReadOnly(true);
 			    	 address=(AddressBook) session.get(AddressBook.class,Integer.parseInt(interviewCandidateCode));
 			}
 			catch(Exception e)
@@ -941,6 +945,7 @@ public class InterviewAttendanceMaintenance {
 		try
 			{
 			    session = HibernateFactory.openSession();
+			    session.setDefaultReadOnly(true);
 			   // interviewcandidate=(InterviewCandidate) session.get(InterviewCandidate.class,Integer.parseInt(interviewCandidateCode));
 			    
 			    Criteria criteria = session.createCriteria(InterviewCandidate.class);

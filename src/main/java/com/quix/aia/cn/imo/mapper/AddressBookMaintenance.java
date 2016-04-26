@@ -259,7 +259,8 @@ public class AddressBookMaintenance {
 		if (null != dateTime && !"".equals(dateTime)) {
 			date = LMSUtil.convertDateToyyyymmddhhmmssDashed(dateTime);
 		}
-
+//		 if(Integer.parseInt(pageNo) <= 1){
+			 
 		if (Long.parseLong(pageNo) > 0) {
 			firstRecordNo = ((addressBookListingOffset * Integer.parseInt(pageNo)) - addressBookListingOffset);
 		}
@@ -317,7 +318,11 @@ public class AddressBookMaintenance {
 			candidateWorkExperienceMaintenance = null;
 			candidateNoteMaintenance = null;
 		}
+		 /*}else{
+			   list = new ArrayList<AddressBook>();
+			  }*/
 		return list;
+		 
 	}
 	
 	/**
@@ -430,6 +435,7 @@ public class AddressBookMaintenance {
 
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.add(Restrictions.eq("iosAddressCode", iosAddressCode));
 			criteria.add(Restrictions.eq("agentId", agentId));
@@ -477,6 +483,7 @@ public class AddressBookMaintenance {
 
 		try {
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			criteria = session.createCriteria(AddressBook.class);
 			criteria.add(Restrictions.eq("name", addressBook.getName()));
 			criteria.add(Restrictions.eq("birthDate", addressBook.getBirthDate()));
