@@ -35,7 +35,17 @@ function alphanumeric(inputtxt)
   }
 else
   { 
-	$("#userID").val('000'+inputtxt.value);
+	
+	//alert(inputtxt.value.length);
+	var count=9-inputtxt.value.length;
+	var str='';
+	
+	var i;
+	for(i=0 ; i<count ; i++){
+		str=str+'0';
+	}
+	
+	$("#userID").val(str+inputtxt.value);
    return true; 
   }
   }
