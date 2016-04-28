@@ -26,8 +26,46 @@ function submitForm()
 {
 	document.loginForm.submit();	
 }
+function alphanumeric(inputtxt)
+{
+ if((/[^0-9a-bA-B\s]/gi.test(inputtxt.value))) 
+  {
+	 //alert("alfanumeric");
+   return true;
+  }
+else
+  { 
+	$("#userID").val('000'+inputtxt.value);
+   return true; 
+  }
+  }
+
 </SCRIPT>
 
+<!-- <script>
+$( document ).ready(function() {
+	 alert("alfanumeric");  
+	
+	
+});
+$("#userID").focusout(function(){
+	 alert("alfanumeric");   
+var inputtxt= $("#userID").val();
+  var letterNumber = /^[0-9a-zA-Z]+$/;  
+	 if((inputtxt.value.match(letterNumber)))  
+	  {  
+		 alert("alfanumeric");   
+	   return false;  
+	  }  
+	else  
+	  {   
+	   alert("numeric");   
+	   return false;   
+	  } 
+   
+});
+
+</script> -->
 </head>
 
 <body onload="dwr.engine.setActiveReverseAjax(true);">
@@ -73,7 +111,7 @@ if(application.getAttribute(ApplicationAttribute.LATEST_JS_CSS_VERSION)!=null)
 				            </tr>          					
 			               <tr>                         
 				               <td ><label >用户</label></td>
-				               <td ><input name="userID" id="userID" type="text" class="textObj" style="width:80%" autocomplete="off"/></td>
+				               <td ><input name="userID" id="userID" type="text" class="textObj" style="width:80%" autocomplete="off" onblur="alphanumeric(this);"/></td>
 				               <td align="left">	
 									<select name="SelectLang" id="SelectLang" class="comboObj" >
 										 <option value="CN" >Chinese</option>           		 
@@ -130,7 +168,7 @@ if(application.getAttribute(ApplicationAttribute.LATEST_JS_CSS_VERSION)!=null)
 							 <div class="grid_12 MT25">
 						<div style="float:right;">
 						 <a  style="color: white; font-size: 12px; text-decoration: none; " href="Terms&Condition/Tearms.docx">条款与条件</a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color: white; font-size: 12px; text-decoration: none;" href="Terms&Condition/Preivacy.docx">隐私声明</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						Version : 1.38</div> Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. 
+						Version : 1.42</div> Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. 
 					</div> <%-- <%=version %> --%>
 				</div>
 	 </div>

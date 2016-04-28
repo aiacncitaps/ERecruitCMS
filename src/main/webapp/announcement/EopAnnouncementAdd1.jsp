@@ -178,11 +178,11 @@ function uploadMaterial(){
 					$('#ajaxLoader').find(".lightbox").hide();
 				});
 				}else{
-					alert("Please Upload File Less then 5 MB");
+					alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 					$('#AnnouncementMaterial').val('');
 				} 
 			}else{
-				alert("Please Upload file with extension .pdf");
+				alert('<%=localeObj.getTranslatedText("Please Upload file with extension .pdf")%>');
 				$('#uploadMaterialFile').val('');
 				
 				if(document.getElementById('AnnouncementMaterial') != null) 
@@ -194,7 +194,7 @@ function uploadMaterial(){
 			}
 		}else{
 			
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadMaterialFile').val('');
 		}
 	}else{
@@ -248,7 +248,7 @@ function uploadMaterial(){
 		        announcementMaterialTD.appendChild(files);
 		        files.style.display = "block";
 			}else{
-				alert("Please Upload file with extension .pdf");
+				alert('<%=localeObj.getTranslatedText("Please Upload file with extension .pdf")%>');
 				$('#uploadMaterialFile').val('');
 				
 				if(document.getElementById('AnnouncementMaterial') != null) 
@@ -261,7 +261,7 @@ function uploadMaterial(){
 
 		}else{
 			
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadMaterialFile').val('');
 		}
 

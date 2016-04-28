@@ -2,6 +2,7 @@ package com.quix.aia.cn.imo.servlets;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,7 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+import com.quix.aia.cn.imo.data.event.EventCandidate;
 import com.quix.aia.cn.imo.data.user.User;
+import com.quix.aia.cn.imo.mapper.EopAttendanceMaintenance;
+import com.quix.aia.cn.imo.mapper.EopMaintenance;
 import com.quix.aia.cn.imo.utilities.EmailNotification;
 
 public class demo {
@@ -43,11 +47,17 @@ public class demo {
 		System.out.println(o);*/
 		
 		
-		System.out.println(demo.sstr);
+	//	System.out.println(demo.sstr);
 		
 		/*String str="[{'eventCode':143,'candidateName':'BHP','servicingAgent':'S00012','dob':'2013-07-04','gender':'F','timeIn':'10:10:00'}]";
 		boolean flag=isJSONValid(str);
 		System.out.println(flag);*/
+		
+		EopMaintenance main=new EopMaintenance();
+		List ls=main.getRegisteredEmailAddressForParticularEvent(1);
+		System.out.println("done");
+		
+		
 	}
 	
 	public  boolean isJSONValid(String test) {

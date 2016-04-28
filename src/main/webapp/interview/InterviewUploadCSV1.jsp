@@ -42,21 +42,21 @@ String localKey = localeObj.getKey();
 							
 						});
 					 // hideProgress();
-					  //alert("CSV file Uploaded Successfully");
+					  //alert('<%=localeObj.getTranslatedText("CSV file Uploaded Successfully")%>');
 					  $("#submit").show();
 					}
 					else{
 						 if(lang == 'CN')
-							 alert("请上传文件扩展XLSX或XLS");
+							 alert('<%=localeObj.getTranslatedText("请上传文件扩展XLSX或XLS")%>');
 						 else
-							alert("Please Upload file with extension xlsx OR xls");
+							alert('<%=localeObj.getTranslatedText("Please Upload file with extension xlsx OR xls")%>');
 					}
 			   }
 			  else{
 				  if(lang == 'CN')
-						alert("请上传文件");
+						alert('<%=localeObj.getTranslatedText("请上传文件")%>');
 				  else
-					alert("Please Upload a file");
+					alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			   }
 	    }else{
 	    	var material_name=$("#csvFile").val();
@@ -113,16 +113,16 @@ String localKey = localeObj.getKey();
 		    	}
 				else{
 					 if(lang == 'CN')
-						 alert("请上传文件扩展XLSX或XLS");
+						 alert('<%=localeObj.getTranslatedText("请上传文件扩展XLSX或XLS")%>');
 					 else
-						alert("Please Upload file with extension xlsx OR xls");
+						alert('<%=localeObj.getTranslatedText("Please Upload file with extension xlsx OR xls")%>');
 				}	
 
 	    	}  else{
 					  if(lang == 'CN')
-							alert("请上传文件");
+							alert('<%=localeObj.getTranslatedText("请上传文件")%>');
 					  else
-						alert("Please Upload a file");
+						alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 				   }
 	    }
 		$('#ajaxLoader').find(".lightbox").hide();

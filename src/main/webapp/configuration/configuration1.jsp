@@ -117,10 +117,10 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 	    	var appType=$('#appType').val();
 	    	var appURL=$('#appURL').val();
 	    	if($('#version').val().length == 0){
-	    		alert("Require version");
+	    		alert('<%=localeObj.getTranslatedText("Require version")%>');
 	    		return false;	
 	    	}else if($('#build').val().length == 0){
-	    		alert("Require Build");
+	    		alert('<%=localeObj.getTranslatedText("Require Build")%>');
 	    		return false;	
 	    	}
 	    	
@@ -142,10 +142,10 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
 			    	    }	
 			        });
 		        }else{
-		        	alert("Please Upload file with extension .plist");
+		        	alert('<%=localeObj.getTranslatedText("Please Upload file with extension .plist")%>');
 		        }
 	        }else{
-	        	alert("Please Upload a file");
+	        	alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 	        }
 	});
 		
@@ -190,11 +190,11 @@ function uploadMaterial1(){
 					$('#ajaxLoader').find(".lightbox").hide();
 				});
 				}else{
-					alert("Please Upload File Less then 5 MB");
+					alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 					$('#plistFile').val('');
 				} 
 			}else{
-				alert("Please Upload file with extension .plist");
+				alert('<%=localeObj.getTranslatedText("Please Upload file with extension .plist")%>');
 				$('#plistFile').val('');
 				
 				if(document.getElementById('plistFile') != null) 
@@ -202,7 +202,7 @@ function uploadMaterial1(){
 			}
 		}else{
 			
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadMaterialFile1').val('');
 		}
 	}else{
@@ -262,7 +262,7 @@ function uploadMaterial1(){
 		        announcementMaterialTD.appendChild(files);
 		        files.style.display = "block";
 			}else{
-				alert("Please Upload file with extension .plist");
+				alert('<%=localeObj.getTranslatedText("Please Upload file with extension .plist")%>');
 				$('#uploadMaterialFile1').val('');
 				
 				if(document.getElementById('plistFile') != null) 
@@ -271,7 +271,7 @@ function uploadMaterial1(){
 
 		}else{
 			
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadMaterialFile1').val('');
 		}
 

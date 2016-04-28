@@ -25,7 +25,9 @@ function submitForm(){
 	document.eGreetingForm.submit();
 }
 </script>
-
+<%
+LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LOCALE_OBJ);
+%>
 <script>
 function uploadMaterial(){
 	$('#ajaxLoader').find(".lightbox").show();
@@ -68,18 +70,18 @@ function uploadMaterial(){
 			//  hideProgress();
 				}else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload File Less then 5 MB");
+					alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 					$('#ProfileMaterial').val('');
 				}
 			  }else{
 					$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please upload png/jpg/gif type file");
+				alert('<%=localeObj.getTranslatedText("Please upload png/jpg/gif type file")%>');
 				$('#ProfileMaterial').val('');
 			
 			} 
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 		}
 		
     }else{
@@ -151,13 +153,13 @@ function uploadMaterial(){
 
 			  }else{
 					$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please upload png/jpg/gif type file");
+				alert('<%=localeObj.getTranslatedText("Please upload png/jpg/gif type file")%>');
 				$('#ProfileMaterial').val('');
 			
 			} 
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 		}
 	}
     $('#ajaxLoader').find(".lightbox").hide();
@@ -166,8 +168,7 @@ function uploadMaterial(){
 
 <%
 String eCode = request.getParameter("E_GREETING_ID");
-	LocaleObject localeObj = (LocaleObject) session
-			.getAttribute(SessionAttributes.LOCALE_OBJ);
+	
      E_Greeting E_GreetingObj=new E_Greeting();
     boolean modifyFlag = false,errorFlag = false;
     FormObj formDetail = null;

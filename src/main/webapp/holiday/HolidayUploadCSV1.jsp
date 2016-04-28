@@ -44,15 +44,15 @@ $(document).ready(function(){
 				
 			});
 		 // hideProgress();
-		 // alert("CSV file Uploaded Successfully");
+		 // alert('<%=localeObj.getTranslatedText("CSV file Uploaded Successfully")%>');
 		  $("#submit").show();
 		}
 		else{
-			alert("Please Upload file with extension .csv");
+			alert('<%=localeObj.getTranslatedText("Please Upload file with extension .csv")%>');
 		}
    }
   else{
-		alert("Please Upload a file");
+		alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
    }
 	$('#ajaxLoader').find(".lightbox").hide();	
  }

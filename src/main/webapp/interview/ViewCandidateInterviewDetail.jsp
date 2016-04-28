@@ -647,29 +647,29 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 									callback : function(str) {
 										if((str-0)>0)
 										{
-												alert("Material Added Successfully");
+												alert('<%=localeObj.getTranslatedText("Material Added Successfully")%>');
 												window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode='+interviewCode+'&candidateCode='+candidateCode;
 										}
 										else
-											alert("Material Not Added");
+											alert('<%=localeObj.getTranslatedText("Material Not Added")%>');
 									}
 							 });
 						});
 					}else{
 						$('#ajaxLoader').find(".lightbox").hide();
-						alert("Please Upload File Less then 5 MB");
+						alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 						$("#material").val('');
 					} 
 					 // hideProgress();
-					 // alert("file Uploaded Successfully");
+					 // alert('<%=localeObj.getTranslatedText("file Uploaded Successfully")%>');
 					 
 					}
 					else{
-						alert("Please Upload a PDF or Documents File");
+						alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Documents File")%>');
 					}
 			   }
 			  else{
-					alert("Please Upload a file");
+					alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			   }
         	}else{
         		var material_name=$("#CandidateMaterial").val();
@@ -732,20 +732,20 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
     							callback : function(str) {
     								if((str-0)>0)
     								{
-    										alert("Material Added Successfully");
+    										alert('<%=localeObj.getTranslatedText("Material Added Successfully")%>');
     										window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode='+interviewCode+'&candidateCode='+candidateCode;
     								}
     								else
-    									alert("Material Not Added");
+    									alert('<%=localeObj.getTranslatedText("Material Not Added")%>');
     							}
     					 });
         		        }, 10000);
         			  }else{
-  						alert("Please Upload a PDF or Documents File");
+  						alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Documents File")%>');
         			
         			} 
         		}else{
-        			alert("Please Upload a file");
+        			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
         		}
         	}
 		$('#ajaxLoader').find(".lightbox").hide();
@@ -768,7 +768,7 @@ function removeMaterial(code){
 		{
   			//alert(response);
   			if(response=='1'){
-  				//alert("Sucess");
+  				//alert('<%=localeObj.getTranslatedText("Sucess")%>');
   				window.location.href = 'ContentManager?key=ViewCandidateInterviewDetail&interviewCode=<%=Integer.parseInt(iCode) %>&candidateCode=<%=Integer.parseInt(candidateCode) %>';
   			}
 	    }	

@@ -331,7 +331,7 @@ function chkPhaseTotal(phase,phase_total,month){
 		  + parseFloat($('#phase_'+phase+'_may').val()) + parseFloat($('#phase_'+phase+'_jun').val()) + parseFloat($('#phase_'+phase+'_jul').val()) + parseFloat($('#phase_'+phase+'_aug').val()) + parseFloat($('#phase_'+phase+'_sep').val())
 		  +parseFloat( $('#phase_'+phase+'_oct').val() )+ parseFloat($('#phase_'+phase+'_nov').val());
 	if(total==phase_total){}else{
-		alert("Sum of month value should be matched with phase total value.");
+		alert('<%=localeObj.getTranslatedText("Sum of month value should be matched with phase total value")%>');
 		$('#phase_'+phase+'_'+month).focus();
 	}
 	//alert(total);

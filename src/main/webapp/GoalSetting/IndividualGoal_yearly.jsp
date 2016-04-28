@@ -105,19 +105,19 @@ function calculateTotal(obj){
 	var gen_y =   $('#gen_y').val();
 	var sa =   $('#sa').val();
 	if(ga=='' || ga==""){
-		alert("Please enter value for GA");
+		alert('<%=localeObj.getTranslatedText("Please enter value for GA")%>');
 		document.getElementById("ga").focus();
 	}
 	else if(ha=='' || ha==""){
-		alert("Please enter value for HA");
+		alert('<%=localeObj.getTranslatedText("Please enter value for HA")%>');
 		document.getElementById("ha").focus();
 	}	
 	else if(gen_y=='' || gen_y==""){
-		alert("Please enter value for GEN Y");
+		alert('<%=localeObj.getTranslatedText("Please enter value for GEN Y")%>');
 		document.getElementById("gen_y").focus();
 	}
 	else if(sa=='' || sa==""){
-		alert("Please enter value for SA");
+		alert('<%=localeObj.getTranslatedText("Please enter value for SA")%>');
 		document.getElementById("sa").focus();
 	}else{
 		var total = parseFloat(ga) + parseFloat(ha) +parseFloat(gen_y) + parseFloat(sa);

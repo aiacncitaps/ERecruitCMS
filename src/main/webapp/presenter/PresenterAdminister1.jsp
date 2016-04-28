@@ -517,12 +517,12 @@ function submitForm(){
 		  
 		}else{
 			 $('#ajaxLoader').find(".lightbox").hide();
-			alert("Please upload png/jpg/gif type file");
+			alert('<%=localeObj.getTranslatedText("Please upload png/jpg/gif type file")%>');
 			$('#filename1').val('');
 		}
 		}else{
 			 $('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload file");
+			alert('<%=localeObj.getTranslatedText("Please Upload file")%>');
 		}
 		
   }
@@ -554,13 +554,13 @@ function submitForm(){
 		  hideProgress();
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please upload .pdf type file");
+			alert('<%=localeObj.getTranslatedText("Please upload .pdf type file")%>');
 			$('#filename2').val('');
 		}
 	 
 	 }else{
 		 $('#ajaxLoader').find(".lightbox").hide();
-		 alert("Please Upload file");
+		 alert('<%=localeObj.getTranslatedText("Please Upload file")%>');
 	 }
 	
 }

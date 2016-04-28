@@ -100,9 +100,7 @@ public class SecurityFilter implements Filter {
 		
 		try{
 			
-			
-			
-			
+						
 			HttpServletResponse  httpResponse = (HttpServletResponse)response;
 			HttpServletRequest  httpRequest = (HttpServletRequest)request;
 			
@@ -124,20 +122,17 @@ public class SecurityFilter implements Filter {
 				httpRequest.setCharacterEncoding("UTF-8");
 				
 			}
-			
 		if(FullPath != null && FullPath.contains("/rest") &&  !FullPath.contains("/validateVersion") && !FullPath.contains("/pushDetails")
 				&& !FullPath.contains("/pushResults") && !FullPath.contains("/pushContractedDetails")){
 				
-			
-			
+			System.out.println(httpRequest.getSession().getAttribute("sessionIDRest"));
 				if(httpRequest.getSession().getAttribute("sessionIDRest")==null){
 					httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					
 					return;
 				}
-				else
+				/*else
 				{
-				
 					String sessionid = httpRequest.getSession().getId();
 					// be careful overwriting: JSESSIONID may have been set with other flags
 					//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
@@ -148,22 +143,21 @@ public class SecurityFilter implements Filter {
 					
 				//	for our server
 				//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
-				}
+				}*/
 				
-			}else if(FullPath.contains("/pushDetails") || FullPath.contains("/pushResults") || FullPath.contains("/pushContractedDetails")){
-				
+			}/*else if(FullPath.contains("/pushDetails") || FullPath.contains("/pushResults") || FullPath.contains("/pushContractedDetails")){
 			
 			}
 		// for our server
-		/*
-		else if (FullPath.contains("/validateVersion"))
+		
+	/*else if (FullPath.contains("/validateVersion"))
 		{
 			String sessionid = httpRequest.getSession().getId();
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, 15);
 			String o = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz").format( c.getTime() );
 		//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";Secure; HttpOnly");
-			//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
+		//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + ";Expires=" + o + ";");
 			
 		}
 		else{
@@ -172,7 +166,7 @@ public class SecurityFilter implements Filter {
 				String sessionid = httpRequest.getSession().getId();
 				// be careful overwriting: JSESSIONID may have been set with other flags
 			//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; Secure; HttpOnly");
-				//httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; ");
+			//	httpResponse.setHeader("Set-Cookie", "JSESSIONID=" + sessionid + "; ");
 				
 			
 		}*/

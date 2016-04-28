@@ -49,18 +49,18 @@ $(document).ready(function(){
 	    		}
 	    		else{
 	    			 if(lang == 'CN')
-	    				 alert("请上传文件扩展XLSX或XLS");
+	    				 alert('<%=localeObj.getTranslatedText("请上传文件扩展XLSX或XLS")%>');
 	    			 else
-	    				alert("Please Upload file with extension xlsx OR xls");
+	    				alert('<%=localeObj.getTranslatedText("Please Upload file with extension xlsx OR xls")%>');
 	    			if(document.getElementById('csvFile') != null) 
 	    				 document.getElementById('csvFile').outerHTML = document.getElementById('csvFile').outerHTML;
 	    		}
 	       }
 	      else{
 	    	  if(lang == 'CN')
-	    		alert("请上传文件");
+	    		alert('<%=localeObj.getTranslatedText("请上传文件")%>');
 	    	  else
-	    		  alert("Please Upload a file");
+	    		  alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 	       }
 	    }else{
 	    	var material_name=$("#csvFile").val();
@@ -117,18 +117,18 @@ $(document).ready(function(){
 		    	}
 	    		else{
 	    			 if(lang == 'CN')
-	    				 alert("请上传文件扩展XLSX或XLS");
+	    				 alert('<%=localeObj.getTranslatedText("请上传文件扩展XLSX或XLS")%>');
 	    			 else
-	    				alert("Please Upload file with extension xlsx OR xls");
+	    				alert('<%=localeObj.getTranslatedText("Please Upload file with extension xlsx OR xls")%>');
 	    			if(document.getElementById('csvFile') != null) 
 	    				 document.getElementById('csvFile').outerHTML = document.getElementById('csvFile').outerHTML;
 	    		}
 	       }
 	      else{
 	    	  if(lang == 'CN')
-	    		alert("请上传文件");
+	    		alert('<%=localeObj.getTranslatedText("请上传文件")%>');
 	    	  else
-	    		  alert("Please Upload a file");
+	    		  alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 	       }
 	    }
 	

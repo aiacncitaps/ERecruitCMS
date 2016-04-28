@@ -187,21 +187,21 @@ function interviewFormSubmit ( action )
 					});
 				}else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload File Less then 5 MB");
+					alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 					$("#topic_file").val('');
 				}  
 				 // hideProgress();
-				 // alert("file Uploaded Successfully");
+				 // alert('<%=localeObj.getTranslatedText("file Uploaded Successfully")%>');
 				 
 				}
 				else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload a PDF or Image File");
+					alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Image File")%>');
 				}
 		   }
 		  else{
 			  $('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload a file");
+				alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 		   }
 		}else{
 			var material_name=$("#InterviewTopicFile").val();
@@ -257,13 +257,13 @@ function interviewFormSubmit ( action )
 	
 				}else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload a PDF or Image File");
+					alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Image File")%>');
 				}   
 
 			}else{
 				
 				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload a file");
+				alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			} 
 
 			$('#ajaxLoader').find(".lightbox").hide();

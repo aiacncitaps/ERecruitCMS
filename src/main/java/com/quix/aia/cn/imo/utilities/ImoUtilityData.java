@@ -3210,4 +3210,32 @@ public class ImoUtilityData {
 	    return str;
 	}
 	
+	
+	public static String IDTYPE(String name){
+		 
+		 if(name.equalsIgnoreCase("01")){return "身份证";}
+		 if(name.equalsIgnoreCase("02")){return "军官证";}
+		 if(name.equalsIgnoreCase("03")){return "护照";}
+		 if(name.equalsIgnoreCase("06")){return "台湾居民来往大陆通行证(台胞证)";}
+		 if(name.equalsIgnoreCase("05")){return "澳居民来往内地通行证(回乡证)";}
+		 if(name.equalsIgnoreCase("10")){return "出生证";}
+		
+		 
+		 return null;
+		 
+	  }
+	
+	public static String NEWCOMER(String name){
+		 
+		 if(name.equalsIgnoreCase("A")){return "新人";}
+		 if(name.equalsIgnoreCase("B")){return "归雁";}
+		 if(name.equalsIgnoreCase("C")){return "转司";}
+		 if(name.equalsIgnoreCase("D")){return "转司之归雁";}
+		
+		
+		 
+		 return null;
+		 
+	  }
+	
 }

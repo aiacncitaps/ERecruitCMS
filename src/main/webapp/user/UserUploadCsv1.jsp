@@ -57,9 +57,9 @@ function uploadCSV(lang){
 					 $("#submit").show();
 				  $('#ajaxLoader').find(".lightbox").hide();
 					if(lang == 'CN')
-						 alert("文档上载成功");
+						 alert('<%=localeObj.getTranslatedText("文档上载成功")%>');
 					else
-				 		 alert("Xcel file Uploaded Successfully");
+				 		 alert('<%=localeObj.getTranslatedText("Xcel file Uploaded Successfully")%>');
 				 
 				}
 				else{
@@ -125,9 +125,9 @@ function uploadCSV(lang){
 				 $("#submit").show();
 				  $('#ajaxLoader').find(".lightbox").hide();
 					if(lang == 'CN')
-						 alert("文档上载成功");
+						 alert('<%=localeObj.getTranslatedText("文档上载成功")%>');
 					else
-				 		 alert("Xcel file Uploaded Successfully");
+				 		 alert('<%=localeObj.getTranslatedText("Xcel file Uploaded Successfully")%>');
 				 
 				}
 				else{
@@ -146,9 +146,9 @@ function userCSVSubmit(action,lang)
 	var csvFile = $('input[type=file]').get(0).files[0];
 	if(csvFile==null){
 		 if(lang == 'CN')
-			 alert("先上传文件");
+			 alert('<%=localeObj.getTranslatedText("先上传文件")%>');
 		 else
-			alert("First Upload File");
+			alert('<%=localeObj.getTranslatedText("First Upload File")%>');
 		return false;
 		
 	}

@@ -263,7 +263,7 @@ function uploadCSVFile(){
 			});
 			
 		}else{
-			alert("Please Upload file with extension .csv or .xlsx or .xls");
+			alert('<%=localeObj.getTranslatedText("Please Upload file with extension .csv or .xlsx or .xls")%>');
 			$('#uploadSpecialGrp').val('');
 			if(document.getElementById('UploadSpecialGroupListing') != null) 
 			document.getElementById('UploadSpecialGroupListing').outerHTML = document.getElementById('UploadSpecialGroupListing').outerHTML;
@@ -273,7 +273,7 @@ function uploadCSVFile(){
 		
 		}
 	}else{
-		alert("Please Upload a file");
+		alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 		$('#uploadSpecialGrp').val('');
 	}
 	$('#ajaxLoader').find(".lightbox").hide();
@@ -313,12 +313,12 @@ function uploadMaterial(){
 				});
 				}else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload File Less then 5 MB");
+					alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 					$('#ProfileMaterial').val('');
 				}  
 			}else{
 				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs");
+				alert('<%=localeObj.getTranslatedText("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs")%>');
 				$('#uploadProfileFile').val('');
 			
 				if(document.getElementById('ProfileMaterial') != null) 
@@ -332,7 +332,7 @@ function uploadMaterial(){
 			}
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please  Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please  Upload a file")%>');
 			$('#uploadProfileFile').val('');
 			
 		}
@@ -392,7 +392,7 @@ function uploadMaterial(){
 		        files.style.display = "block";
 			  }else{
 				  $('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs");
+					alert('<%=localeObj.getTranslatedText("Please Upload file with extension .pdf or .jpg or jpeg or .doc or .docs")%>');
 				$('#uploadProfileFile').val('');
 			
 				if(document.getElementById('ProfileMaterial') != null) 
@@ -406,7 +406,7 @@ function uploadMaterial(){
 			} 
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadProfileFile').val('');
 		}
 	}
@@ -447,13 +447,13 @@ function uploadEopTopic(){
 			
 			}else{
 				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload File Less then 5 MB");
+				alert('<%=localeObj.getTranslatedText("Please Upload File Less then 5 MB")%>');
 				$("#TopicFile").val('');
 			} 
 			}
 			else{
 				$('#ajaxLoader').find(".lightbox").hide();
-				alert("Please Upload a PDF or Image File");
+				alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Image File")%>');
 				if(document.getElementById('TopicFile') != null) 
 				document.getElementById('TopicFile').outerHTML = document.getElementById('TopicFile').outerHTML;
 				$('#uploadTopicFile').val('');
@@ -467,7 +467,7 @@ function uploadEopTopic(){
 	   }
 	  else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadTopicFile').val('');
 	   }
 	}else{
@@ -526,7 +526,7 @@ function uploadEopTopic(){
 		        files.style.display = "block";
 			  }else{
 					$('#ajaxLoader').find(".lightbox").hide();
-					alert("Please Upload a PDF or Image File");
+					alert('<%=localeObj.getTranslatedText("Please Upload a PDF or Image File")%>');
 					if(document.getElementById('TopicFile') != null) 
 					document.getElementById('TopicFile').outerHTML = document.getElementById('TopicFile').outerHTML;
 					$('#uploadTopicFile').val('');
@@ -539,7 +539,7 @@ function uploadEopTopic(){
 			} 
 		}else{
 			$('#ajaxLoader').find(".lightbox").hide();
-			alert("Please Upload a file");
+			alert('<%=localeObj.getTranslatedText("Please Upload a file")%>');
 			$('#uploadTopicFile').val('');
 		}
 	}
