@@ -277,6 +277,22 @@ public class LMSUtil
 		}
 		return null;
    	}
+    
+    public static Date convertDateToyyyymmddhhmmssDashed2(String s)
+   	{
+    	try
+		{
+		return yyyymmddhhmmssdashed2.parse(s);
+		}
+		catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+   			e.printStackTrace();
+		}
+		return null;
+   	}
+    
+    
     public static String convertDateToyyyymmddhhmmssDashedString(Date date)
    	{
     	try
@@ -338,6 +354,21 @@ public class LMSUtil
 		}
 		return null;
    	}
+    
+    public static Date convertDateToyyyy_mm_dd2(String s)
+   	{
+    	try
+		{
+		return yyyy_MM_dd.parse(s);
+		}
+		catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+   			e.printStackTrace();
+		}
+		return null;
+   	}
+    
     
     public static String convertDatetoDD_MM_YYYY(Date d)
     {
@@ -560,9 +591,11 @@ public class LMSUtil
     public static  SimpleDateFormat HH_MM = new SimpleDateFormat("HH:mm");
     public static SimpleDateFormat yyyymmddhhmmss = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
     public static SimpleDateFormat yyyymmddhhmmssdashed = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    public static SimpleDateFormat yyyymmddhhmmssdashed2 = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
     public static SimpleDateFormat yyyymmddHHmmssdashed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static SimpleDateFormat ddmmyyyyhhmmss = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
     public static  SimpleDateFormat yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
+    public static  SimpleDateFormat yyyy_MM_dd2 = new SimpleDateFormat("yyyy/MM/dd");
     public static SimpleDateFormat hhmmass = new SimpleDateFormat("hh:mm:ss");
     public static SimpleDateFormat dd_mmm_yyyy = new SimpleDateFormat("dd-MMM-yyyy");
     public static  SimpleDateFormat HH_MM_SS = new SimpleDateFormat("HH:mm:ss");

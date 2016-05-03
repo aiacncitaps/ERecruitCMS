@@ -171,7 +171,7 @@ public class PropertiesMaintenance {
 			configurationProperties.setConfigurationValue(appURL);
 			configurationProperties.setVersion(version);
 			configurationProperties.setBuild(build);
-			configurationProperties.setChangeLog(changeLog);
+			configurationProperties.setChangeLog(changeLog.trim());
 			
 			
 			session = HibernateFactory.openSession();

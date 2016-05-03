@@ -29,6 +29,7 @@ package com.quix.aia.cn.imo.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -585,6 +586,15 @@ public class AddressBookRest {
 					String agentId = restForm.getAgentId();
 					agentId = null != agentId ? agentId:"";
 			        
+					SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd");
+
+			        SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd");
+			        if ((restForm.getCcTestResultDate() != null) && (!restForm.getCcTestResultDate().equals("")))
+			        {
+			          Date dt = formate2.parse(restForm.getCcTestResultDate());
+			          String str2 = formate.format(dt);
+			          restForm.setCcTestResultupdateDate(formate.parse(str2));
+			        }
 				
 				//addressBook = addressBookMaintenance.getAddressBook(candidateCode, agentId);
 				String[] fetchFields={"ccTestResult","ccTestResultDate"};
@@ -595,6 +605,22 @@ public class AddressBookRest {
 					Object[] obj = list.get(0);
 					addressBook.setCcTestResult(""+obj[0]);
 					addressBook.setCcTestResultDate((Date)obj[1]);
+					
+					  // System.out.println("********************************************** " + addressBook.getCcTestResultDate());
+				          if ((restForm.getCcTestResultDate() != null) && (!restForm.getCcTestResultDate().equals("")) && 
+				            (addressBook.getCcTestResultDate() != null))
+				          {
+				            int i = addressBook.getCcTestResultDate().compareTo(restForm.getCcTestResultupdateDate());
+				            if (((i == -1) || (i == 0)) && 
+				              (!restForm.getCcTestResult().equalsIgnoreCase(addressBook.getCcTestResult()))) {
+				              addressBookMaintenance.updatecctestResult(restForm);
+				              addressBook.setCcTestResult(restForm.getCcTestResult());
+				              addressBook.setCcTestResultDate(restForm.getCcTestResultupdateDate());
+				            }
+
+				          }
+				          
+				          
 				}
 				
 				addressBookMaintenance.updateAddressBookStatus("5/9", conditionFieldName, conditionFieldValue);

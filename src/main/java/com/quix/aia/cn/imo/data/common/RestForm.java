@@ -1,5 +1,7 @@
 package com.quix.aia.cn.imo.data.common;
 
+import java.util.Date;
+
 public class RestForm {
 	
 	private String agentId;
@@ -24,9 +26,16 @@ public class RestForm {
 	private String candidateAgentCode;
 	private String ccTestResult;
 	private String ccTestResultDate;
+	private String interviewResult;
+	private String recruitmentPlan;
+	private String remarks;
+	private Date passTime;
+	private Date ccTestResultupdateDate;
+	private int addressCode;
 	
 	
 
+	
 	
 	
 	public RestForm(){
@@ -52,9 +61,52 @@ public class RestForm {
 		candidateAgentCode="";
 		ccTestResult="";
 		ccTestResultDate="";
+		interviewResult="";
+		recruitmentPlan="";
+		remarks="";
+		passTime=null;
+		ccTestResultupdateDate=null;
+		addressCode=0;
+		
+		
 		
 		
 	}
+	
+	
+	public String getInterviewResult() {
+		return interviewResult;
+	}
+
+	public void setInterviewResult(String interviewResult) {
+		this.interviewResult = interviewResult;
+	}
+
+	public String getRecruitmentPlan() {
+		return recruitmentPlan;
+	}
+
+	public void setRecruitmentPlan(String recruitmentPlan) {
+		this.recruitmentPlan = recruitmentPlan;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public Date getPassTime() {
+		return passTime;
+	}
+
+	public void setPassTime(Date passTime) {
+		this.passTime = passTime;
+	}
+
+	
 	
 	public String getCcTestResult() {
 		return ccTestResult;
@@ -229,6 +281,26 @@ public class RestForm {
 
 	public void setCandidateAgentCode(String candidateAgentCode) {
 		this.candidateAgentCode = candidateAgentCode;
+	}
+
+
+	public Date getCcTestResultupdateDate() {
+		return ccTestResultupdateDate;
+	}
+
+
+	public void setCcTestResultupdateDate(Date ccTestResultupdateDate) {
+		this.ccTestResultupdateDate = ccTestResultupdateDate;
+	}
+
+
+	public int getAddressCode() {
+		return addressCode;
+	}
+
+
+	public void setAddressCode(int addressCode) {
+		this.addressCode = addressCode;
 	}
 
 }

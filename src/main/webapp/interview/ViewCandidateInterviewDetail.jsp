@@ -5,6 +5,7 @@
   - Description:        View Candidate Interview Details
 --%>
 
+<%@page import="com.quix.aia.cn.imo.data.common.RestForm"%>
 <%@page import="com.quix.aia.cn.imo.mapper.AddressBookMaintenance"%>
 <%@page import="com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview"%>
 <%@page import="com.quix.aia.cn.imo.mapper.CandidateFirstInterviewMaintenance"%>
@@ -98,7 +99,8 @@ StringBuffer contactNumber = new StringBuffer(interviewCandidate.getContactNumbe
 	}
 	
 	String stFilePath = "resources"+"/"+"material";
-	CandidateFirstInterview candidateFirstInterview  = new CandidateFirstInterviewMaintenance().getCandidateFirstinterview(interviewCandidate.getServicingAgent(),interviewCandidate.getInterviewCandidateCode());
+	
+	CandidateFirstInterview candidateFirstInterview  = new CandidateFirstInterviewMaintenance().getCandidateFirstinterview(interviewCandidate.getServicingAgent(),interviewCandidate.getInterviewCandidateCode(),null);
 	if(candidateFirstInterview == null){
 		candidateFirstInterview = new CandidateFirstInterview();
 		candidateFirstInterview.setRecruitmentPlan("");

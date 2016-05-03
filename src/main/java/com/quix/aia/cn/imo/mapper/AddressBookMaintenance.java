@@ -110,6 +110,11 @@ public class AddressBookMaintenance {
 				if (0 == key) {
 					addressBook.setAddressCode(null);
 				}
+				
+				if(addressBook.getAddressCode()==2){
+					System.out.println(addressBook.getCcTestResult());
+					System.out.println(addressBook.getCcTestResultDate());
+				}
 				if(addressBook.getDeleteStatus()){
 					recordsToDelete++;
 					deleteAddressBookList.add(addressBook);
@@ -259,7 +264,7 @@ public class AddressBookMaintenance {
 		if (null != dateTime && !"".equals(dateTime)) {
 			date = LMSUtil.convertDateToyyyymmddhhmmssDashed(dateTime);
 		}
-//		 if(Integer.parseInt(pageNo) <= 1){
+		// if(Integer.parseInt(pageNo) <= 1){
 			 
 		if (Long.parseLong(pageNo) > 0) {
 			firstRecordNo = ((addressBookListingOffset * Integer.parseInt(pageNo)) - addressBookListingOffset);
@@ -318,7 +323,7 @@ public class AddressBookMaintenance {
 			candidateWorkExperienceMaintenance = null;
 			candidateNoteMaintenance = null;
 		}
-		 /*}else{
+		/* }else{
 			   list = new ArrayList<AddressBook>();
 			  }*/
 		return list;
@@ -800,6 +805,48 @@ public class AddressBookMaintenance {
 	}
 	
 	
+	public void updatecctestResult(RestForm restForm) {
+		// TODO Auto-generated method stub
+		
+		Session session = null;
+		Query query = null;
+
+		try {
+			
+			session = HibernateFactory.openSession();
+			Transaction tx=session.beginTransaction();
+			query = session.createQuery("UPDATE AddressBook SET ccTestResult =:testResult,ccTestResultDate=:testDate where addressCode=:candidateCode ");
+			query.setParameter("testResult", restForm.getCcTestResult());
+			query.setParameter("testDate", restForm.getCcTestResultupdateDate());
+			query.setParameter("candidateCode",Integer.parseInt(restForm.getCandidateCode().trim()));
+			query.executeUpdate();
+			tx.commit();
+			
+
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.getMessage());
+			ex.printStackTrace();
+			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			ex.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
+		} finally {
+			try {
+				HibernateFactory.close(session);
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+			session = null;
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
 	/**
 	 * <p>
 	 * This method get all data
@@ -1134,4 +1181,6 @@ public class AddressBookMaintenance {
 	  }
 		return ccTestResult;
 	}
+
+	
 }

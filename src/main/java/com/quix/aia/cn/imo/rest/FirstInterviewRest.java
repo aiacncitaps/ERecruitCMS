@@ -43,12 +43,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.codec.binary.Base64;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
@@ -171,8 +176,8 @@ public class FirstInterviewRest {
 		boolean flag=LMSUtil.isJSONValid(jsonString);
 		MsgBeans beans = new MsgBeans();
 		
+		Gson googleJson = null;
         GsonBuilder builder = new GsonBuilder();
-        Gson googleJson = builder.create();
 		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
 		CandidateFirstInterviewMaintenance candidateFirstInterviewMaint = new CandidateFirstInterviewMaintenance();
         CandidateFirstInterview candidateFirstInterview = null;
@@ -183,13 +188,30 @@ public class FirstInterviewRest {
 			  /*Type listType = new TypeToken<List<RestForm>>(){}.getType();
 		        List<RestForm> jsonObjList = googleJson.fromJson(jsonString, listType);
 		        RestForm restForm = jsonObjList.get(0);  */
+			
+			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
+	               @Override  
+	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+         	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed2(json.getAsString());
+         	   		if(null != date){
+         	   			return date;
+         	   		}else{
+         	   			return  LMSUtil.convertDateToyyyy_mm_dd(json.getAsString());
+         	   		}
+	               }
+	           });
+	       
+	        googleJson  = builder.create();
+	        
 			RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+			
 		        String agentId = restForm.getAgentId();
 		        String candidateCode = restForm.getCandidateCode();
+		        
 			 if(flag==true){
 			log.log(Level.INFO, "First Interview --> fetching Information ... ");
 			
-			candidateFirstInterview = candidateFirstInterviewMaint.getCandidateFirstinterview(agentId, candidateCode);
+			candidateFirstInterview = candidateFirstInterviewMaint.getCandidateFirstinterview(agentId, candidateCode,restForm);
 			
 			
 			if(null == candidateFirstInterview){

@@ -41,6 +41,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
 import com.quix.aia.cn.imo.utilities.MsgObject;
@@ -141,10 +142,11 @@ public class CandidateFirstInterviewMaintenance {
 	
 	/**
 	 * <p>Insert candidate done</p>
+	 * @param restForm 
 	 * @param candidate
 	 * @return
 	 */
-	public CandidateFirstInterview getCandidateFirstinterview(String agentId, String candidateCode)
+	public CandidateFirstInterview getCandidateFirstinterview(String agentId, String candidateCode, RestForm restForm)
 	{
 		Integer key = 0;
 		Session session = null;
@@ -152,13 +154,38 @@ public class CandidateFirstInterviewMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
-			session.setDefaultReadOnly(true);
+			//session.setDefaultReadOnly(true);
 			
 			Criteria crit = session.createCriteria(CandidateFirstInterview.class);
 			crit.add(Restrictions.eq("agentId", agentId));
 			crit.add(Restrictions.eq("candidateCode", candidateCode));
 			crit.addOrder(Order.desc("firstInterviewCode"));
+			crit.setFirstResult(0);
+			crit.setMaxResults(1);
 			list=(ArrayList<CandidateFirstInterview>) crit.list();
+			
+			if(restForm!=null){
+				for(CandidateFirstInterview firstInter:list){
+					if(firstInter.getPassTime()!=null){
+						
+					
+					int i=firstInter.getPassTime().compareTo(restForm.getPassTime());
+					if(i==-1){
+						
+						firstInter.setPassTime(restForm.getPassTime());
+						firstInter.setInterviewResult(restForm.getInterviewResult());
+						firstInter.setRecruitmentPlan(restForm.getRecruitmentPlan());
+						firstInter.setRemarks(restForm.getRemarks());
+						updateFirstInterview(firstInter);
+						
+					}
+					
+					}
+					
+				}
+			}
+			
+			
 			log.log(Level.INFO,"---New Candidate Training Result Fetched Successfully--- ");
 		}catch(Exception e)
 		{
@@ -184,6 +211,41 @@ public class CandidateFirstInterviewMaintenance {
 			return null;
 		}
 	}
+
+
+
+	private void updateFirstInterview(CandidateFirstInterview firstInter) {
+		// TODO Auto-generated method stub
+	
+		Session session = null;
+
+		try{
+			session = HibernateFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			session.update(firstInter);
+			tx.commit();
+			log.log(Level.INFO,"---update Candidate Training Result Inserted Successfully--- ");
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("CandidateFirstInterviewMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				HibernateFactory.close(session);
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		
+	}
+
+
 
 	public static final String Name = "name";
 

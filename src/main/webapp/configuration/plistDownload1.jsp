@@ -52,7 +52,7 @@ String eopScanAppURL = configurationMap.get(ConfigurationProperties.EOP_SCAN_APP
 PropertiesMaintenance propMain=new PropertiesMaintenance();
 ArrayList<ConfigurationProperties> configPropertyList=propMain.getConfigData();
 
-System.out.println("********************************     user type "+userObj.getUserType());
+
 ConfigurationProperties eRequitConfig=new ConfigurationProperties();
 ConfigurationProperties eopRequitConfig=new ConfigurationProperties();
 for(ConfigurationProperties eRequitConfig1 : configPropertyList){
@@ -170,19 +170,19 @@ if(null != eopScanAppURL && !"".equals(eopScanAppURL)){
 					</tr>
 					
 					<tr>
-						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
+						<td style="vertical-align: top"></br><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
 						<td>
-							<textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
-							<%=eRequitConfig.getChangeLog() %></textarea>
+							<textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;"><%=eRequitConfig.getChangeLog() %></textarea>
 						</td>
-						
+						<%System.out.println(eopRequitConfig.getChangeLog().trim()); %>
 						<td  style="padding-right : 30%;"  > </td>
 						<%if(!userObj.getUserType().equals("AG") || userObj.getUserType().equals("AD")){ %>
-						<td style="vertical-align: top"><label><%=localeObj.getTranslatedText("Change Log")%></label></td>
+						<td style="vertical-align: top"></br> <label><%=localeObj.getTranslatedText("Change Log")%></label></td>
 						<td>
 							
-							<b><textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;">
-							<%=eopRequitConfig.getChangeLog() %></textarea></b>
+							<b><textarea name="log" id="log" class="textObj" rows="10" cols="10" maxlength="400" readonly="readonly" style="resize: none;border : none; width : 100%;font-family: 'DINFactBoldRegular';font-size: 14px;"><%=eopRequitConfig.getChangeLog().trim() %></textarea></b>
+							
+							
 						</td>
 						<%} %>
 					</tr>

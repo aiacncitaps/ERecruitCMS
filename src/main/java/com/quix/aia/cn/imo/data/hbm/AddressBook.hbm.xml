@@ -261,6 +261,16 @@
             <column name="CO"  />
         </property>
 
+
+	<property name="interviewResult" type="java.lang.String">
+			<column name="INTERVIEW_RESULTS" />
+		</property>
+		
+		<property name="passTime" type="java.lang.String">
+			<column name="INTERVIEW_PASS_TIME" />
+		</property>
+		
+		
 		<set name="candidateEducations" table="T_CANDIDATE_EDUCATION"
 			inverse="true" lazy="false" fetch="select">
 			<key>

@@ -206,12 +206,31 @@ public class TrainingRest {
 	        Type listType = new TypeToken<List<CandidateTrainingResult>>(){}.getType();
 	        List<CandidateTrainingResult> jsonObjList = googleJson.fromJson(jsonString, listType);
 	        candidateTrainingResult = jsonObjList.get(0);
-	        candidateTrainingResult.setCreationDate(new Date());  
 	        
-	        candidateTrainingResultMaint.createNewCandidateTrainingResult(candidateTrainingResult,request);
-			
-			log.log(Level.INFO,"Training --> Candidate Training Results Saved successfully... ");
-			isSuccessful=1;
+	        if(candidateTrainingResult.getPerAgentName()!=null && !candidateTrainingResult.getPerAgentName().equals("") 
+	        	&&	candidateTrainingResult.getPerAgentId()!=null && !candidateTrainingResult.getPerAgentId().equals("")
+	        	&&	candidateTrainingResult.getBranchCode()!=null && !candidateTrainingResult.getBranchCode().equals("")
+	        	&&	candidateTrainingResult.getCourseType()!=null && !candidateTrainingResult.getCourseType().equals("")
+	        	&&	candidateTrainingResult.getPassTime()!=null && !candidateTrainingResult.getPassTime().equals("")){
+	        	
+	        	
+	        	candidateTrainingResult.setCreationDate(new Date());  
+	 	        
+	 	        candidateTrainingResultMaint.createNewCandidateTrainingResult(candidateTrainingResult,request);
+	 			
+	 			log.log(Level.INFO,"Training --> Candidate Training Results Saved successfully... ");
+	 			isSuccessful=1;
+	        	
+	        }else{
+	        	isSuccessful=0;
+				return Response.status(200).entity("[{\"isSuccessful\":"+isSuccessful+"}]").build();
+	        }
+	        
+	        
+	        
+	        
+	        
+	       
 			}else{
 				isSuccessful=0;
 				return Response.status(200).entity("[{\"isSuccessful\":"+isSuccessful+"}]").build();

@@ -122,7 +122,25 @@ public class AddressBook implements Serializable {
 	
 	private byte[] presenterImg;
 	private Date presenterDate;
+	private String interviewResult;
+	private String passTime;
 	
+	public String getInterviewResult() {
+		return interviewResult;
+	}
+
+	public void setInterviewResult(String interviewResult) {
+		this.interviewResult = interviewResult;
+	}
+
+	public String getPassTime() {
+		return passTime;
+	}
+
+	public void setPassTime(String passTime) {
+		this.passTime = passTime;
+	}
+
 	private String co;
 
 	public byte[] getPresenterImg() {
