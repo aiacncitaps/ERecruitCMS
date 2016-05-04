@@ -111,16 +111,12 @@ public class AddressBookMaintenance {
 					addressBook.setAddressCode(null);
 				}
 				
-				if(addressBook.getAddressCode()==2){
-					System.out.println(addressBook.getCcTestResult());
-					System.out.println(addressBook.getCcTestResultDate());
-				}
 				if(addressBook.getDeleteStatus()){
 					recordsToDelete++;
 					deleteAddressBookList.add(addressBook);
 					//addressBook = getAddressBook(addressBook);
 					addressBook.setDeleteStatus(true);
-					addressBook.setModificationDate(new Date());
+					//addressBook.setModificationDate(new Date());
 					deleteString = ",\"deleteStatus\":"+addressBook.getDeleteStatus();
 				}
 				session.saveOrUpdate(addressBook);
@@ -702,7 +698,7 @@ public class AddressBookMaintenance {
 			String fetchField = getStringFromArrayString(fetchFields,null,"forSelect");
 			String fetchCondition = getStringFromArrayString(conditionFieldName, conditionFieldValue,"forWhere");
 			query = session.createQuery(" SELECT "+fetchField+" FROM AddressBook WHERE "+fetchCondition);
-			list = query.setCacheable(true).list();
+			list = query.list();
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());

@@ -167,18 +167,18 @@ public class CandidateFirstInterviewMaintenance {
 			if(restForm!=null){
 				for(CandidateFirstInterview firstInter:list){
 					if(firstInter.getPassTime()!=null){
-						
-					
-					int i=firstInter.getPassTime().compareTo(restForm.getPassTime());
-					if(i==-1){
-						
-						firstInter.setPassTime(restForm.getPassTime());
-						firstInter.setInterviewResult(restForm.getInterviewResult());
-						firstInter.setRecruitmentPlan(restForm.getRecruitmentPlan());
-						firstInter.setRemarks(restForm.getRemarks());
-						updateFirstInterview(firstInter);
-						
-					}
+						if(restForm.getPassTime()!=null && !restForm.getPassTime().equals("") ){
+							int i=firstInter.getPassTime().compareTo(restForm.getPassTime());
+							if(i==-1){
+								
+								firstInter.setPassTime(restForm.getPassTime());
+								firstInter.setInterviewResult(restForm.getInterviewResult());
+								firstInter.setRecruitmentPlan(restForm.getRecruitmentPlan());
+								firstInter.setRemarks(restForm.getRemarks());
+								updateFirstInterview(firstInter);
+								
+							}
+						}
 					
 					}
 					

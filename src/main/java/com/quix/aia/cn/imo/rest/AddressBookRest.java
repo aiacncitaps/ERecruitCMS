@@ -233,7 +233,7 @@ public class AddressBookRest {
 				log.log(Level.INFO,"Address Book --> Information fetched successfully... ");
 				jsonString = googleJson.toJson(addressBookList);
 	
-				String dateTime = request.getParameter("dateTime");
+				String dateTime = restForm.getDateTime();
 				if (null != dateTime && !"".equals(dateTime)) {
 					deletedList = addressBookMaintenance.getAgentDeletedAddressBook(request, context,restForm);
 					if(!"".equals(deletedList)){
@@ -586,9 +586,9 @@ public class AddressBookRest {
 					String agentId = restForm.getAgentId();
 					agentId = null != agentId ? agentId:"";
 			        
-					SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd");
+					SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-			        SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd");
+			        SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			        if ((restForm.getCcTestResultDate() != null) && (!restForm.getCcTestResultDate().equals("")))
 			        {
 			          Date dt = formate2.parse(restForm.getCcTestResultDate());
@@ -610,14 +610,15 @@ public class AddressBookRest {
 				          if ((restForm.getCcTestResultDate() != null) && (!restForm.getCcTestResultDate().equals("")) && 
 				            (addressBook.getCcTestResultDate() != null))
 				          {
+				        	  if(!restForm.getCcTestResult().equals("") && restForm.getCcTestResult()!=null){
+				        		 
 				            int i = addressBook.getCcTestResultDate().compareTo(restForm.getCcTestResultupdateDate());
-				            if (((i == -1) || (i == 0)) && 
-				              (!restForm.getCcTestResult().equalsIgnoreCase(addressBook.getCcTestResult()))) {
+				            if (i == -1) {
 				              addressBookMaintenance.updatecctestResult(restForm);
 				              addressBook.setCcTestResult(restForm.getCcTestResult());
 				              addressBook.setCcTestResultDate(restForm.getCcTestResultupdateDate());
 				            }
-
+				          }
 				          }
 				          
 				          
@@ -628,7 +629,7 @@ public class AddressBookRest {
 				
 				String date="";
 				if(addressBook.getCcTestResultDate()!=null)
-					date=LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
+					date= formate2.format(addressBook.getCcTestResultDate()); //LMSUtil.convertDateToyyyymmddhhmmssDashedString(addressBook.getCcTestResultDate());
 				jsonString="";
 				jsonString+="[{\"CCTestResult\":\""+addressBook.getCcTestResult()+"\",\"Date\":\""+date+"\"}]";
 				// Convert the object to a JSON string
@@ -695,8 +696,9 @@ public Response insertCCTestResults(@Context HttpServletRequest request,String j
 		    	String ccTestResult=restForm.getCcTestResult();
 		    	String ccTestResultDateStr = restForm.getCcTestResultDate();
 		        
+		    	 SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		    	if(null != ccTestResultDateStr && !"".equals(ccTestResultDateStr)){
-		    		ccTestResultDate = LMSUtil.convertDateToyyyymmddhhmmssDashed(ccTestResultDateStr);
+		    		ccTestResultDate = formate2.parse(ccTestResultDateStr); //LMSUtil.convertDateToyyyymmddhhmmssDashed(ccTestResultDateStr);
 		    	}
 			if(agentId!=null && candidateCode!=null && ccTestResult!=null){
 				
@@ -706,10 +708,12 @@ public Response insertCCTestResults(@Context HttpServletRequest request,String j
 					return Response.status(500).entity(new Gson().toJson(beans)).build();
 				}else{
 					AddressBookMaintenance addressBookMain=new AddressBookMaintenance();
-					AddressBook addressbook=addressBookMain.getaddressDataForCCTest(candidateCode);
+					/*AddressBook addressbook=addressBookMain.getaddressDataForCCTest(candidateCode);
 					addressbook.setCcTestResult(ccTestResult);
 					addressbook.setCcTestResultDate(ccTestResultDate);
-					addressBookMain.updateAddressBook(addressbook);
+					addressBookMain.updateAddressBook(addressbook);*/
+					restForm.setCcTestResultupdateDate(ccTestResultDate);
+					addressBookMain.updatecctestResult(restForm);
 					auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INSERT_CC_TEST, AuditTrail.FUNCTION_SUCCESS, "SUCCESS"));
 					beans.setCode("200");
 					beans.setMassage("Success");
@@ -744,4 +748,6 @@ public Response insertCCTestResults(@Context HttpServletRequest request,String j
 		}
 	
 	}
+
+
 }

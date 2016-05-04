@@ -689,7 +689,7 @@ public class EopMaintenance {
 		
 		try{
 			session = HibernateFactory.openSession();
-		
+			session.setDefaultReadOnly(true);
 			Criteria crit = session.createCriteria(Event.class);
 			crit.add(Restrictions.eq("status", true));
 			eventList = (ArrayList)crit.list();
