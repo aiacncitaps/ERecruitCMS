@@ -292,6 +292,20 @@ public class LMSUtil
 		return null;
    	}
     
+    public static Date convertDateToyyyymmddhhmmssDashed24Hr(String s)
+   	{
+    	try
+		{
+		return yyyymmddhhmmssdashed24Hr.parse(s);
+		}
+		catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+   			e.printStackTrace();
+		}
+		return null;
+   	}
+    
     
     public static String convertDateToyyyymmddhhmmssDashedString(Date date)
    	{
@@ -592,6 +606,7 @@ public class LMSUtil
     public static SimpleDateFormat yyyymmddhhmmss = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
     public static SimpleDateFormat yyyymmddhhmmssdashed = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public static SimpleDateFormat yyyymmddhhmmssdashed2 = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+    public static SimpleDateFormat yyyymmddhhmmssdashed24Hr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static SimpleDateFormat yyyymmddHHmmssdashed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static SimpleDateFormat ddmmyyyyhhmmss = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
     public static  SimpleDateFormat yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");

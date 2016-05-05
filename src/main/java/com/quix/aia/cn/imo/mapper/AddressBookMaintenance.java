@@ -30,6 +30,7 @@ package com.quix.aia.cn.imo.mapper;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,11 +99,12 @@ public class AddressBookMaintenance {
 		CandidateNoteMaintenance candidateNoteMaintenance = new CandidateNoteMaintenance();
 
 		try {
-			session = HibernateFactory.openSession();
+			
 			int count = 0;
 
 			boolean flag = true;
 			for (AddressBook addressBook : addressBookList) {
+				session = HibernateFactory.openSession();
 				deleteString = "";
 
 				tx = session.beginTransaction();
@@ -123,13 +125,30 @@ public class AddressBookMaintenance {
 				tx.commit();
 
 				if("".equals(deleteString)){
-					candidateEducationMaintenance.saveOrUpdate(addressBook);
-					candidateESignatureMaintenance.saveOrUpdate(addressBook);
-					candidateFamilyInfoMaintenance.saveOrUpdate(addressBook);
-					candidateGroupMaintenance.saveOrUpdate(addressBook);
-					candidateProfessionalCertificationMaintenance.saveOrUpdate(addressBook);
-					candidateWorkExperienceMaintenance.saveOrUpdate(addressBook);
-					candidateNoteMaintenance.saveOrUpdate(addressBook);
+					if(addressBook.getCandidateEducations()!=null && addressBook.getCandidateEducations().size()>0){
+						candidateEducationMaintenance.saveOrUpdate(addressBook);
+					}
+					if(addressBook.getCandidateESignatures().size()>0 && addressBook.getCandidateESignatures()!=null ){
+						candidateESignatureMaintenance.saveOrUpdate(addressBook);
+					}
+					if(addressBook.getCandidateFamilyInfos()!=null &&  addressBook.getCandidateFamilyInfos().size()>0){
+						candidateFamilyInfoMaintenance.saveOrUpdate(addressBook);
+					}
+					
+					if(addressBook.getCandidateGroups()!=null &&   addressBook.getCandidateGroups().size()>0){
+						candidateGroupMaintenance.saveOrUpdate(addressBook);
+					}
+					
+					if(addressBook.getCandidateProfessionalCertifications()!=null &&  addressBook.getCandidateProfessionalCertifications().size()>0){
+						candidateProfessionalCertificationMaintenance.saveOrUpdate(addressBook);
+					}
+					if(addressBook.getCandidateWorkExperiences()!=null && addressBook.getCandidateWorkExperiences().size()>0){
+						candidateWorkExperienceMaintenance.saveOrUpdate(addressBook);
+					}
+					if(addressBook.getCandidateNotes()!=null && addressBook.getCandidateNotes().size()>0){
+						candidateNoteMaintenance.saveOrUpdate(addressBook);
+					}
+					
 				}
 
 				if (flag) {
@@ -142,6 +161,13 @@ public class AddressBookMaintenance {
 				if (++count % 10 == 0) {
 					session.flush();
 					session.clear();
+				}
+				
+				try {
+					HibernateFactory.close(session);
+				} catch (Exception e) {
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -698,7 +724,10 @@ public class AddressBookMaintenance {
 			String fetchField = getStringFromArrayString(fetchFields,null,"forSelect");
 			String fetchCondition = getStringFromArrayString(conditionFieldName, conditionFieldValue,"forWhere");
 			query = session.createQuery(" SELECT "+fetchField+" FROM AddressBook WHERE "+fetchCondition);
+			query.setFirstResult(0);
+			query.setMaxResults(1);
 			list = query.list();
+			
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -817,6 +846,8 @@ public class AddressBookMaintenance {
 			query.setParameter("candidateCode",Integer.parseInt(restForm.getCandidateCode().trim()));
 			query.executeUpdate();
 			tx.commit();
+			session.flush();
+			
 			
 
 		} catch (Exception ex) {
@@ -840,6 +871,48 @@ public class AddressBookMaintenance {
 		
 	}
 	
+	
+	public void updateFirstInterview(RestForm restForm, String candidateCode) {
+		// TODO Auto-generated method stub
+		
+		Session session = null;
+		Query query = null;
+
+		try {
+			
+			session = HibernateFactory.openSession();
+			Transaction tx=session.beginTransaction();
+			SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String passTime= formate.format(restForm.getPassTime());
+			query = session.createQuery("UPDATE AddressBook SET interviewResult =:interviewresult,passTime=:passtime where addressCode=:candidateCode ");
+			query.setParameter("interviewresult", restForm.getInterviewResult());
+			query.setParameter("passtime",passTime );
+			query.setParameter("candidateCode",Integer.parseInt(candidateCode.trim()));
+			query.executeUpdate();
+			tx.commit();
+			session.flush();
+			
+
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.getMessage());
+			ex.printStackTrace();
+			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			ex.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
+		} finally {
+			try {
+				HibernateFactory.close(session);
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+			session = null;
+		}
+		
+		
+		
+	}
 	
 	
 	

@@ -110,7 +110,7 @@ public class FirstInterviewRest {
 			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
 	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed(json.getAsString());
+            	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed24Hr(json.getAsString());
             	   		if(null != date){
             	   			return date;
             	   		}else{
@@ -192,7 +192,7 @@ public class FirstInterviewRest {
 			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
 	               @Override  
 	               public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-         	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed2(json.getAsString());
+         	   		Date date = LMSUtil.convertDateToyyyymmddhhmmssDashed24Hr(json.getAsString());
          	   		if(null != date){
          	   			return date;
          	   		}else{

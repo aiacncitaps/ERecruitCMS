@@ -1451,16 +1451,27 @@ public class EopAttendanceMaintenance {
 			 ArrayList<EventCandidate> attendanceList = new ArrayList<EventCandidate>();
 			try{
 				session = HibernateFactory.openSession();
-				Criteria crit = session.createCriteria(EventCandidate.class);
+				tx = session.beginTransaction();
+				/*Criteria crit = session.createCriteria(EventCandidate.class);
 				crit.add(Restrictions.eq("eventCandidateCode", ""+candidateCode));
 				attendanceList = (ArrayList)crit.list();
 				
-				tx = session.beginTransaction();
+				
 				for(EventCandidate eventCandidate : attendanceList){
 					eventCandidate.setStatus(false);
 					session.update(eventCandidate);
 				}
+				tx.commit();*/
+				
+				
+				
+				Query query = session.createQuery("UPDATE EventCandidate SET status =:st  where eventCandidateCode=:candidateCode ");
+				query.setParameter("st", false);
+				query.setParameter("candidateCode",candidateCode+"".trim());
+				query.executeUpdate();
+				
 				tx.commit();
+				session.flush();
 				
 			}catch(Exception e)
 			{

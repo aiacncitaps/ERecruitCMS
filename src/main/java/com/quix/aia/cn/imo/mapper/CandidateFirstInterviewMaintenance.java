@@ -26,6 +26,7 @@ package com.quix.aia.cn.imo.mapper;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -69,8 +71,17 @@ public class CandidateFirstInterviewMaintenance {
 		 log.log(Level.INFO,"---Candidate Training Result Maintenance Creation--- ");
 		 User userObj = (User)requestParameters.getSession().getAttribute("currUserObj");
 		 MsgObject msgObj = null;
-		String agentId = requestParameters.getParameter("agentId");
+		//String agentId = requestParameters.getParameter("agentId");
 		int status = insertNewCandidateFirstInterview(candidateFirstInterview);
+		
+		/*RestForm restform=new RestForm();
+		restform.setPassTime(candidateFirstInterview.getPassTime());
+		restform.setInterviewResult(candidateFirstInterview.getInterviewResult());
+		String candidateCode=candidateFirstInterview.getCandidateCode();
+		AddressBookMaintenance addressbookmain=new AddressBookMaintenance();
+		addressbookmain.updateFirstInterview(restform,candidateCode);
+*/		
+		
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		String msg = "";
 		if(status !=0){
@@ -118,7 +129,19 @@ public class CandidateFirstInterviewMaintenance {
 			Transaction tx = session.beginTransaction();
 			session.saveOrUpdate(candidate);
 			key=1;
+		//	session.flush();
+			
+			/* update Addressbook interview result and date   */
+			SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String passTime= formate.format(candidate.getPassTime());
+			Query query = session.createQuery("UPDATE AddressBook SET interviewResult =:interviewresult,passTime=:passtime where addressCode=:candidateCode ");
+			query.setParameter("interviewresult", candidate.getInterviewResult());
+			query.setParameter("passtime",passTime );
+			query.setParameter("candidateCode",Integer.parseInt(candidate.getCandidateCode()));
+			query.executeUpdate();
+			
 			tx.commit();
+			session.flush();
 			log.log(Level.INFO,"---New Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)
 		{
@@ -154,7 +177,7 @@ public class CandidateFirstInterviewMaintenance {
 		try{
 			
 			session = HibernateFactory.openSession();
-			//session.setDefaultReadOnly(true);
+			session.setDefaultReadOnly(true);
 			
 			Criteria crit = session.createCriteria(CandidateFirstInterview.class);
 			crit.add(Restrictions.eq("agentId", agentId));
@@ -163,6 +186,29 @@ public class CandidateFirstInterviewMaintenance {
 			crit.setFirstResult(0);
 			crit.setMaxResults(1);
 			list=(ArrayList<CandidateFirstInterview>) crit.list();
+
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			LogsMaintenance logsMain=new LogsMaintenance();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			logsMain.insertLogs("CandidateFirstInterviewMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		try{
+			
 			
 			if(restForm!=null){
 				for(CandidateFirstInterview firstInter:list){
@@ -175,7 +221,10 @@ public class CandidateFirstInterviewMaintenance {
 								firstInter.setInterviewResult(restForm.getInterviewResult());
 								firstInter.setRecruitmentPlan(restForm.getRecruitmentPlan());
 								firstInter.setRemarks(restForm.getRemarks());
-								updateFirstInterview(firstInter);
+								updateFirstInterview(firstInter,restForm,candidateCode);
+								/*AddressBookMaintenance addressbookmain=new AddressBookMaintenance();
+								addressbookmain.updateFirstInterview(restForm,candidateCode);*/
+								
 								
 							}
 						}
@@ -186,7 +235,8 @@ public class CandidateFirstInterviewMaintenance {
 			}
 			
 			
-			log.log(Level.INFO,"---New Candidate Training Result Fetched Successfully--- ");
+			log.log(Level.INFO,"---New First Interview  Result Fetched Successfully--- ");
+			
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
@@ -214,7 +264,7 @@ public class CandidateFirstInterviewMaintenance {
 
 
 
-	private void updateFirstInterview(CandidateFirstInterview firstInter) {
+	private void updateFirstInterview(CandidateFirstInterview firstInter, RestForm restForm, String candidateCode) {
 		// TODO Auto-generated method stub
 	
 		Session session = null;
@@ -223,7 +273,20 @@ public class CandidateFirstInterviewMaintenance {
 			session = HibernateFactory.openSession();
 			Transaction tx = session.beginTransaction();
 			session.update(firstInter);
+			session.flush();
+			
+			/* update Addressbook interview result and date   */
+			SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String passTime= formate.format(restForm.getPassTime());
+			Query query = session.createQuery("UPDATE AddressBook SET interviewResult =:interviewresult,passTime=:passtime where addressCode=:candidateCode ");
+			query.setParameter("interviewresult", restForm.getInterviewResult());
+			query.setParameter("passtime",passTime );
+			query.setParameter("candidateCode",Integer.parseInt(candidateCode.trim()));
+			query.executeUpdate();
+			
 			tx.commit();
+			session.flush();
+			
 			log.log(Level.INFO,"---update Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)
 		{

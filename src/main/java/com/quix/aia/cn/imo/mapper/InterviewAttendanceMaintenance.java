@@ -996,7 +996,8 @@ public class InterviewAttendanceMaintenance {
 		 ArrayList<InterviewCandidate> attendanceList = new ArrayList<InterviewCandidate>();
 		try{
 			session = HibernateFactory.openSession();
-			Criteria crit = session.createCriteria(InterviewCandidate.class);
+			tx = session.beginTransaction();
+			/*Criteria crit = session.createCriteria(InterviewCandidate.class);
 			crit.add(Restrictions.eq("interviewCandidateCode", ""+candidateCode));
 			attendanceList = (ArrayList)crit.list();
 			
@@ -1005,7 +1006,16 @@ public class InterviewAttendanceMaintenance {
 				interviewCandidate.setStatus(false);
 				session.update(interviewCandidate);
 			}
+			tx.commit();*/
+			
+			
+			Query query = session.createQuery("UPDATE InterviewCandidate SET status =:st  where interviewCandidateCode=:candidateCode ");
+			query.setParameter("st", false);
+			query.setParameter("candidateCode",candidateCode+"".trim());
+			query.executeUpdate();
+			
 			tx.commit();
+			session.flush();
 			
 		}catch(Exception e)
 		{
