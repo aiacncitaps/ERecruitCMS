@@ -30,10 +30,14 @@ package com.quix.aia.cn.imo.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -336,9 +340,12 @@ public class InterviewRest {
 				request.setAttribute("isRest", true);
 				ArrayList list = new ArrayList();
 				InterviewAttendanceMaintenance objMaintenance = new InterviewAttendanceMaintenance();
+				registeredCount=objMaintenance.getAttendanceListCounter(request,Integer.parseInt(interviewCode));
+				/*list = objMaintenance.getAttendanceList(request,Integer.parseInt(interviewCode));
+				registeredCount = list.size();*/
 				
-				list = objMaintenance.getAttendanceList(request,Integer.parseInt(interviewCode));
-				registeredCount = list.size();
+				
+				
 			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			 }else{
 				 beans.setCode("500");
@@ -501,11 +508,12 @@ public class InterviewRest {
 		MsgBeans beans = new MsgBeans();
 		AuditTrailMaintenance auditTrailMaint=new AuditTrailMaintenance();
 		String interviewStatus = "";
+		String interviewDate="";
 		try
 		{
 			GsonBuilder builder = new GsonBuilder();
 			 Gson googleJson  = builder.create();
-			 
+			 TreeSet set=new TreeSet();
 			 if(flag==true){
 				 
 				 	/*Type listType = new TypeToken<List<RestForm>>(){}.getType();
@@ -518,15 +526,66 @@ public class InterviewRest {
 					interviewType = interviewType==null||interviewType.equals("")?"0":interviewType;
 				 
 				InterviewAttendanceMaintenance objMaintenance = new InterviewAttendanceMaintenance();
-				InterviewCandidate interviewCandidate = objMaintenance.getCandidateInterviewDetail(candidateCode, interviewType);
-				
-				if(null == interviewCandidate){
-					interviewStatus = "No Status";
+				InterviewCandidate interviewCandidate=null;
+				if(interviewType.equals("3rd")){
+					ArrayList list=objMaintenance.getCandidateInterviewDetail3rd(candidateCode, interviewType);
+					
+					for(int i=0 ; i<1 ; i++){
+						ArrayList<InterviewCandidate> list3=(ArrayList<InterviewCandidate>) list.get(i);
+						for(InterviewCandidate candidate : list3){
+							if("p".equalsIgnoreCase(candidate.getInterviewResult())){
+								candidate.setInterviewResult("PASS");
+							}else if("f".equalsIgnoreCase(candidate.getInterviewResult())){
+								
+								candidate.setInterviewResult("FAIL");
+							}else{
+								candidate.setInterviewResult("No Status");
+							}
+							if(!candidate.getInterviewResult().equalsIgnoreCase("No Status")){
+								set.add(candidate.getInterviewDate()+","+candidate.getInterviewResult());
+							}
+							
+						}
+					}
+					
+					
 				}else{
-					interviewStatus = interviewCandidate.getInterviewResult();
+					 interviewCandidate = objMaintenance.getCandidateInterviewDetail(candidateCode, interviewType);
 				}
 				
-				String responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\"}]";
+				if(interviewType.equals("3rd")){
+					if(set!=null){
+						String str1=(String) set.last();
+						String str[]=str1.split(",");
+						interviewDate=str[0];
+						interviewStatus=str[1];
+						
+					}
+					
+				}else{
+					
+					if(null == interviewCandidate){
+						interviewStatus = "No Status";
+					}else{
+						interviewStatus = interviewCandidate.getInterviewResult();
+						if(interviewStatus.equals("PASS")){
+							interviewStatus = "PASS";
+							
+						}else{
+							interviewStatus = "FAIL";
+						}
+						
+					}
+				}
+				
+					
+				String responseJsonString="";
+				if(interviewStatus.equals("PASS")){
+					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\",\"Date\":\""+interviewDate+"\"}]";
+				}else{
+					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\"}]";
+				}
+				
 			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_INTERVIEW, AuditTrail.FUNCTION_REST, "SUCCESS"));
 				return Response.status(200).entity(responseJsonString).build();
 			 }else{

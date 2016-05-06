@@ -1704,14 +1704,14 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 	 
 	try{
 		
-		session = HibernateFactory.openSession();
-		session.setDefaultReadOnly(true);
+		/*session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);*/
 		Date sdate=new Date();
 		log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 
 		Criteria crit ;
 		Date now=new Date();
-		Query query=session.createQuery("FROM Interview where status = 1 "
+		/*Query query=session.createQuery("FROM Interview where status = 1 "
 				+ "  AND (interviewDate > :interviewDate OR ( interviewDate = :interviewDate AND StartTime > :startTime ))"
 				+ " AND ( (buCode=:bucode  and district=0) "
 				+ "or (buCode=:bucode and district=:distcode and  branchCode=0)"
@@ -1719,7 +1719,7 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
 				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
 				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode ) )");
-		
+		*/
 	ImoUtilityData utilityData=new ImoUtilityData();
 	String branchName=utilityData.getBranchNameBaseonCode(aamData.getBranchCode());
 	ArrayList<Branch> branchlist= utilityData.getBranchCodeListBasedOnBranchName(branchName);
@@ -1733,7 +1733,18 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			aamData.setDistrictCode(dist.getDistrictCode());
 			aamData.setBuCode(dist.getBuCode());			
 			
-		
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			
+			Query query=session.createQuery("FROM Interview where status = 1 "
+					+ "  AND (interviewDate > :interviewDate OR ( interviewDate = :interviewDate AND StartTime > :startTime ))"
+					+ " AND ( (buCode=:bucode  and district=0) "
+					+ "or (buCode=:bucode and district=:distcode and  branchCode=0)"
+					+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and  cityCode='0')"
+					+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
+					+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
+					+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode ) )");
+			
 			
 		query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 		query.setParameter("interviewDate",sdf1.parse(sdf1.format(now)));
@@ -1745,12 +1756,23 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 		query.setParameter("officeCode",aamData.getOfficeCode());
 		interviewList=(ArrayList<Interview>) query.setCacheable(true).list();
 		
+		/* */
+		try{
+			session.setDefaultReadOnly(false);
+			HibernateFactory.close(session);
+			
+		}catch(Exception e){
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		}
 		
 		if(!"".equals(candidateCode)){
 			   for(Iterator iterator=interviewList.iterator();iterator.hasNext(); ){
 			    interview = (Interview) iterator.next();
 			    
-			    
+			    session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
+				
 			    crit = session.createCriteria(InterviewCandidate.class);
 			    crit.add(Restrictions.eq("interviewCode", interview.getInterview_code()));
 			    crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
@@ -1762,6 +1784,15 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			     interview.setIsRegistered(false);
 			    }
 
+			    try{
+					session.setDefaultReadOnly(false);
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+			    
 			   }
 			}
 		
@@ -1771,6 +1802,19 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 		} // branchCode for loop
 		
 	}else{
+		
+		session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
+		Query query=session.createQuery("FROM Interview where status = 1 "
+				+ "  AND (interviewDate > :interviewDate OR ( interviewDate = :interviewDate AND StartTime > :startTime ))"
+				+ " AND ( (buCode=:bucode  and district=0) "
+				+ "or (buCode=:bucode and district=:distcode and  branchCode=0)"
+				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and  cityCode='0')"
+				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode='0')"
+				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode = '0')"
+				+ "or (buCode=:bucode and district=:distcode and branchCode=:branchCode and cityCode=:citycode and sscCode=:ssccode and officeCode =:officeCode ) )");
+		
+		
 		
 		query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 		query.setParameter("interviewDate",sdf1.parse(sdf1.format(now)));
@@ -1782,12 +1826,22 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 		query.setParameter("officeCode",aamData.getOfficeCode());
 		interviewList=(ArrayList<Interview>) query.setCacheable(true).list();
 		
-		
+		/*   */
+		 try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		 
 		if(!"".equals(candidateCode)){
 			   for(Iterator iterator=interviewList.iterator();iterator.hasNext(); ){
 			    interview = (Interview) iterator.next();
 			    
-			    
+			    session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 			    crit = session.createCriteria(InterviewCandidate.class);
 			    crit.add(Restrictions.eq("interviewCode", interview.getInterview_code()));
 			    crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
@@ -1799,13 +1853,21 @@ public ArrayList getAllInterviewRest(AamData aamData,String agentId, String cand
 			     interview.setIsRegistered(false);
 			    }
 
+			    try{
+					session.setDefaultReadOnly(false);
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+			    
+			    
 			   }
 			}
 		
 		interviewListAddAll.addAll(interviewList);
 	}
-		
-		
 		
 		
 		Date edate=new Date();

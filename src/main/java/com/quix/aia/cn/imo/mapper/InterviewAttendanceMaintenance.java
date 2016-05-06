@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +47,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
+import com.quix.aia.cn.imo.data.addressbook.CandidateFirstInterview;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
 import com.quix.aia.cn.imo.data.common.AamData;
 import com.quix.aia.cn.imo.data.interview.Interview;
@@ -298,6 +300,48 @@ public class InterviewAttendanceMaintenance {
 	}
 	 
 	 
+	
+	public  Integer getAttendanceListCounter(HttpServletRequest req,int interviewCode)
+	{
+		Session session = null;
+		Integer count=0;
+		String agentId = req.getParameter("agentId");
+		Boolean isRest = (Boolean) req.getAttribute("isRest");
+		ArrayList<InterviewCandidate> attendanceList = new ArrayList<InterviewCandidate>();
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Criteria crit = session.createCriteria(InterviewCandidate.class);
+			crit.add(Restrictions.eq("interviewCode", interviewCode));
+			crit.add(Restrictions.eq("status", true));
+			crit.addOrder(Order.desc("candidateCode"));
+			crit.setProjection(Projections.rowCount());
+			count = ((Long) crit.uniqueResult()).intValue();
+			
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				session.setDefaultReadOnly(false);
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+	}
+		
+		return count;
+	}
+	 
+	
+	
 	/**
 	 * <p>get all attendance registered for particular interview</p>
 	 * @param req   Servlet Request Parameter
@@ -329,7 +373,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
-				session.setDefaultReadOnly(false);
+				
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -696,7 +740,7 @@ public class InterviewAttendanceMaintenance {
 		session = HibernateFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		
-		Criteria crit = session.createCriteria(InterviewCandidate.class);
+		/*Criteria crit = session.createCriteria(InterviewCandidate.class);
 		crit.add(Restrictions.eq("interviewCode", interviewCode));
 		crit.add(Restrictions.eq("interviewCandidateCode", ""+candidateCode));
 		List<InterviewCandidate> list=(ArrayList<InterviewCandidate>) crit.list();
@@ -704,7 +748,14 @@ public class InterviewAttendanceMaintenance {
 			candidate = (InterviewCandidate) iterator.next();
 			candidate.setStatus(false);
 			session.update(candidate);
-		}
+		}*/
+		
+		Query query = session.createQuery("UPDATE InterviewCandidate SET status =:st where interviewCode=:interviewCode where interviewCandidateCode=:candidateCode ");
+		query.setParameter("st", false);
+		query.setParameter("interviewCode",interviewCode );
+		query.setParameter("candidateCode",candidateCode);
+		query.executeUpdate();
+		
 		tx.commit();
 		status = "Y";
 		
@@ -774,7 +825,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
-				session.setDefaultReadOnly(false);
+				
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -794,45 +845,20 @@ public class InterviewAttendanceMaintenance {
 		List<InterviewCandidate> interviewList = new ArrayList();
 		boolean interviewFound = false;
 		boolean fail = false;
+		
 		try{
 			session = HibernateFactory.openSession();
 			session.setDefaultReadOnly(true);
-			Query selectQ = session.createQuery(" from InterviewCandidate where interviewCandidateCode=:candidateCode and status=:status ");
+			/*Query selectQ = session.createQuery(" from InterviewCandidate where interviewCandidateCode=:candidateCode and status=:status ");
 			selectQ.setParameter("candidateCode", candidateCode);
 			selectQ.setParameter("status", true);
 			attendanceList = selectQ.list();
+			*/
 			
-			if(!attendanceList.isEmpty()){
-				for(Iterator itr = attendanceList.iterator();itr.hasNext();){
-					interviewCandidate1 = (InterviewCandidate) itr.next();
-					selectQ = session.createQuery(" from Interview where interview_code=:interviewCode and interviewType=:interviewType and status=:status ");
-					selectQ.setParameter("interviewCode", interviewCandidate1.getInterviewCode());
-					selectQ.setParameter("interviewType", interviewType);
-					selectQ.setParameter("status", true);
-					interviewList = selectQ.list();
-					
-					if(!interviewList.isEmpty()){
-						interviewFound = true;
-						if("p".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
-							interviewCandidate.setInterviewResult("PASS");
-							break;
-						}else if("f".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
-							fail = true;
-							interviewCandidate.setInterviewResult("FAIL");
-						}else if(!fail){
-							interviewCandidate.setInterviewResult("No Status");
-						}
-					}
-					
-				}
-				
-				if(!interviewFound){
-					interviewCandidate = null;
-				}
-				
-			}else{
-				interviewCandidate = null;
-			}
+			Criteria crit = session.createCriteria(InterviewCandidate.class);
+			crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
+			crit.add(Restrictions.eq("status", true));
+			attendanceList=crit.list();
 			
 		}catch(Exception e)
 		{
@@ -844,7 +870,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
-				session.setDefaultReadOnly(false);
+				
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -852,8 +878,189 @@ public class InterviewAttendanceMaintenance {
 				e.printStackTrace();
 			}
 		}
+			
+			try{
+				
+					if(!attendanceList.isEmpty()){
+						
+						for(Iterator itr = attendanceList.iterator();itr.hasNext();){
+							
+							session = HibernateFactory.openSession();
+							session.setDefaultReadOnly(true);
+							
+							interviewCandidate1 = (InterviewCandidate) itr.next();
+							/*Query selectQ = session.createQuery(" from Interview where interview_code=:interviewCode and interviewType=:interviewType and status=:status ");
+							selectQ.setParameter("interviewCode", interviewCandidate1.getInterviewCode());
+							selectQ.setParameter("interviewType", interviewType);
+							selectQ.setParameter("status", true);
+							interviewList = selectQ.list();*/
+							
+							Criteria crit = session.createCriteria(Interview.class);
+							crit.add(Restrictions.eq("interview_code", interviewCandidate1.getInterviewCode()));
+							crit.add(Restrictions.eq("interviewType", interviewType));
+							crit.add(Restrictions.eq("status", true));
+							interviewList=crit.list();
+							
+							
+							if(!interviewList.isEmpty()){
+								interviewFound = true;
+								if("p".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
+									interviewCandidate.setInterviewResult("PASS");
+									
+									//break;
+								}else if("f".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
+									fail = true;
+									interviewCandidate.setInterviewResult("FAIL");
+								}else if(!fail){
+									interviewCandidate.setInterviewResult("No Status");
+								}
+							}
+							
+							try{
+								
+								HibernateFactory.close(session);
+								
+							}catch(Exception e){
+								log.log(Level.SEVERE, e.getMessage());
+								e.printStackTrace();
+							}
+							
+							
+						}
+						
+						if(!interviewFound){
+							interviewCandidate = null;
+						}
+						
+					}else{
+						interviewCandidate = null;
+					}
+			}catch(Exception e)
+			{
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+			}finally{
+				try{
+					
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		
 		return interviewCandidate;
 	}
+	
+	
+	
+	
+	public ArrayList<InterviewCandidate> getCandidateInterviewDetail3rd(String candidateCode, String interviewType)
+	{
+		Session session = null;
+		InterviewCandidate interviewCandidate = new InterviewCandidate();
+		InterviewCandidate interviewCandidate1 = null;
+		ArrayList<InterviewCandidate> attendanceList = new ArrayList();
+		ArrayList list=new ArrayList();
+		ArrayList<InterviewCandidate> interviewList = new ArrayList<InterviewCandidate>();
+		boolean interviewFound = false;
+		boolean fail = false;
+		
+		try{
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			
+			Criteria crit = session.createCriteria(InterviewCandidate.class);
+			crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
+			crit.add(Restrictions.eq("status", true));
+			attendanceList=(ArrayList<InterviewCandidate>) crit.list();
+			
+		}catch(Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+		}finally{
+			try{
+				
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+			
+			try{
+				
+					if(!attendanceList.isEmpty()){
+						
+						for(Iterator itr = attendanceList.iterator();itr.hasNext();){
+							
+							session = HibernateFactory.openSession();
+							session.setDefaultReadOnly(true);
+							
+							interviewCandidate1 = (InterviewCandidate) itr.next();
+							Criteria crit = session.createCriteria(Interview.class);
+							crit.add(Restrictions.eq("interview_code", interviewCandidate1.getInterviewCode()));
+							crit.add(Restrictions.eq("interviewType", interviewType));
+							crit.add(Restrictions.eq("status", true));
+							crit.setProjection(Projections.rowCount());
+							Integer count = ((Long) crit.uniqueResult()).intValue();
+							if(count>0){
+								list.add(attendanceList);
+							}
+							
+							
+							try{
+								
+								HibernateFactory.close(session);
+								
+							}catch(Exception e){
+								log.log(Level.SEVERE, e.getMessage());
+								e.printStackTrace();
+							}
+							
+							
+						}
+						
+						
+					}else{
+						interviewCandidate = null;
+					}
+			}catch(Exception e)
+			{
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
+			}finally{
+				try{
+					
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		
+		return list;
+	}
+	
+	
+	
+	
 	public static AddressBook getccTestResult(String interviewCandidateCode) {
 		
 		log.log(Level.INFO,"InterviewMaintenance --> getcctest result ");
@@ -904,6 +1111,8 @@ public class InterviewAttendanceMaintenance {
 			    Criteria criteria = session.createCriteria(InterviewCandidate.class);
 				criteria.add(Restrictions.eq("interviewCandidateCode", ""+candidateCode));
 				criteria.add(Restrictions.eq("interviewCode", interviewCode));
+				criteria.setFirstResult(0);
+				criteria.setMaxResults(1);
 				listData = (ArrayList) criteria.list();
 				
 				if(listData.size()>0){
@@ -923,7 +1132,7 @@ public class InterviewAttendanceMaintenance {
 					logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
-					session.setDefaultReadOnly(false);
+					
 					HibernateFactory.close(session);
 				}catch(Exception e){
 					
@@ -950,7 +1159,8 @@ public class InterviewAttendanceMaintenance {
 			    
 			    Criteria criteria = session.createCriteria(InterviewCandidate.class);
 				criteria.add(Restrictions.eq("candidateCode", candidateCode));
-				
+				criteria.setFirstResult(0);
+				criteria.setMaxResults(1);
 				listData = (ArrayList) criteria.list();
 				
 				if(listData.size()>0){
@@ -1073,7 +1283,7 @@ public class InterviewAttendanceMaintenance {
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
-				session.setDefaultReadOnly(false);
+				
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
