@@ -579,6 +579,11 @@ public class InterviewRest {
 					
 				String responseJsonString="";
 				if(interviewStatus.equals("PASS") && interviewType.equals("3rd") ){
+					SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+			        SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			        Date dt = formate.parse(interviewDate);
+			        interviewDate = formate2.format(dt);
+					
 					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\",\"Date\":\""+interviewDate+"\"}]";
 				}else{
 					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\"}]";
