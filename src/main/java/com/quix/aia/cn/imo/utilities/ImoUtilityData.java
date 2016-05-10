@@ -120,7 +120,7 @@ public class ImoUtilityData {
 			
 			session = HibernateFactory.openSession();
 			ImoUtilityData imoData = null;
-		 
+			session.setDefaultReadOnly(true);
 			List list = session.createQuery("SELECT  buCode,buName  FROM  Bu where status = 1 ORDER BY  orderCode,buName" ).list();
 			Iterator ite = list.iterator();
 			if(list !=null  && list.size() > 0){
@@ -165,6 +165,7 @@ public class ImoUtilityData {
 		try{
 			
 			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
 			ImoUtilityData imoData = null;
 		   
 			Query  query = session.createQuery("SELECT  districtCode,districtName FROM District where buCode =:buCode and status = 1 ORDER BY orderCode,districtName" );
@@ -210,6 +211,7 @@ public class ImoUtilityData {
 			try{
 				
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				ImoUtilityData imoData = null;
 				//distCode =:districtCode and 
 				Query  query = session.createQuery("SELECT Distinct  branchCode,branchFullName,orderCode FROM Branch where distCode =:districtCode and  status = 1 ORDER BY orderCode,branchCode,branchFullName" );
@@ -256,6 +258,7 @@ public class ImoUtilityData {
 			try{
 				
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				ImoUtilityData imoData = null;
 			   
 				Query query = session.createQuery("SELECT  branchName  FROM Branch where branchCode=:code" );
@@ -309,6 +312,7 @@ public class ImoUtilityData {
 			try{
 				
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				ImoUtilityData imoData = null;
 			   
                 Query  query = session.createQuery("SELECT  officeName,officeFullName FROM Office where sscCodeStr =:sscCode " );
@@ -355,6 +359,7 @@ public class ImoUtilityData {
 				try{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					ImoUtilityData imoData = null;
 				   
                     Query  query = session.createQuery("SELECT  sscName,sscFullName FROM Ssc where cityCodeStr =:code " );
@@ -401,7 +406,7 @@ public class ImoUtilityData {
 		
 		try {
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Query query=session.createQuery("select branchName from Branch where branchCode=:code");
 			query.setParameter("code",Integer.parseInt(branch));
 			List list=query.list();
@@ -458,6 +463,7 @@ public class ImoUtilityData {
 			String str="";
 			try {
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				
 				Query query=session.createQuery("select branchName from Branch where branchCode=:code");
 				query.setParameter("code",code);
@@ -496,6 +502,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					Branch branchbean=null;
 					Query query=session.createQuery(" from Branch where branchFullName=:fullName ");
 					query.setParameter("fullName", branch);
@@ -533,6 +540,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					City citybean=null;
 					Query query=session.createQuery(" from City where cityFullName=:fullName ");
 					query.setParameter("fullName", city);
@@ -568,6 +576,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					Ssc sscbean=null;
 					Query query=session.createQuery(" from Ssc where sscFullName=:fullName ");
 					query.setParameter("fullName", ssc);
@@ -605,6 +614,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					Office officebean=null;
 					Query query=session.createQuery(" from Office where officeFullName=:fullName ");
 					query.setParameter("fullName", office.trim());
@@ -641,6 +651,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
 					
 					Query query = session.createQuery(" from Department  where status = 1 ORDER BY orderCode,deptName");
 					arrActivity=(ArrayList<Department>) query.setCacheable(true).list();
@@ -674,7 +685,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from Bu where buCode=:code and status = 1");
 					query.setParameter("code", buCode);
 					arrActivity= (ArrayList<Bu>) query.list();
@@ -713,7 +724,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from District where districtCode=:code and status = 1");
 					query.setParameter("code", distCode);
 					arrActivity= (ArrayList<District>) query.list();
@@ -752,7 +763,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from Branch where branchCode=:code and status = 1");
 					query.setParameter("code", distCode);
 					arrActivity= (ArrayList<Branch>) query.list();
@@ -791,7 +802,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					
 					Query query = session.createQuery(" from City where cityName=:code");
 					query.setParameter("code", cityCode);
@@ -825,7 +836,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from Ssc where sscName=:ssccode ");
 					query.setParameter("ssccode", sscCode);
 					arrActivity= (ArrayList<Ssc>) query.list();
@@ -863,7 +874,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from Office where officeName=:code ");
 					query.setParameter("code", code);
 					arrActivity= (ArrayList<Office>) query.list();
@@ -899,7 +910,7 @@ public class ImoUtilityData {
 				{
 					
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query = session.createQuery(" from Department where deptCode="+department+"  and status = 1 ");
 				
 					arrActivity= (ArrayList<Department>) query.list();
@@ -958,7 +969,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select buCode from Bu where buName=:buname   and status = 1");
 					query.setParameter("buname", buName);
 					arrActivity= (ArrayList) query.list();
@@ -988,7 +999,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select districtCode from District where districtName=:distname  and status = 1");
 					query.setParameter("distname", distName);
 					arrActivity= (ArrayList) query.list();
@@ -1018,7 +1029,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select cityName from City where cityFullName=:cityname  ");
 					query.setParameter("cityname", cityName);
 					arrActivity= (ArrayList) query.list();
@@ -1049,7 +1060,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select branchCode from Branch where branchName=:name  and status = 1");
 					query.setParameter("name", branchName);
 					arrActivity= (ArrayList) query.list();
@@ -1081,7 +1092,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("from Branch where branchName=:name  and status = 1");
 					query.setParameter("name", branchName);
 					arrActivity= (ArrayList<Branch>) query.list();
@@ -1113,7 +1124,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select sscName from Ssc where sscFullName=:sscname");
 					query.setParameter("sscname", sscName);
 					arrActivity= (ArrayList) query.list();
@@ -1145,7 +1156,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select officeName from Office where officeFullName=:name ");
 					query.setParameter("name", name);
 					arrActivity= (ArrayList) query.list();
@@ -1177,7 +1188,7 @@ public class ImoUtilityData {
 				try
 				{
 					session = HibernateFactory.openSession();
-					
+					session.setDefaultReadOnly(true);
 					Query query= session.createQuery("select deptCode from Department where deptName=:deptname  and status = 1");
 					query.setParameter("deptname", deptName);
 					arrActivity= (ArrayList) query.list();
@@ -1300,7 +1311,7 @@ public class ImoUtilityData {
 			try
 			{
 				session = HibernateFactory.openSession();
-				
+				session.setDefaultReadOnly(true);
 				Query query= session.createQuery("select channelCode from Channel where channelName=:Name  and status = 1");
 				query.setParameter("Name", ChannelName);
 				arrActivity= (ArrayList) query.list();
@@ -1346,7 +1357,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -1614,7 +1625,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -1667,7 +1678,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -1810,7 +1821,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -1965,7 +1976,7 @@ public class ImoUtilityData {
 		log.log(Level.INFO, "ImoUtilityDate -->  getPresenterCache");
 		
 		Session session = null;
-		Transaction tx;
+		
 		
 		List<Presenter> listPresenter=null;
 		List<Bu> listbu=null;
@@ -1979,7 +1990,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -2130,8 +2141,7 @@ public class ImoUtilityData {
 		log.log(Level.INFO, "ImoUtilityDate -->  getInterviewCache");
 		
 		Session session = null;
-		Transaction tx;
-	
+			
 		List<Interview> listInterview=null;
 		List<Bu> listbu=null;
 		List<District> listdist=null;
@@ -2144,7 +2154,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -2292,7 +2302,7 @@ public class ImoUtilityData {
 		log.log(Level.INFO, "ImoUtilityDate -->  getHolidayCache");
 		
 		Session session = null;
-		Transaction tx;
+		
 		List<Holiday> listHoliday=null;
 		List<Bu> listbu=null;
 		List<District> listdist=null;
@@ -2303,7 +2313,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			Date sdate=new Date();
 			log.log(Level.INFO,"Start Time "+sdate.getTime());
 		
@@ -2417,7 +2427,7 @@ public class ImoUtilityData {
 		// TODO Auto-generated method stub
 		log.log(Level.INFO, "ImoUtilityDate -->  checkLevelOfCode");
 		Session session = null;
-		Transaction tx;
+		
 		Boolean flag=false;
 		List<Ssc> ssclist=null;
 		Ssc ssc=null;
@@ -2440,7 +2450,7 @@ public class ImoUtilityData {
 		try{
 			Query query=null;
 			session = HibernateFactory.openSession();
-			
+			session.setDefaultReadOnly(true);
 			if(distCode!=0 && branchCode==0 && cityCode.equals("0") && sscCode.equals("0") && officeCode.equals("0")){
 //				ssc=new Ssc();
 //				crit = session.createCriteria(Ssc.class);
@@ -2548,6 +2558,7 @@ public class ImoUtilityData {
 			try{
 				
 				session = HibernateFactory.openSession();
+				session.setDefaultReadOnly(true);
 				ImoUtilityData imoData = null;
 				Query  query = session.createQuery("SELECT  Distinct branchName, branchFullName FROM Branch where status = 1 ORDER BY branchFullName" );
 				List list = query.list();

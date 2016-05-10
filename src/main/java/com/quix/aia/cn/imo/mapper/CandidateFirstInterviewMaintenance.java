@@ -273,7 +273,7 @@ public class CandidateFirstInterviewMaintenance {
 			session = HibernateFactory.openSession();
 			//Transaction tx = session.beginTransaction();
 			session.update(firstInter);
-			session.flush();
+			//session.flush();
 			
 			/* update Addressbook interview result and date   */
 			SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

@@ -1146,7 +1146,7 @@ public class AddressBookMaintenance {
 			Integer key =  getAddressBookIfExist(addressBook);
 			
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			if(key == 0){
 				if(userObj!=null){
 					addressBook.setCreatedBy(userObj.getStaffLoginId());
@@ -1185,7 +1185,7 @@ public class AddressBookMaintenance {
 			    addressBook = addressBookObj;
 			}
 			
-			tx.commit();
+			//tx.commit();
 		
 		    log.log(Level.INFO,"---Insert To Address Book Successfully--- ");
 			

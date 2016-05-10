@@ -987,7 +987,8 @@ public class InterviewAttendanceMaintenance {
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("InterviewAttendanceMaintenance",Level.SEVERE+"",errors.toString());
-		}finally{
+		}
+		/*finally{
 			try{
 				
 				HibernateFactory.close(session);
@@ -996,16 +997,14 @@ public class InterviewAttendanceMaintenance {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
-		}
+		}*/
 			
 			try{
 				
 					if(!attendanceList.isEmpty()){
-						
+					//	session = HibernateFactory.openSession();
+					//	session.setDefaultReadOnly(true);
 						for(Iterator itr = attendanceList.iterator();itr.hasNext();){
-							
-							session = HibernateFactory.openSession();
-							session.setDefaultReadOnly(true);
 							
 							interviewCandidate1 = (InterviewCandidate) itr.next();
 							Criteria crit = session.createCriteria(Interview.class);
@@ -1018,19 +1017,16 @@ public class InterviewAttendanceMaintenance {
 								list.add(attendanceList);
 							}
 							
-							
-							try{
-								
-								HibernateFactory.close(session);
-								
-							}catch(Exception e){
-								log.log(Level.SEVERE, e.getMessage());
-								e.printStackTrace();
-							}
-							
-							
 						}
 						
+					/*	try{
+							
+						HibernateFactory.close(session);
+							
+						}catch(Exception e){
+							log.log(Level.SEVERE, e.getMessage());
+							e.printStackTrace();
+						}*/
 						
 					}else{
 						interviewCandidate = null;

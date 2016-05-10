@@ -93,9 +93,9 @@ public class EgreetingMaintenance {
 		ArrayList<FestiveCategory> arrFestiveCategory = new ArrayList();
 		LogsMaintenance logsMain=new LogsMaintenance();
 		Session session = HibernateFactory.openSession();
+		session.setDefaultReadOnly(true);
 		try {
-			Query query = session
-					.createQuery("from FestiveCategory where status=:status");
+			Query query = session.createQuery("from FestiveCategory where status=:status");
 			query.setParameter("status", true);
 			arrFestiveCategory = (ArrayList<FestiveCategory>) query.list();
 		} catch (Exception e) {

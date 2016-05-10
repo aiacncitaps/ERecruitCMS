@@ -432,11 +432,11 @@ public class EopAttendanceMaintenance {
 		
 		try{
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			
 			key = (Integer)session.save(candidate);
 			
-			tx.commit();
+			//tx.commit();
 		
 		    log.log(Level.INFO,"---New Candidate Registered Successfully--- ");
 			
@@ -932,11 +932,11 @@ public class EopAttendanceMaintenance {
 		EventCandidate candidate = new EventCandidate();
 		try{
 		session = HibernateFactory.openSession();
-		Transaction tx = session.beginTransaction();
+		//Transaction tx = session.beginTransaction();
 		candidate = (EventCandidate)session.get(EventCandidate.class,candidateCode);
 		candidate.setStatus(false);
 		session.update(candidate);
-		tx.commit();
+		//tx.commit();
 		status = "Y";
 		
 		log.log(Level.INFO,"---Candidate Deleted Successfully---");
@@ -1218,7 +1218,7 @@ public class EopAttendanceMaintenance {
 	  EventCandidate candidate = new EventCandidate();
 	  try{
 	  session = HibernateFactory.openSession();
-	  Transaction tx = session.beginTransaction();
+	 // Transaction tx = session.beginTransaction();
 	  
 /*	  Criteria crit = session.createCriteria(EventCandidate.class);
 	  crit.add(Restrictions.eq("eventCode", eventCode));
@@ -1239,7 +1239,7 @@ public class EopAttendanceMaintenance {
 		query.executeUpdate();
 	  
 	  
-	  tx.commit();
+	 // tx.commit();
 	  status = "Y";
 	  
 	  log.log(Level.INFO,"---Candidate Deleted Successfully---");
@@ -1350,7 +1350,7 @@ public class EopAttendanceMaintenance {
 				addressBook.setBirthDate(candidate.getDob());
 				addressBook.setAgentId(candidate.getServicingAgent());
 				addressBook.setGender(candidate.getGender());
-				AddressBookMaintenance addressBookMaintenance=  new AddressBookMaintenance();
+				//AddressBookMaintenance addressBookMaintenance=  new AddressBookMaintenance();
 //				List<AddressBook> list = (List<AddressBook>) addressBookMaintenance.getAddressBook1(addressBook);
 //				if(!list.isEmpty() && 0 < list.size()){
 //					addressBook = list.get(0);

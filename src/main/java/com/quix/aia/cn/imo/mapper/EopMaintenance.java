@@ -2235,10 +2235,12 @@ public class EopMaintenance {
 			}
 			
 			
+					session = HibernateFactory.openSession();
+					session.setDefaultReadOnly(true);
+			
 				  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
 					  
-					  session = HibernateFactory.openSession();
-						session.setDefaultReadOnly(true);
+					 
 					  
 				    event = (Event) iterator.next();
 				    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
@@ -2260,7 +2262,11 @@ public class EopMaintenance {
 				   }
 					
 					
-					/* */
+					
+					
+					
+				   }
+				  /* */
 					try{
 						HibernateFactory.close(session);
 						
@@ -2268,10 +2274,6 @@ public class EopMaintenance {
 						log.log(Level.SEVERE, e.getMessage());
 						e.printStackTrace();
 					}
-					
-					
-				   }
-				  
 				  
 				  session = HibernateFactory.openSession();
 				  session.setDefaultReadOnly(true);
@@ -2312,13 +2314,12 @@ public class EopMaintenance {
 						log.log(Level.SEVERE, e.getMessage());
 						e.printStackTrace();
 					}
+
+
 					
-					
+						session = HibernateFactory.openSession();
+						session.setDefaultReadOnly(true);
 						  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
-							  
-							  session = HibernateFactory.openSession();
-							  session.setDefaultReadOnly(true);
-							  
 							  
 						    event = (Event) iterator.next();
 						    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
@@ -2339,7 +2340,12 @@ public class EopMaintenance {
 
 						   }
 							
-							/* */
+							
+							
+						   }
+				  
+						  
+						  /* */
 							try{
 								
 								HibernateFactory.close(session);
@@ -2348,9 +2354,6 @@ public class EopMaintenance {
 								log.log(Level.SEVERE, e.getMessage());
 								e.printStackTrace();
 							}
-							
-						   }
-				  
 				  eopList.addAll(eopList2);
 				  
 				  eventListAddAll.addAll(eopList);
@@ -2400,10 +2403,11 @@ public class EopMaintenance {
 					log.log(Level.SEVERE, e.getMessage());
 					e.printStackTrace();
 				}
+				
+				
+				 session = HibernateFactory.openSession();
+				  session.setDefaultReadOnly(true);
 					  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
-						  
-						  session = HibernateFactory.openSession();
-						  session.setDefaultReadOnly(true);
 						  
 					    event = (Event) iterator.next();
 					    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
@@ -2424,7 +2428,9 @@ public class EopMaintenance {
 
 					   }
 						
-						/* */
+					   }
+					  
+					  /* */
 						try{
 							
 							HibernateFactory.close(session);
@@ -2434,10 +2440,6 @@ public class EopMaintenance {
 							e.printStackTrace();
 						}
 						
-						
-					   }
-					  
-					  
 					  
 					  session = HibernateFactory.openSession();
 					  session.setDefaultReadOnly(true);
@@ -2479,10 +2481,10 @@ public class EopMaintenance {
 							e.printStackTrace();
 						}
 						
+							session = HibernateFactory.openSession();
+							session.setDefaultReadOnly(true);
+						
 							  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
-								  session = HibernateFactory.openSession();
-								  session.setDefaultReadOnly(true);
-								  
 								  
 							    event = (Event) iterator.next();
 							    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
@@ -2503,7 +2505,10 @@ public class EopMaintenance {
 
 							   }
 								
-								/* */
+								
+							   }
+					  
+							  /* */
 								try{
 									
 									HibernateFactory.close(session);
@@ -2512,8 +2517,6 @@ public class EopMaintenance {
 									log.log(Level.SEVERE, e.getMessage());
 									e.printStackTrace();
 								}
-							   }
-					  
 					  eopList.addAll(eopList2);
 					  eventListAddAll.addAll(eopList);
 				
@@ -2613,9 +2616,9 @@ public class EopMaintenance {
 					+ "  AND (e.eventDate < :eventDate OR ( e.eventDate = :eventDate AND e.startTime <= :startTime ))"
 					+ "  AND ec.status = 1 AND ec.eventCode=e.event_code AND ec.eventCandidateCode = :candidateCode ");
 			
-			System.out.println(""+now);
+			/*System.out.println(""+now);
 			System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
-		
+		*/
 			query.setParameter("startTime", LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
 			query.setParameter("eventDate", sdf1.parse(sdf1.format(now)));
 			query.setParameter("candidateCode", candidateCode);

@@ -529,6 +529,7 @@ public class InterviewRest {
 				InterviewCandidate interviewCandidate=null;
 				if(interviewType.equals("3rd")){
 					ArrayList list=objMaintenance.getCandidateInterviewDetail3rd(candidateCode, interviewType);
+					if(list!=null && list.size()>0){
 					
 					for(int i=0 ; i<1 ; i++){
 						ArrayList<InterviewCandidate> list3=(ArrayList<InterviewCandidate>) list.get(i);
@@ -547,14 +548,9 @@ public class InterviewRest {
 							
 						}
 					}
-					
-					
-				}else{
-					 interviewCandidate = objMaintenance.getCandidateInterviewDetail(candidateCode, interviewType);
 				}
-				
-				if(interviewType.equals("3rd")){
-					if(set!=null){
+					
+					if(set!=null && set.size()>0){
 						String str1=(String) set.last();
 						String str[]=str1.split(",");
 						interviewDate=str[0];
@@ -562,20 +558,22 @@ public class InterviewRest {
 						
 					}
 					
-				}else{
 					
-					if(null == interviewCandidate){
-						interviewStatus = "No Status";
-					}else{
-						interviewStatus = interviewCandidate.getInterviewResult();
-						if(interviewStatus.equals("PASS")){
-							interviewStatus = "PASS";
-							
+				}else{
+					 interviewCandidate = objMaintenance.getCandidateInterviewDetail(candidateCode, interviewType);
+					 if(null == interviewCandidate){
+							interviewStatus = "No Status";
 						}else{
-							interviewStatus = "FAIL";
-						}
-						
-					}
+							interviewStatus = interviewCandidate.getInterviewResult();
+							if(interviewStatus.equals("PASS")){
+								interviewStatus = "PASS";
+								
+							}else{
+								interviewStatus = "FAIL";
+							}
+				}
+				
+				
 				}
 				
 					
