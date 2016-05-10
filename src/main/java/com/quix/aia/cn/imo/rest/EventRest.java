@@ -496,6 +496,7 @@ public class EventRest {
 	        candidate.setOfficeName(aamData.getOfficeName());
 	        candidate.setAgencyLeaderCode(aamData.getLeaderCode());
 	        candidate.setEventCandidateCode(""+candidate.getCandidateCode());
+	        candidate.setRegisterd_date(new Date());
 	        
 	        if(candidate.getStatusStr() != null && candidate.getStatusStr().equalsIgnoreCase("true"))
 	        	candidate.setStatus(true);

@@ -306,7 +306,7 @@ public class EopAttendanceMaintenance {
 		addressBook.setCo(candidate.getBranchName());
 		AddressBook addressBookObj = new AddressBookMaintenance().insertAddressBook(addressBook,requestParameters);
 		candidate.setEventCandidateCode(""+addressBookObj.getAddressCode());
-		
+		candidate.setRegisterd_date(new Date());
 		AamData aamData = AamDataMaintenance.retrieveDataToModel(candidate.getServicingAgent(),addressBook.getCo()); 
 		candidate.setAgencyLeaderCode(aamData.getLeaderCode()!=null ? aamData.getLeaderCode() : "");
 		candidate.setAgencyLeaderName(AamDataMaintenance.retrieveAgentName(aamData.getLeaderCode(), aamData.getBranch())); 
@@ -435,8 +435,8 @@ public class EopAttendanceMaintenance {
 			//Transaction tx = session.beginTransaction();
 			
 			key = (Integer)session.save(candidate);
-			
-			//tx.commit();
+			//session.flush();
+		//	tx.commit();
 		
 		    log.log(Level.INFO,"---New Candidate Registered Successfully--- ");
 			

@@ -99,6 +99,11 @@
         </property>
         
         
+        <property  name="registerd_date" type="java.util.Date">
+            <column name="REGISTERED_DATE"  />
+        </property>
+        
+        
          <property name="branchName" formula="(SELECT b.BRANCH_FULLNAME FROM T_BRANCH b WHERE b.BRANCH_CODE=BRANCH) " update="false"></property>
         <property name="buName" formula="(SELECT b.BU_NAME FROM T_BU b WHERE b.BU_CODE=BU) " update="false"></property>
         <property name="distName" formula="(SELECT b.DISTRICT_NAME FROM T_DISTRICT b WHERE b.DISTRICT_CODE=DISTRICT) " update="false"></property>

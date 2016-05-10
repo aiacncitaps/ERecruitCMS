@@ -87,6 +87,7 @@ public class Event {
 	private String attendedStatus;
 	private Integer calendarServiceError;
 	private String tempFilePath;
+	private Date maxRegisteredDate;
 	
 	 public String getOfficeCode() {
 		return officeCode;
@@ -927,6 +928,14 @@ public class Event {
                 + "</tr>";
         return returnStr;
     }
+
+	public Date getMaxRegisteredDate() {
+		return maxRegisteredDate;
+	}
+
+	public void setMaxRegisteredDate(Date maxRegisteredDate) {
+		this.maxRegisteredDate = maxRegisteredDate;
+	}
 	 
 
 	

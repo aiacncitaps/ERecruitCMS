@@ -7,7 +7,7 @@
 			<property name="hibernate.connection.url">jdbc:sqlserver://202.150.218.108:1433;databaseName=DEMOIMOCN2;instanceName=MSSQLSERVER;</property>
 		    <property name="hibernate.connection.username">sa</property>
 		      <property name="hibernate.connection.password">5!ngap0re</property> 
-                
+                <property name="connection.autocommit">true</property>
 <!--
 			<property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=aia_icalendar;instanceName=MSSQLSERVER;</property>
 		    <property name="hibernate.connection.username">sa</property>

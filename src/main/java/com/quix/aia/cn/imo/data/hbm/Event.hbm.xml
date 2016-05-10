@@ -152,7 +152,9 @@
 	
         <property name="registeredCount" formula="(SELECT COUNT(r.CANDIDATE_CODE) FROM T_EVENT_REG r WHERE r.EVENT_CODE=EVENT_CODE AND r.STATUS = 1) " update="false"></property>
         <property name="attendeeCount" formula="(SELECT COUNT(r.CANDIDATE_CODE) FROM T_EVENT_REG r WHERE r.EVENT_CODE=EVENT_CODE AND r.STATUS = 1 AND r.TIME_IN IS NOT NULL) " update="false"></property> 
-        <property name="completedCount" formula="(SELECT COUNT(r.CANDIDATE_CODE) FROM T_EVENT_REG r WHERE r.EVENT_CODE=EVENT_CODE AND r.STATUS = 1 AND r.COMPLETE_STATUS = 'Y') " update="false"></property>  
+        <property name="completedCount" formula="(SELECT COUNT(r.CANDIDATE_CODE) FROM T_EVENT_REG r WHERE r.EVENT_CODE=EVENT_CODE AND r.STATUS = 1 AND r.COMPLETE_STATUS = 'Y') " update="false"></property>
+        
+        <property name="maxRegisteredDate" formula="(SELECT MAX(r.REGISTERED_DATE) FROM T_EVENT_REG r WHERE r.EVENT_CODE=EVENT_CODE AND r.STATUS = 1 ) " update="false"></property>  
         
        
     </class>

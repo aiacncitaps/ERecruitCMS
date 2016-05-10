@@ -72,6 +72,7 @@ public class EventCandidate {
     private String education;
     private String teamName;
     private String iosAddressCode;
+    private Date registerd_date;
     
 	  
 	
@@ -128,6 +129,7 @@ public class EventCandidate {
 		nric = "";
 		education = "";
 		teamName = "";
+		registerd_date=null;
 	}
 	/**
 	 * @return the candidateCode
@@ -645,6 +647,12 @@ public class EventCandidate {
 	}
 	public void setIosAddressCode(String iosAddressCode) {
 		this.iosAddressCode = iosAddressCode;
+	}
+	public Date getRegisterd_date() {
+		return registerd_date;
+	}
+	public void setRegisterd_date(Date registerd_date) {
+		this.registerd_date = registerd_date;
 	}
 	
 }

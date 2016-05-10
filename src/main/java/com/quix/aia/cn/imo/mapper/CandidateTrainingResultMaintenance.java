@@ -137,6 +137,7 @@ public class CandidateTrainingResultMaintenance {
 		 try{
 			 
 			 session = HibernateFactory.openSession();
+			 session.setDefaultReadOnly(true);
 			 Query query=session.createQuery("select agentId from AddressBook where nric=:nric group by agentId,nric ");
 			 query.setParameter("nric", nric);
 			 list=(ArrayList) query.list();
@@ -173,10 +174,10 @@ public class CandidateTrainingResultMaintenance {
 
 		try{
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			session.saveOrUpdate(candidate);
 			key=1;
-			tx.commit();
+			//tx.commit();
 			log.log(Level.INFO,"---New Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)
 		{
