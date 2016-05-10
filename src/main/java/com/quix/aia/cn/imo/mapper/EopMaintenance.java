@@ -2156,6 +2156,28 @@ public class EopMaintenance {
 			
 			Criteria crit ;
 			Date now=new Date();
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			Query qu=null;
+			Date maxRegisteredDate=null;
+			if(candidateCode!=null && candidateCode.length()>0){
+				qu=session.createQuery("select MAX(registerd_date) from EventCandidate where  eventCandidateCode=:candidateCode and status=1 ");
+				qu.setParameter("candidateCode", candidateCode);
+				List list=qu.list();
+				if(list!=null && list.size()>0){
+					maxRegisteredDate=(Date) list.get(0);
+				}
+				
+			}
+			/* */
+			try{
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+			 
 			
            /* Query query=session.createQuery("FROM Event where status = 1 and eventDate >= :eventDate and "
                     + "( (buCode=:bucode  and district=0) "
@@ -2243,6 +2265,7 @@ public class EopMaintenance {
 					 
 					  
 				    event = (Event) iterator.next();
+				    event.setMaxRegisteredDate(maxRegisteredDate);
 				    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 				    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
 				    else
@@ -2322,6 +2345,7 @@ public class EopMaintenance {
 						  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
 							  
 						    event = (Event) iterator.next();
+						    event.setMaxRegisteredDate(maxRegisteredDate);
 						    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 						    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
 						    else
@@ -2410,6 +2434,7 @@ public class EopMaintenance {
 					  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
 						  
 					    event = (Event) iterator.next();
+					    event.setMaxRegisteredDate(maxRegisteredDate);
 					    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 					    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
 					    else
@@ -2487,6 +2512,7 @@ public class EopMaintenance {
 							  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
 								  
 							    event = (Event) iterator.next();
+							    event.setMaxRegisteredDate(maxRegisteredDate);
 							    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 							    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
 							    else

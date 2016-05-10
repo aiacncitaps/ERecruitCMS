@@ -963,6 +963,7 @@ public class InterviewAttendanceMaintenance {
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			crit.add(Restrictions.eq("interviewCandidateCode", candidateCode));
 			crit.add(Restrictions.eq("status", true));
+			crit.add(Restrictions.eq("interviewResult", "P"));
 			attendanceList=(ArrayList<InterviewCandidate>) crit.list();
 			
 		}catch(Exception e)
