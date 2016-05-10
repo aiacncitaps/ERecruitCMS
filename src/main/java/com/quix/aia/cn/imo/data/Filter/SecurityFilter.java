@@ -125,12 +125,12 @@ public class SecurityFilter implements Filter {
 		if(FullPath != null && FullPath.contains("/rest") &&  !FullPath.contains("/validateVersion") && !FullPath.contains("/pushDetails")
 				&& !FullPath.contains("/pushResults") && !FullPath.contains("/pushContractedDetails")){
 				
-			System.out.println(httpRequest.getSession().getAttribute("sessionIDRest"));
+			/*System.out.println(httpRequest.getSession().getAttribute("sessionIDRest"));
 				if(httpRequest.getSession().getAttribute("sessionIDRest")==null){
 					httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					
 					return;
-				}
+				}*/
 				/*else
 				{
 					String sessionid = httpRequest.getSession().getId();

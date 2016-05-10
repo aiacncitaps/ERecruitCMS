@@ -189,7 +189,7 @@ public class AnnouncementMaintenance {
 		//String announcementPath  = configurationMap.get("AnnouncementPath");//E:/IMOCN/announcement
 		String tempDir = System.getProperty("java.io.tmpdir");
 		announcement.setToken(LMSUtil.getRendomToken());
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 			
 			session = HibernateFactory.openSession();
@@ -239,7 +239,7 @@ public class AnnouncementMaintenance {
 			}catch(Exception e)
 			{
 				log.log(Level.SEVERE, e.getMessage());
-				e.printStackTrace();
+				e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
@@ -500,7 +500,7 @@ public class AnnouncementMaintenance {
 		log.log(Level.SEVERE,"AnnouncementMaintenance -->  getAnnouncementsRest ");
 		Session session = null;
 		ArrayList announcementList = new ArrayList();
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 			
 			session = HibernateFactory.openSession();
@@ -536,6 +536,7 @@ public class AnnouncementMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
@@ -560,7 +561,7 @@ public class AnnouncementMaintenance {
 		log.log(Level.SEVERE,"AnnouncementMaintenance -->  getDeletedAnnouncementsRest ");
 		Session session = null;
 		ArrayList announcementList = new ArrayList();
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		
 		try{
 			
@@ -581,6 +582,7 @@ public class AnnouncementMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
@@ -607,7 +609,7 @@ public class AnnouncementMaintenance {
 	{
 		 Session session = null;;
 		 Announcement announcement = new Announcement();
-		 LogsMaintenance logsMain=new LogsMaintenance();
+		 
 		try{
 		session = HibernateFactory.openSession();
 		session.setDefaultReadOnly(true);
@@ -620,6 +622,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
@@ -647,7 +650,7 @@ public class AnnouncementMaintenance {
 		User userObj = (User)requestParameters.getSession().getAttribute("currUserObj");
 		String status = "N";
 		Announcement announcement = new Announcement();
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 		session = HibernateFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -665,6 +668,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
@@ -713,7 +717,7 @@ public class AnnouncementMaintenance {
 		String file_name = "";
 		announcement.setModifiedBy(userObj.getStaffLoginId());
 		announcement.setModificationDate(new Date());
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 			session = HibernateFactory.openSession();
 			Transaction tx = session.beginTransaction();
@@ -766,6 +770,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
@@ -809,7 +814,7 @@ public class AnnouncementMaintenance {
 		FileOutputStream stream=null;
 		//upload material
 		String path = "";
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 			log.log(Level.INFO,"---AnnouncementMaintenance File upload Started---");
 		    //String serverFilename = annPath+"/"+ "ANN_" + announcement.getToken();
@@ -841,6 +846,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 			}
 		finally{if(stream!=null)try{stream.close();}catch(Exception e){log.log(Level.SEVERE, e.getMessage());e.printStackTrace();}}
@@ -855,7 +861,7 @@ public class AnnouncementMaintenance {
 	public boolean checkDuplicateAnnouncement(Announcement announcement){
 		log.log(Level.INFO,"---Duplicate Announcement checking---");
 		Session session = null;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 			session = HibernateFactory.openSession();
 			session.setDefaultReadOnly(true);
@@ -874,6 +880,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}
 		return false;
@@ -889,7 +896,7 @@ public class AnnouncementMaintenance {
 		log.log(Level.INFO,"AnnouncementMaintenance ---> getAnnouncementMaterial ");
 		 Session session = null;
 		 AnnouncementMaterial mat = null;
-		 LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 		session = HibernateFactory.openSession();
 		session.setDefaultReadOnly(true);
@@ -909,6 +916,7 @@ public class AnnouncementMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			 LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
@@ -939,7 +947,7 @@ public class AnnouncementMaintenance {
 		// ResourceBundle msgProps = ResourceBundle.getBundle("configurations");
 	    String url  = "";//msgProps.getString("APP_URL");
 		String path="#";
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try{
 			session = HibernateFactory.openSession();
 			session.setDefaultReadOnly(true);
@@ -981,7 +989,7 @@ public class AnnouncementMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
+			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("AnnouncementMaintenance",Level.SEVERE+"",errors.toString());

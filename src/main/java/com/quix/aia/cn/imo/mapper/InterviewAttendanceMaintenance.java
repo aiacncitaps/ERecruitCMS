@@ -233,7 +233,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -280,7 +279,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -321,7 +319,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -366,7 +363,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -412,7 +408,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -466,7 +461,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -498,7 +492,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -545,7 +538,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -582,7 +574,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -700,7 +691,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -764,7 +754,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -818,7 +807,6 @@ public class InterviewAttendanceMaintenance {
 				return false;
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -863,7 +851,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -937,7 +924,6 @@ public class InterviewAttendanceMaintenance {
 			}catch(Exception e)
 			{
 				log.log(Level.SEVERE, e.getMessage());
-				e.printStackTrace();
 				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -982,7 +968,6 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -1034,7 +1019,6 @@ public class InterviewAttendanceMaintenance {
 			}catch(Exception e)
 			{
 				log.log(Level.SEVERE, e.getMessage());
-				e.printStackTrace();
 				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -1072,7 +1056,6 @@ public class InterviewAttendanceMaintenance {
 			catch(Exception e)
 			{
 				log.log(Level.SEVERE,e.getMessage());
-				e.printStackTrace();
 				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -1120,7 +1103,6 @@ public class InterviewAttendanceMaintenance {
 			catch(Exception e)
 			{
 				log.log(Level.SEVERE,e.getMessage());
-				e.printStackTrace();
 				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -1169,7 +1151,6 @@ public class InterviewAttendanceMaintenance {
 			catch(Exception e)
 			{
 				log.log(Level.SEVERE,e.getMessage());
-				e.printStackTrace();
 				 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -1271,7 +1252,7 @@ public class InterviewAttendanceMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
+			
 			 e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));

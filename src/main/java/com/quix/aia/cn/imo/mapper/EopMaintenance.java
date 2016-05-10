@@ -1088,7 +1088,7 @@ public class EopMaintenance {
 					
 					
 					
-				} catch(Exception e){log.log(Level.SEVERE, e.getMessage());e.printStackTrace();
+				} catch(Exception e){log.log(Level.SEVERE, e.getMessage());
 				LogsMaintenance logsMain=new LogsMaintenance();e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -1411,7 +1411,7 @@ public class EopMaintenance {
 	     }
 	}
 	}catch(Exception e){
-		log.log(Level.SEVERE, e.getMessage());e.printStackTrace();
+		log.log(Level.SEVERE, e.getMessage());
 		LogsMaintenance logsMain=new LogsMaintenance();e.printStackTrace();
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));

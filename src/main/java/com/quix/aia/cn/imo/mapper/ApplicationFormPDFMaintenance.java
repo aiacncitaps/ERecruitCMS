@@ -175,7 +175,6 @@ public class ApplicationFormPDFMaintenance {
 	      } catch (Exception e)
 	      {
 	    	 log.log(Level.INFO,"ApplicationFormPDFMaintenance --> pdf --> Exception  "+e.getMessage());
-	         e.printStackTrace();
 	         e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -469,7 +468,6 @@ public class ApplicationFormPDFMaintenance {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				log.log(Level.INFO,"ApplicationFormPDFMaintenance --> ESingnature "+e.getMessage());
-				e.printStackTrace();
 				e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -580,7 +578,6 @@ public class ApplicationFormPDFMaintenance {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.log(Level.INFO,"ApplicationFormPDFMaintenance --> personalCertification "+e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -737,7 +734,6 @@ public class ApplicationFormPDFMaintenance {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.log(Level.INFO,"ApplicationFormPDFMaintenance --> Education "+e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -897,7 +893,6 @@ public class ApplicationFormPDFMaintenance {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					log.log(Level.INFO,"ApplicationFormPDFMaintenance --> workExperience "+e.getMessage());
-					e.printStackTrace();
 					e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 					StringWriter errors = new StringWriter();
 					e.printStackTrace(new PrintWriter(errors));
@@ -1029,7 +1024,6 @@ public class ApplicationFormPDFMaintenance {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.log(Level.INFO,"ApplicationFormPDFMaintenance --> familyInformation "+e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -1367,7 +1361,6 @@ public class ApplicationFormPDFMaintenance {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				log.log(Level.INFO,"ApplicationFormPDFMaintenance --> personalInformation "+e.getMessage());
-				e.printStackTrace();
 				e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
@@ -1419,7 +1412,6 @@ public class ApplicationFormPDFMaintenance {
 			
 		}catch(Exception e){
 			log.log(Level.INFO,"ApplicationFormPDFMaintenance --> insertPdf "+e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));

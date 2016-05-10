@@ -472,7 +472,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -521,7 +520,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -569,7 +567,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -615,7 +612,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -663,7 +659,6 @@ public class AddressBookMaintenance {
 
 			} catch (Exception ex) {
 				log.log(Level.SEVERE, ex.getMessage());
-				ex.printStackTrace();
 				ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 				StringWriter errors = new StringWriter();
 				ex.printStackTrace(new PrintWriter(errors));
@@ -712,7 +707,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -789,7 +783,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -832,7 +825,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -871,7 +863,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -910,7 +901,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -953,7 +943,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -1026,7 +1015,6 @@ public class AddressBookMaintenance {
 				emailAddrs = (String)list.get(0);
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -1066,7 +1054,6 @@ public class AddressBookMaintenance {
 				nric = (String)list.get(0);
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -1110,7 +1097,6 @@ public class AddressBookMaintenance {
 
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
-			ex.printStackTrace();
 			ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
@@ -1192,7 +1178,6 @@ public class AddressBookMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -1259,7 +1244,6 @@ public class AddressBookMaintenance {
 		}catch(Exception e)
 		{
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -1291,7 +1275,6 @@ public class AddressBookMaintenance {
 				ccTestResult = (String)list.get(0);
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
 			e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));

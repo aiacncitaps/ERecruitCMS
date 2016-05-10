@@ -129,7 +129,7 @@ public class FestiveCategoryMaintenance {
 		log.log(Level.INFO,
 				"FestiveCategoryMaintanence --> getAllFestiveCategory");
 		ArrayList arrActivity = new ArrayList();
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 
 			session = HibernateFactory.openSession();
@@ -144,6 +144,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			session.setDefaultReadOnly(false);
@@ -212,7 +213,7 @@ public class FestiveCategoryMaintenance {
 		if (!req.getParameter("name").equals("")) {
 			str = str + " and FestiveCategoryName like :name ";
 		}
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 
 			session = HibernateFactory.openSession();
@@ -233,6 +234,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			session.setDefaultReadOnly(false);
@@ -307,7 +309,7 @@ public class FestiveCategoryMaintenance {
 	private long validatename(String name, int FestiveCategoryCode) {
 		long count = 0;
 		Session session = null;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 			session = HibernateFactory.openSession();
 			session.setDefaultReadOnly(true);
@@ -325,6 +327,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
@@ -335,6 +338,7 @@ public class FestiveCategoryMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 			}
 		}
@@ -403,7 +407,7 @@ public class FestiveCategoryMaintenance {
 		Integer key = 0;
 		Session session = null;
 		Transaction tx = null;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 			session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
@@ -415,6 +419,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
@@ -425,6 +430,7 @@ public class FestiveCategoryMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 			}
 		}
@@ -443,7 +449,7 @@ public class FestiveCategoryMaintenance {
 	 */
 	public FestiveCategory getFestiveCategory(int FestiveCategoryCode) {
 		Session session = null;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		FestiveCategory FestiveCategoryClassObj = new FestiveCategory();
 		try {
 			session = HibernateFactory.openSession();
@@ -457,6 +463,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
@@ -468,6 +475,7 @@ public class FestiveCategoryMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 			}
 		}
@@ -492,7 +500,7 @@ public class FestiveCategoryMaintenance {
 			HttpServletRequest requestParameters) {
 		Session session = null;
 		Transaction tx;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 
 			session = HibernateFactory.openSession();
@@ -517,6 +525,7 @@ public class FestiveCategoryMaintenance {
 			log.log(Level.SEVERE, e.getMessage());
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
@@ -528,6 +537,7 @@ public class FestiveCategoryMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 			}
 
@@ -562,7 +572,7 @@ public class FestiveCategoryMaintenance {
 		FestiveCategory FestiveCategoryObj = new FestiveCategory();
 		Session session = null;
 		Transaction tx;
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 
 			session = HibernateFactory.openSession();
@@ -603,6 +613,7 @@ public class FestiveCategoryMaintenance {
 			log.log(Level.SEVERE, e.getMessage());
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
@@ -613,6 +624,7 @@ public class FestiveCategoryMaintenance {
 				e.printStackTrace();
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 			}
 		}
@@ -638,7 +650,7 @@ public class FestiveCategoryMaintenance {
 	private void DeleteRelatedEgreeting(int festiveCategoryCode, HttpServletRequest req,Session session,Transaction tx) {
 		
 		
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		try {
 			/*session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
@@ -690,6 +702,7 @@ public class FestiveCategoryMaintenance {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("FestiveCategoryMaintenance",Level.SEVERE+"",errors.toString());
 		} /*finally {
 			try {

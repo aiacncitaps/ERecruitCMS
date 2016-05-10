@@ -164,8 +164,6 @@ public class AddressBookRest {
 			beans.setMassage("Something wrong happens, please contact administrator. Error Message : "+ e.getMessage());
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",AuditTrail.MODULE_ADDRESS_BOOK, AuditTrail.FUNCTION_FAIL,"FAILED"));
 
-			log.log(Level.SEVERE, "Address Book --> Error in Save Record.");
-			log.log(Level.SEVERE, e.getMessage());
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -257,9 +255,7 @@ public class AddressBookRest {
 			beans.setCode("500");
 			beans.setMassage("Something wrong happens, please contact administrator. Error Message : "+ e.getMessage());
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",AuditTrail.MODULE_ADDRESS_BOOK, AuditTrail.FUNCTION_FAIL,"FAILED"));
-
-			log.log(Level.SEVERE, "Address Book --> Error in fetching Record.");
-			log.log(Level.SEVERE, e.getMessage());
+			log.log(Level.SEVERE,"Address Book --> Error in fetching Record."+e.getMessage());
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -292,7 +288,6 @@ public class AddressBookRest {
 	public Response syncNotes(@Context HttpServletRequest request,
 	   		   @Context ServletContext context,
 	   		   String jsonString) {
-		log.log(Level.INFO, "Address Book --> syncNotes ");
 		log.log(Level.INFO,"Address Book --> syncNotes --> Data for Sync Notes...  ::::: "+jsonString);
 //		String responseString = "[{\"status\":";
 		boolean flag=LMSUtil.isJSONValid(jsonString);
@@ -343,7 +338,6 @@ public class AddressBookRest {
 			auditTrailMaint.insertAuditTrail(new AuditTrail("Rest",AuditTrail.MODULE_ADDRESS_BOOK, AuditTrail.FUNCTION_FAIL,"FAILED"));
 
 			log.log(Level.SEVERE, "Address Book --> Error in Saving Candidate Notes.");
-			log.log(Level.SEVERE, e.getMessage());
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
@@ -556,7 +550,7 @@ public class AddressBookRest {
 	public Response getCCTestResults(@Context HttpServletRequest request,String jsonString) {
 		log.log(Level.INFO, "Address Book --> getCCTestResults ");
 		boolean flag=LMSUtil.isJSONValid(jsonString);
-		LogsMaintenance logsMain=new LogsMaintenance();
+		//LogsMaintenance logsMain=new LogsMaintenance();
 		ContractDetail contractDetail = new ContractDetail();
 		AddressBook addressBook;
 		GsonBuilder builder = new GsonBuilder();
@@ -657,6 +651,7 @@ public class AddressBookRest {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain=new LogsMaintenance();
 			logsMain.insertLogs("AddressBookRest",Level.SEVERE+"",errors.toString());
 			
 			return Response.status(200).entity(googleJson.toJson(beans)).build();

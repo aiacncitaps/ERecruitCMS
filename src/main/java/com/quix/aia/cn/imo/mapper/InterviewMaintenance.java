@@ -265,7 +265,7 @@ public  int insertInterview(Interview interview,HttpServletRequest requestParame
 		String interviewPath  = configurationMap.get("InterviewPath");
 		
 		String tempDir = System.getProperty("java.io.tmpdir");
-		LogsMaintenance logsMain=new LogsMaintenance();
+		
 		 try
 			{
 				session = HibernateFactory.openSession();
@@ -319,6 +319,7 @@ public  int insertInterview(Interview interview,HttpServletRequest requestParame
 				log.log(Level.SEVERE,e.getMessage()); 
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
+				LogsMaintenance logsMain=new LogsMaintenance();
 				logsMain.insertLogs("InterViewMaintenance",Level.SEVERE+"",errors.toString());
 				e.printStackTrace();
 			}finally{
