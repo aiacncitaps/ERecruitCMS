@@ -54,13 +54,13 @@ public class LogsMaintenance {
 		Session session = null;
 		try{
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			logs.setLogDate(new Date());
 			logs.setFileName(FileName);
 			logs.setLevel(level);
 			logs.setMsg(Msg);
 			session.save(logs);
-			tx.commit();
+			//tx.commit();
 			
 		}catch(Exception e){
 			log.log(Level.SEVERE, e.getMessage());

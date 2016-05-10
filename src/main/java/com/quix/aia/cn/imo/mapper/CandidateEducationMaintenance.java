@@ -69,33 +69,29 @@ public class CandidateEducationMaintenance {
 	 * AddressBook called from rest. When addressCode is 0, it performs insert
 	 * otherwise performs update.
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param Set
 	 *            <CandidateEducation/> List of Class Object
 	 * @return void
 	 * 
 	 */
-	public void saveOrUpdate(AddressBook addressBook) {
+	public void saveOrUpdate(AddressBook addressBook, Session session) {
 
-		Session session = null;
-		Transaction tx = null;
+		
 		CandidateEducationId educationId;
 
 		try {
-			deleteRecords(addressBook);
+			deleteRecords(addressBook,session);
 			
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
-			for (CandidateEducation candidateEducation : addressBook
-					.getCandidateEducations()) {
+			for (CandidateEducation candidateEducation : addressBook.getCandidateEducations()) {
 				educationId = new CandidateEducationId();
 				educationId.setAddressCode(addressBook.getAddressCode());
-				educationId.setIosAddressCode(candidateEducation
-						.getIosAddressCode());
+				educationId.setIosAddressCode(candidateEducation.getIosAddressCode());
 				candidateEducation.setEducationId(educationId);
 				session.saveOrUpdate(candidateEducation);
 			}
-			tx.commit();
+			
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
 			ex.printStackTrace();
@@ -104,14 +100,14 @@ public class CandidateEducationMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateEducationMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
 			tx = null;
-			session = null;
+			session = null;*/
 			educationId = null;
 		}
 	}
@@ -120,25 +116,24 @@ public class CandidateEducationMaintenance {
 	 * <p>
 	 * Delete Records of AddressBook record
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param AddressBook addressBook
 	 *            
 	 * @return void
 	 * 
 	 */
-	public void deleteRecords(AddressBook addressBook) {
+	public void deleteRecords(AddressBook addressBook, Session session) {
 
-		Session session = null;
+		/*
 		Criteria criteria = null;
 		Transaction tx = null;
 		List<CandidateEducation> list = null;
-		CandidateEducation candidateEducation = null;
+		CandidateEducation candidateEducation = null;*/
 
 		try {
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
 			
-			criteria = session.createCriteria(CandidateEducation.class);
+			/*criteria = session.createCriteria(CandidateEducation.class);
 			criteria.add(Restrictions.eq("educationId.addressCode", addressBook.getAddressCode()));
 			list = criteria.list();
 			
@@ -146,8 +141,13 @@ public class CandidateEducationMaintenance {
 				candidateEducation = (CandidateEducation) itr.next();
 				session.delete(candidateEducation);
 			}
+			*/
 			
-			tx.commit();
+			
+			Query query = session.createQuery("DELETE FROM  CandidateEducation  where educationId.addressCode=:addressCode ");
+			query.setParameter("addressCode", addressBook.getAddressCode());
+			query.executeUpdate();
+			
 		    
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -157,13 +157,13 @@ public class CandidateEducationMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateEducationMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
-			session = null;
+			session = null;*/
 		}
 	}
 	
@@ -188,7 +188,7 @@ public class CandidateEducationMaintenance {
 		CandidateEducationMaintenance candidateEducationMaintenance = new CandidateEducationMaintenance();
 		AddressBook addressBook = new AddressBook();
 		addressBook.setAddressCode(38);
-		candidateEducationMaintenance.deleteRecords(addressBook);
+		//candidateEducationMaintenance.deleteRecords(addressBook);
 	}
 
 	public static final String Name = "name";

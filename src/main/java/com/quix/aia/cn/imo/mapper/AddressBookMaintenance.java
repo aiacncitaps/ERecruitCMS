@@ -50,6 +50,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.data.addressbook.AddressBook;
+import com.quix.aia.cn.imo.data.addressbook.ContractDetail;
 import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.user.User;
 import com.quix.aia.cn.imo.database.HibernateFactory;
@@ -122,31 +123,31 @@ public class AddressBookMaintenance {
 					deleteString = ",\"deleteStatus\":"+addressBook.getDeleteStatus();
 				}
 				session.saveOrUpdate(addressBook);
-				tx.commit();
+			//	tx.commit();
 
 				if("".equals(deleteString)){
 					if(addressBook.getCandidateEducations()!=null && addressBook.getCandidateEducations().size()>0){
-						candidateEducationMaintenance.saveOrUpdate(addressBook);
+						candidateEducationMaintenance.saveOrUpdate(addressBook,session);
 					}
 					if(addressBook.getCandidateESignatures().size()>0 && addressBook.getCandidateESignatures()!=null ){
-						candidateESignatureMaintenance.saveOrUpdate(addressBook);
+						candidateESignatureMaintenance.saveOrUpdate(addressBook,session);
 					}
 					if(addressBook.getCandidateFamilyInfos()!=null &&  addressBook.getCandidateFamilyInfos().size()>0){
-						candidateFamilyInfoMaintenance.saveOrUpdate(addressBook);
+						candidateFamilyInfoMaintenance.saveOrUpdate(addressBook,session);
 					}
 					
 					if(addressBook.getCandidateGroups()!=null &&   addressBook.getCandidateGroups().size()>0){
-						candidateGroupMaintenance.saveOrUpdate(addressBook);
+						candidateGroupMaintenance.saveOrUpdate(addressBook,session);
 					}
 					
 					if(addressBook.getCandidateProfessionalCertifications()!=null &&  addressBook.getCandidateProfessionalCertifications().size()>0){
-						candidateProfessionalCertificationMaintenance.saveOrUpdate(addressBook);
+						candidateProfessionalCertificationMaintenance.saveOrUpdate(addressBook,session);
 					}
 					if(addressBook.getCandidateWorkExperiences()!=null && addressBook.getCandidateWorkExperiences().size()>0){
-						candidateWorkExperienceMaintenance.saveOrUpdate(addressBook);
+						candidateWorkExperienceMaintenance.saveOrUpdate(addressBook,session);
 					}
 					if(addressBook.getCandidateNotes()!=null && addressBook.getCandidateNotes().size()>0){
-						candidateNoteMaintenance.saveOrUpdate(addressBook);
+						candidateNoteMaintenance.saveOrUpdate(addressBook,session);
 					}
 					
 				}
@@ -158,12 +159,13 @@ public class AddressBookMaintenance {
 				}
 				returnJsonString += "{\"iosAddressCode\":\""+ addressBook.getIosAddressCode() + "\",\"addressCode\":"+ addressBook.getAddressCode() +deleteString+"}";
 
-				if (++count % 10 == 0) {
+				/*if (++count % 10 == 0) {
 					session.flush();
 					session.clear();
-				}
+				}*/
 				
 				try {
+					tx.commit();
 					HibernateFactory.close(session);
 				} catch (Exception e) {
 					log.log(Level.SEVERE, e.getMessage());
@@ -630,6 +632,62 @@ public class AddressBookMaintenance {
 		}
 	}
 	
+	
+	
+	
+	
+	public void updateAddressBookpushContractedDetails(ContractDetail contractDetail ) {
+		// TODO Auto-generated method stub
+		
+		
+			Session session = null;
+			
+			try {
+				session = HibernateFactory.openSession();
+				//tx = session.beginTransaction();
+				
+				Query query = session.createQuery("UPDATE  AddressBook SET    branchCode=:co,contractDate=:contractDate,recruitmentType=:recruitmentType,"
+						+ "recruitmentProgressStatus=:recruitmentProgressStatus   "
+						+ " where   nric=:nric and agentId:=agentId   ");
+				
+				query.setParameter("co", contractDetail.getBranchCode());
+				query.setParameter("contractDate", contractDetail.getContractDate());
+				query.setParameter("recruitmentType",contractDetail.getRecruitmentType());
+				query.setParameter("recruitmentProgressStatus", "9/9");
+				query.setParameter("nric",contractDetail.getCandidateNric());
+				query.setParameter("agentId",contractDetail.getRecruiterAgentCode());
+				
+				query.executeUpdate();
+				
+				//tx.commit();
+
+			} catch (Exception ex) {
+				log.log(Level.SEVERE, ex.getMessage());
+				ex.printStackTrace();
+				ex.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				ex.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
+			} finally {
+				try {
+					HibernateFactory.close(session);
+				} catch (Exception e) {
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
+				session = null;
+				//tx = null;
+			}
+			
+			
+		
+		
+		
+	}
+	
+	
+	
+	
 	/**
 	 * <p>
 	 * This method get AddressBook of Particular address code
@@ -839,14 +897,14 @@ public class AddressBookMaintenance {
 		try {
 			
 			session = HibernateFactory.openSession();
-			Transaction tx=session.beginTransaction();
+			//Transaction tx=session.beginTransaction();
 			query = session.createQuery("UPDATE AddressBook SET ccTestResult =:testResult,ccTestResultDate=:testDate where addressCode=:candidateCode ");
 			query.setParameter("testResult", restForm.getCcTestResult());
 			query.setParameter("testDate", restForm.getCcTestResultupdateDate());
 			query.setParameter("candidateCode",Integer.parseInt(restForm.getCandidateCode().trim()));
 			query.executeUpdate();
-			tx.commit();
-			session.flush();
+			//tx.commit();
+			//session.flush();
 			
 			
 
@@ -881,7 +939,7 @@ public class AddressBookMaintenance {
 		try {
 			
 			session = HibernateFactory.openSession();
-			Transaction tx=session.beginTransaction();
+			//Transaction tx=session.beginTransaction();
 			SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			String passTime= formate.format(restForm.getPassTime());
 			query = session.createQuery("UPDATE AddressBook SET interviewResult =:interviewresult,passTime=:passtime where addressCode=:candidateCode ");
@@ -889,7 +947,7 @@ public class AddressBookMaintenance {
 			query.setParameter("passtime",passTime );
 			query.setParameter("candidateCode",Integer.parseInt(candidateCode.trim()));
 			query.executeUpdate();
-			tx.commit();
+			//tx.commit();
 			session.flush();
 			
 
@@ -1250,6 +1308,8 @@ public class AddressBookMaintenance {
 	  }
 		return ccTestResult;
 	}
+
+	
 
 	
 }

@@ -2150,8 +2150,7 @@ public class EopMaintenance {
 		Event event;
 		try{
 			
-			session = HibernateFactory.openSession();
-			session.setDefaultReadOnly(true);
+			
 			Date sdate=new Date();
 			log.log(Level.SEVERE,"Start Time "+sdate.getTime());
 			
@@ -2197,7 +2196,10 @@ public class EopMaintenance {
 			
 			System.out.println(""+now);
 			System.out.println(""+LMSUtil.HH_MM_SS.parse(LMSUtil.HH_MM_SS.format(now)));
-
+			
+			session = HibernateFactory.openSession();
+			session.setDefaultReadOnly(true);
+			
 			Query query=session.createQuery("select distinct e FROM Event e,SpecialGroup s where status = 1 and  e.openTo='SG'"
 					+ "  AND (e.eventDate > :eventDate OR ( e.eventDate = :eventDate AND e.startTime > :startTime ))"
 					+ "and ( (e.buCode=:bucode  and e.district=0) "
@@ -2223,8 +2225,21 @@ public class EopMaintenance {
 			
 			eopList=(ArrayList<Event>) query.setCacheable(true).list();
 			
+			/* */
+			try{
+				HibernateFactory.close(session);
+				
+			}catch(Exception e){
+				log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+			}
+			
 			
 				  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
+					  
+					  session = HibernateFactory.openSession();
+						session.setDefaultReadOnly(true);
+					  
 				    event = (Event) iterator.next();
 				    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 				    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
@@ -2243,8 +2258,23 @@ public class EopMaintenance {
 				    }
 
 				   }
+					
+					
+					/* */
+					try{
+						HibernateFactory.close(session);
+						
+					}catch(Exception e){
+						log.log(Level.SEVERE, e.getMessage());
+						e.printStackTrace();
+					}
+					
+					
 				   }
 				  
+				  
+				  session = HibernateFactory.openSession();
+				  session.setDefaultReadOnly(true);
 				  
 				  query=session.createQuery("FROM Event where status = 1 and openTo!='SG'"
 						  + " AND (eventDate > :eventDate OR (eventDate = :eventDate AND startTime > :startTime ))"
@@ -2273,8 +2303,23 @@ public class EopMaintenance {
 					
 					eopList2=(ArrayList<Event>) query.setCacheable(true).list();
 					
+					/* */
+					try{
+						
+						HibernateFactory.close(session);
+						
+					}catch(Exception e){
+						log.log(Level.SEVERE, e.getMessage());
+						e.printStackTrace();
+					}
+					
 					
 						  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
+							  
+							  session = HibernateFactory.openSession();
+							  session.setDefaultReadOnly(true);
+							  
+							  
 						    event = (Event) iterator.next();
 						    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 						    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
@@ -2293,6 +2338,17 @@ public class EopMaintenance {
 						    }
 
 						   }
+							
+							/* */
+							try{
+								
+								HibernateFactory.close(session);
+								
+							}catch(Exception e){
+								log.log(Level.SEVERE, e.getMessage());
+								e.printStackTrace();
+							}
+							
 						   }
 				  
 				  eopList.addAll(eopList2);
@@ -2304,6 +2360,10 @@ public class EopMaintenance {
 				
 			}else{
 				
+				  session = HibernateFactory.openSession();
+				  session.setDefaultReadOnly(true);
+				  
+				  
 				Query query=session.createQuery("select distinct e FROM Event e,SpecialGroup s where status = 1 and  e.openTo='SG'"
 						+ "  AND (e.eventDate > :eventDate OR ( e.eventDate = :eventDate AND e.startTime > :startTime ))"
 						+ "and ( (e.buCode=:bucode  and e.district=0) "
@@ -2331,8 +2391,20 @@ public class EopMaintenance {
 				
 				eopList=(ArrayList<Event>) query.setCacheable(true).list();
 				
-				
+				/* */
+				try{
+					
+					HibernateFactory.close(session);
+					
+				}catch(Exception e){
+					log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+				}
 					  for(Iterator iterator=eopList.iterator();iterator.hasNext(); ){
+						  
+						  session = HibernateFactory.openSession();
+						  session.setDefaultReadOnly(true);
+						  
 					    event = (Event) iterator.next();
 					    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 					    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
@@ -2351,7 +2423,24 @@ public class EopMaintenance {
 					    }
 
 					   }
+						
+						/* */
+						try{
+							
+							HibernateFactory.close(session);
+							
+						}catch(Exception e){
+							log.log(Level.SEVERE, e.getMessage());
+							e.printStackTrace();
+						}
+						
+						
 					   }
+					  
+					  
+					  
+					  session = HibernateFactory.openSession();
+					  session.setDefaultReadOnly(true);
 					  
 					  
 					  query=session.createQuery("FROM Event where status = 1 and openTo!='SG'"
@@ -2380,9 +2469,21 @@ public class EopMaintenance {
 						query.setParameter("agentTeam", aamData.getTeamCode());
 						
 						eopList2=(ArrayList<Event>) query.setCacheable(true).list();
-						
+						/* */
+						try{
+							
+							HibernateFactory.close(session);
+							
+						}catch(Exception e){
+							log.log(Level.SEVERE, e.getMessage());
+							e.printStackTrace();
+						}
 						
 							  for(Iterator iterator=eopList2.iterator();iterator.hasNext(); ){
+								  session = HibernateFactory.openSession();
+								  session.setDefaultReadOnly(true);
+								  
+								  
 							    event = (Event) iterator.next();
 							    if("Y".equalsIgnoreCase(event.getOpenToRegistration()))
 							    	event.setPublicUrl(appUrl + "FormManager?key=EopCandidateReg&type=NEW&eventCode="+event.getEvent_code()+"&agentID=");
@@ -2401,6 +2502,16 @@ public class EopMaintenance {
 							    }
 
 							   }
+								
+								/* */
+								try{
+									
+									HibernateFactory.close(session);
+									
+								}catch(Exception e){
+									log.log(Level.SEVERE, e.getMessage());
+									e.printStackTrace();
+								}
 							   }
 					  
 					  eopList.addAll(eopList2);
@@ -2420,7 +2531,7 @@ public class EopMaintenance {
 				logsMain.insertLogs("EopMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try{
-					session.setDefaultReadOnly(false);
+					
 					HibernateFactory.close(session);
 					
 				}catch(Exception e){

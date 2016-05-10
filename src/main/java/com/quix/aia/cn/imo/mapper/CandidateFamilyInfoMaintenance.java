@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -60,23 +61,24 @@ public class CandidateFamilyInfoMaintenance {
 	 * This method performs insert or update of AddressBook from List of AddressBook called from rest. When
 	 * addressCode is 0, it performs insert otherwise performs update.
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param Set<CandidateFamilyInfo/>
 	 *           	List of Class Object
 	 * @return void
 	 * 
 	 */
-	public void saveOrUpdate(AddressBook addressBook) {
+	public void saveOrUpdate(AddressBook addressBook, Session session) {
 
-		Session session = null;
-		Transaction tx = null;
+		/*Session session = null;
+		Transaction tx = null;*/
 		CandidateFamilyInfoId familyInfoId=null;
 
 		try {
-			deleteRecords(addressBook);
+			deleteRecords(addressBook,session);
 			
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
+			/*session = HibernateFactory.openSession();
+			tx = session.beginTransaction();*/
 			for (CandidateFamilyInfo candidateFamilyInfo : addressBook.getCandidateFamilyInfos()) {
 				familyInfoId = new CandidateFamilyInfoId();
 				familyInfoId.setAddressCode(addressBook.getAddressCode());
@@ -84,7 +86,7 @@ public class CandidateFamilyInfoMaintenance {
 				candidateFamilyInfo.setFamilyInfoId(familyInfoId);
 				session.saveOrUpdate(candidateFamilyInfo);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
 			ex.printStackTrace();
@@ -93,14 +95,14 @@ public class CandidateFamilyInfoMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateFamilyInfoMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
 			tx=null;
-			session=null;
+			session=null;*/
 			familyInfoId=null;
 		}
 	}
@@ -109,22 +111,23 @@ public class CandidateFamilyInfoMaintenance {
 	 * <p>
 	 * Delete Records of AddressBook record
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param AddressBook addressBook
 	 *            
 	 * @return void
 	 * 
 	 */
-	public void deleteRecords(AddressBook addressBook) {
+	public void deleteRecords(AddressBook addressBook, Session session) {
 
-		Session session = null;
+	/*	Session session = null;
 		Criteria criteria = null;
 		Transaction tx = null;
 		List<CandidateFamilyInfo> list = null;
-		CandidateFamilyInfo candidateFamilyInfo = null;
+		CandidateFamilyInfo candidateFamilyInfo = null;*/
 
 		try {
-			session = HibernateFactory.openSession();
+			/*session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
 			
 			criteria = session.createCriteria(CandidateFamilyInfo.class);
@@ -136,7 +139,13 @@ public class CandidateFamilyInfoMaintenance {
 				session.delete(candidateFamilyInfo);
 			}
 			
-			tx.commit();
+			tx.commit();*/
+			
+			
+			
+			Query query = session.createQuery("DELETE FROM  CandidateFamilyInfo  where familyInfoId.addressCode=:addressCode ");
+			query.setParameter("addressCode", addressBook.getAddressCode());
+			query.executeUpdate();
 		    
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -146,13 +155,13 @@ public class CandidateFamilyInfoMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateFamilyInfoMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
-			session = null;
+			session = null;*/
 		}
 	}
 	

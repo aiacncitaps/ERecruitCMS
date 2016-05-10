@@ -580,7 +580,7 @@ public class InterviewRest {
 				
 					
 				String responseJsonString="";
-				if(interviewStatus.equals("PASS")){
+				if(interviewStatus.equals("PASS") && interviewType.equals("3rd") ){
 					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\",\"Date\":\""+interviewDate+"\"}]";
 				}else{
 					responseJsonString = "[{\"interviewStatus\":\""+interviewStatus+"\"}]";

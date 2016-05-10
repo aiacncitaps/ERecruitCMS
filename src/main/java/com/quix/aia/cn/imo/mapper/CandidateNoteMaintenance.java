@@ -68,23 +68,24 @@ public class CandidateNoteMaintenance {
 	 * AddressBook called from rest. When addressCode is 0, it performs insert
 	 * otherwise performs update.
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param Set
 	 *            <CandidateNote> List of Class Object
 	 * @return void
 	 * 
 	 */
-	public void saveOrUpdate(AddressBook addressBook) {
+	public void saveOrUpdate(AddressBook addressBook, Session session) {
 
-		Session session = null;
-		Transaction tx = null;
+		/*Session session = null;
+		Transaction tx = null;*/
 		CandidateNoteId noteId;
 
 		try {
 //			deleteRecords(addressBook);
 			
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
+			/*session = HibernateFactory.openSession();
+			tx = session.beginTransaction();*/
 			for (CandidateNote candidateNote : addressBook
 					.getCandidateNotes()) {
 				noteId = new CandidateNoteId();
@@ -94,7 +95,7 @@ public class CandidateNoteMaintenance {
 				candidateNote.setNoteId(noteId);
 				session.saveOrUpdate(candidateNote);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
 			ex.printStackTrace();
@@ -103,14 +104,14 @@ public class CandidateNoteMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateNoteMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
 			tx = null;
-			session = null;
+			session = null;*/
 			noteId = null;
 		}
 	}
@@ -367,6 +368,7 @@ public class CandidateNoteMaintenance {
 	 */
 	public void insertSystemNotes(int addressCode, String activityType, String description)
 	{
+		/*
 		CandidateNoteId candidateNoteId = new CandidateNoteId();
 		candidateNoteId.setAddressCode(addressCode);
 		candidateNoteId.setIosNoteCode(LMSUtil.getRendomToken());
@@ -381,7 +383,7 @@ public class CandidateNoteMaintenance {
 		candidateNote.setActivityStatus(true);
 		candidateNote.setStatus(true);
 		candidateNote.setIsSystem(true);
-		
+		*/
 		//insertNewCandidateNote(candidateNote);
 	}
 

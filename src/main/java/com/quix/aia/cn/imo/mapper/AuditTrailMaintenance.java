@@ -125,7 +125,7 @@ public class AuditTrailMaintenance
         	 java.sql.Date today = new java.sql.Date((new Date()).getTime());
              Date time = new Date();
         	session = HibernateFactory.openSession();
-			tx= session.beginTransaction();
+			//tx= session.beginTransaction();
 			auditTrail.setUserId(auditTrail.getUserId());
 			auditTrail.setDate(today);
 			auditTrail.setTime(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
@@ -133,7 +133,7 @@ public class AuditTrailMaintenance
 			auditTrail.setItemName(auditTrail.getItemName());
 			auditTrail.setAction(auditTrail.getAction());
 			session.save(auditTrail);
-			tx.commit();
+			//tx.commit();
         	/*log.log(Level.INFO,"insertAuditTrail....");
             ResultSet rs = null;
             java.sql.Date today = new java.sql.Date((new Date()).getTime());

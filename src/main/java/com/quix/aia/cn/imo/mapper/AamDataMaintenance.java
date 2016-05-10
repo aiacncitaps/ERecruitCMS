@@ -79,7 +79,8 @@ public class AamDataMaintenance {
 			if (null != coBranch && !"".equals(coBranch)) {
 				crit.add(Restrictions.eq("branch", coBranch));
 			}
-
+			crit.setFirstResult(0);
+			crit.setMaxResults(1);
 			list = (ArrayList) crit.setCacheable(true).list();
 		} catch (Exception he) {
 			he.printStackTrace();

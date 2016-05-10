@@ -414,7 +414,7 @@ public class AddressBookRest {
 	        	contractDetail = jsonObjList.get(0);
 	        	addressBook = new AddressBook();
 				
-				addressBook = addressBookMaintenance.getAddressBookNric(contractDetail.getCandidateNric(), contractDetail.getRecruiterAgentCode());
+				/*addressBook = addressBookMaintenance.getAddressBookNric(contractDetail.getCandidateNric(), contractDetail.getRecruiterAgentCode());
 			        	
 			    addressBook.setCandidateAgentCode(contractDetail.getCandidateAgentCode());
 				addressBook.setBranchCode(contractDetail.getBranchCode());
@@ -424,7 +424,13 @@ public class AddressBookRest {
 				addressBook.setAgentId(contractDetail.getRecruiterAgentCode());
 				addressBook.setRecruitmentProgressStatus("9/9");
 				
-				addressBookMaintenance.updateAddressBook(addressBook);
+				addressBookMaintenance.updateAddressBook(addressBook);*/
+				
+				addressBookMaintenance.updateAddressBookpushContractedDetails(contractDetail);
+				
+				
+				
+				
 	        }
 		    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 		    responseString +=true; 

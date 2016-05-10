@@ -314,7 +314,7 @@ public class InterviewAttendanceMaintenance {
 			Criteria crit = session.createCriteria(InterviewCandidate.class);
 			crit.add(Restrictions.eq("interviewCode", interviewCode));
 			crit.add(Restrictions.eq("status", true));
-			crit.addOrder(Order.desc("candidateCode"));
+			//crit.addOrder(Order.desc("candidateCode"));
 			crit.setProjection(Projections.rowCount());
 			count = ((Long) crit.uniqueResult()).intValue();
 			
@@ -750,7 +750,7 @@ public class InterviewAttendanceMaintenance {
 			session.update(candidate);
 		}*/
 		
-		Query query = session.createQuery("UPDATE InterviewCandidate SET status =:st where interviewCode=:interviewCode where interviewCandidateCode=:candidateCode ");
+		Query query = session.createQuery("UPDATE InterviewCandidate SET status =:st where interviewCode=:interviewCode and interviewCandidateCode=:candidateCode ");
 		query.setParameter("st", false);
 		query.setParameter("interviewCode",interviewCode );
 		query.setParameter("candidateCode",candidateCode);
@@ -906,8 +906,7 @@ public class InterviewAttendanceMaintenance {
 								interviewFound = true;
 								if("p".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
 									interviewCandidate.setInterviewResult("PASS");
-									
-									//break;
+									break;
 								}else if("f".equalsIgnoreCase(interviewCandidate1.getInterviewResult())){
 									fail = true;
 									interviewCandidate.setInterviewResult("FAIL");

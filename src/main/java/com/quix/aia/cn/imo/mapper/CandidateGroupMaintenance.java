@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -59,23 +60,24 @@ public class CandidateGroupMaintenance {
 	 * This method performs insert or update of AddressBook from List of AddressBook called from rest. When
 	 * addressCode is 0, it performs insert otherwise performs update.
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param Set<CandidateGroup/>
 	 *           	List of Class Object
 	 * @return void
 	 * 
 	 */
-	public void saveOrUpdate(AddressBook addressBook) {
+	public void saveOrUpdate(AddressBook addressBook, Session session) {
 
-		Session session = null;
-		Transaction tx = null;
+		/*Session session = null;
+		Transaction tx = null;*/
 		CandidateGroupId groupId=null;
 		
 		try {
-			deleteRecords(addressBook);
+			deleteRecords(addressBook,session);
 			
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
+		/*	session = HibernateFactory.openSession();
+			tx = session.beginTransaction();*/
 			for (CandidateGroup candidateGroup : addressBook.getCandidateGroups()) {
 				groupId = new CandidateGroupId();
 				groupId.setAddressCode(addressBook.getAddressCode());
@@ -83,7 +85,7 @@ public class CandidateGroupMaintenance {
 				candidateGroup.setGroupId(groupId);
 				session.saveOrUpdate(candidateGroup);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
 			ex.printStackTrace();
@@ -92,14 +94,14 @@ public class CandidateGroupMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateGroupMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
-			tx=null;
-			session=null;
+			tx=null;*/
+			
 			groupId=null;
 		}
 	}
@@ -108,22 +110,23 @@ public class CandidateGroupMaintenance {
 	 * <p>
 	 * Delete Records of AddressBook record
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param AddressBook addressBook
 	 *            
 	 * @return void
 	 * 
 	 */
-	public void deleteRecords(AddressBook addressBook) {
+	public void deleteRecords(AddressBook addressBook, Session session) {
 
-		Session session = null;
+		/*Session session = null;
 		Criteria criteria = null;
 		Transaction tx = null;
 		List<CandidateGroup> list = null;
-		CandidateGroup candidateGroup = null;
+		CandidateGroup candidateGroup = null;*/
 
 		try {
-			session = HibernateFactory.openSession();
+			/*session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
 			
 			criteria = session.createCriteria(CandidateGroup.class);
@@ -135,7 +138,11 @@ public class CandidateGroupMaintenance {
 				session.delete(candidateGroup);
 			}
 			
-			tx.commit();
+			tx.commit();*/
+			
+			Query query = session.createQuery("DELETE FROM  CandidateGroup  where groupId.addressCode=:addressCode ");
+			query.setParameter("addressCode", addressBook.getAddressCode());
+			query.executeUpdate();
 		    
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -144,7 +151,7 @@ public class CandidateGroupMaintenance {
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateGroupMaintenance",Level.SEVERE+"",errors.toString());
-		} finally {
+		} /*finally {
 			try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
@@ -152,7 +159,7 @@ public class CandidateGroupMaintenance {
 				e.printStackTrace();
 			}
 			session = null;
-		}
+		}*/
 	}
 	
 	

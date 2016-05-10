@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -59,23 +60,24 @@ public class CandidateWorkExperienceMaintenance {
 	 * This method performs insert or update of AddressBook from List of AddressBook called from rest. When
 	 * addressCode is 0, it performs insert otherwise performs update.
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param Set<CandidateWorkExperience/>
 	 *           	List of Class Object
 	 * @return void
 	 * 
 	 */
-	public void saveOrUpdate(AddressBook addressBook) {
+	public void saveOrUpdate(AddressBook addressBook, Session session) {
 
-		Session session = null;
-		Transaction tx = null;
+		/*Session session = null;
+		Transaction tx = null;*/
 		CandidateWorkExperienceId workExperienceId=null;
 
 		try {
-			deleteRecords(addressBook);
+			deleteRecords(addressBook,session);
 			
-			session = HibernateFactory.openSession();
-			tx = session.beginTransaction();
+			/*session = HibernateFactory.openSession();
+			tx = session.beginTransaction();*/
 			for (CandidateWorkExperience candidateWorkExperience : addressBook.getCandidateWorkExperiences()) {
 				workExperienceId = new CandidateWorkExperienceId();
 				workExperienceId.setAddressCode(addressBook.getAddressCode());
@@ -83,7 +85,7 @@ public class CandidateWorkExperienceMaintenance {
 				candidateWorkExperience.setWorkExperienceId(workExperienceId);
 				session.saveOrUpdate(candidateWorkExperience);
 			}
-			tx.commit();
+			//tx.commit();
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
 			ex.printStackTrace();
@@ -92,14 +94,14 @@ public class CandidateWorkExperienceMaintenance {
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateWorkExperienceMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
-			try {
+			/*try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 				e.printStackTrace();
 			}
 			tx=null;
-			session=null;
+			session=null;*/
 			workExperienceId=null;
 		}
 	}
@@ -108,22 +110,23 @@ public class CandidateWorkExperienceMaintenance {
 	 * <p>
 	 * Delete Records of AddressBook record
 	 * </p>
+	 * @param session 
 	 * 
 	 * @param AddressBook addressBook
 	 *            
 	 * @return void
 	 * 
 	 */
-	public void deleteRecords(AddressBook addressBook) {
+	public void deleteRecords(AddressBook addressBook, Session session) {
 
-		Session session = null;
+	/*	Session session = null;
 		Criteria criteria = null;
 		Transaction tx = null;
 		List<CandidateWorkExperience> list = null;
-		CandidateWorkExperience candidateWorkExperience = null;
+		CandidateWorkExperience candidateWorkExperience = null;*/
 
 		try {
-			session = HibernateFactory.openSession();
+			/*session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
 			
 			criteria = session.createCriteria(CandidateWorkExperience.class);
@@ -135,7 +138,12 @@ public class CandidateWorkExperienceMaintenance {
 				session.delete(candidateWorkExperience);
 			}
 			
-			tx.commit();
+			tx.commit();*/
+			
+			
+			Query query = session.createQuery("DELETE FROM  CandidateWorkExperience  where workExperienceId.addressCode=:addressCode ");
+			query.setParameter("addressCode", addressBook.getAddressCode());
+			query.executeUpdate();
 		    
 		} catch (Exception ex) {
 			log.log(Level.SEVERE, ex.getMessage());
@@ -144,7 +152,7 @@ public class CandidateWorkExperienceMaintenance {
 			StringWriter errors = new StringWriter();
 			ex.printStackTrace(new PrintWriter(errors));
 			logsMain.insertLogs("CandidateWorkExperienceMaintenance",Level.SEVERE+"",errors.toString());
-		} finally {
+		} /*finally {
 			try {
 				HibernateFactory.close(session);
 			} catch (Exception e) {
@@ -152,7 +160,7 @@ public class CandidateWorkExperienceMaintenance {
 				e.printStackTrace();
 			}
 			session = null;
-		}
+		}*/
 	}
 	
 	

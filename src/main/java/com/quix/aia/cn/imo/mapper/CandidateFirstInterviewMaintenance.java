@@ -126,7 +126,7 @@ public class CandidateFirstInterviewMaintenance {
 
 		try{
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			session.saveOrUpdate(candidate);
 			key=1;
 		//	session.flush();
@@ -140,7 +140,7 @@ public class CandidateFirstInterviewMaintenance {
 			query.setParameter("candidateCode",Integer.parseInt(candidate.getCandidateCode()));
 			query.executeUpdate();
 			
-			tx.commit();
+			//tx.commit();
 			session.flush();
 			log.log(Level.INFO,"---New Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)
@@ -271,7 +271,7 @@ public class CandidateFirstInterviewMaintenance {
 
 		try{
 			session = HibernateFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			//Transaction tx = session.beginTransaction();
 			session.update(firstInter);
 			session.flush();
 			
@@ -284,8 +284,8 @@ public class CandidateFirstInterviewMaintenance {
 			query.setParameter("candidateCode",Integer.parseInt(candidateCode.trim()));
 			query.executeUpdate();
 			
-			tx.commit();
-			session.flush();
+			//tx.commit();
+			//session.flush();
 			
 			log.log(Level.INFO,"---update Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)

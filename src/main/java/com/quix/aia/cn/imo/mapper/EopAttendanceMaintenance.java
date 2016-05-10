@@ -1085,6 +1085,7 @@ public class EopAttendanceMaintenance {
 	    return true;
 	   else 
 	    return false;
+	   
 	  }catch(Exception e){
 	   log.log(Level.SEVERE, e.getMessage());
 	   e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
@@ -1114,15 +1115,34 @@ public class EopAttendanceMaintenance {
 		  try{
 		   session = HibernateFactory.openSession();
 		   session.setDefaultReadOnly(true);
-		   Query selectQ = session.createQuery("from Event where event_code =:eventCode and status=:status");
+		   /*Query selectQ = session.createQuery("from Event where event_code =:eventCode and status=:status");
 		   selectQ.setParameter("eventCode",eventCode);
 		   selectQ.setParameter("status", false);
 		   
 		   List list = selectQ.list();
-		   if(list!=null && list.size() > 0)
+		   
+		    if(list!=null && list.size() > 0)
 		    return true;
 		   else 
 		    return false;
+		 
+		   *
+		   */
+		   
+		   
+		   	Criteria crit = session.createCriteria(Event.class);
+			crit.add(Restrictions.eq("event_code", eventCode));
+			crit.add(Restrictions.eq("status", false));
+			crit.setProjection(Projections.rowCount());
+			Integer count = ((Long) crit.uniqueResult()).intValue();
+		   
+			 if(count > 0)
+				    return true;
+			 else 
+				    return false;
+		   
+		   
+		  
 		  }catch(Exception e){
 		   log.log(Level.SEVERE, e.getMessage());
 		   e.printStackTrace();LogsMaintenance logsMain=new LogsMaintenance();
@@ -1200,7 +1220,7 @@ public class EopAttendanceMaintenance {
 	  session = HibernateFactory.openSession();
 	  Transaction tx = session.beginTransaction();
 	  
-	  Criteria crit = session.createCriteria(EventCandidate.class);
+/*	  Criteria crit = session.createCriteria(EventCandidate.class);
 	  crit.add(Restrictions.eq("eventCode", eventCode));
 	  crit.add(Restrictions.eq("eventCandidateCode", ""+candidateCode));
 	  List<EventCandidate> list=(ArrayList<EventCandidate>) crit.list();
@@ -1208,7 +1228,17 @@ public class EopAttendanceMaintenance {
 	   candidate = (EventCandidate) iterator.next();
 	   candidate.setStatus(false);
 	   session.update(candidate);
-	  }
+	  }*/
+	  
+	  
+	  
+	  Query query = session.createQuery("UPDATE EventCandidate SET status =:st where eventCode=:eventCode and eventCandidateCode=:CandidateCode ");
+		query.setParameter("st", false);
+		query.setParameter("eventCode",eventCode );
+		query.setParameter("CandidateCode",candidateCode);
+		query.executeUpdate();
+	  
+	  
 	  tx.commit();
 	  status = "Y";
 	  
@@ -1346,9 +1376,9 @@ public class EopAttendanceMaintenance {
 				
 				candidate1.setStatus(true);
 				session = HibernateFactory.openSession();
-				tx = session.beginTransaction();
+				//tx = session.beginTransaction();
 				session.saveOrUpdate(candidate1);
-				tx.commit();
+				//tx.commit();
 			
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());
