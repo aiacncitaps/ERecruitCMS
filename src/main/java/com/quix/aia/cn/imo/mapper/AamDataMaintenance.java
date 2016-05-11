@@ -191,7 +191,7 @@ public class AamDataMaintenance {
 			logsMain.insertLogs("AamDataMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 //			try {
-//				HibernateFactory.close(session);
+//				session.flush();HibernateFactory.close(session);
 //
 //			} catch (Exception e) {
 //				log.log(Level.SEVERE, e.getMessage());
@@ -302,7 +302,7 @@ public class AamDataMaintenance {
 			logsMain.insertLogs("AamDataMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
-				HibernateFactory.close(session);
+					session.flush();HibernateFactory.close(session);
 
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());

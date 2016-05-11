@@ -67,6 +67,7 @@ public class LogsMaintenance {
 			e.printStackTrace();
 		}finally {
 			try {
+				session.flush();
 				HibernateFactory.close(session);
 
 			} catch (Exception e) {

@@ -189,6 +189,7 @@ public class CandidateTrainingResultMaintenance {
 			logsMain.insertLogs("CandidateTrainingResultMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());

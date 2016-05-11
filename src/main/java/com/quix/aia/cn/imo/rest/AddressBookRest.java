@@ -601,19 +601,25 @@ public class AddressBookRest {
 				String[] conditionFieldName={"addressCode","agentId"};
 				String[] conditionFieldValue={candidateCode,agentId};
 				List<Object []> list = addressBookMaintenance.getAddressBookSelectedField(fetchFields, conditionFieldName, conditionFieldValue);
+				System.out.println("***********  get cctest result "+list.size());
 				if(!list.isEmpty()){
 					Object[] obj = list.get(0);
 					addressBook.setCcTestResult(""+obj[0]);
 					addressBook.setCcTestResultDate((Date)obj[1]);
-					
+					System.out.println("");
 					  // System.out.println("********************************************** " + addressBook.getCcTestResultDate());
 				          if ((restForm.getCcTestResultDate() != null) && (!restForm.getCcTestResultDate().equals("")) && 
 				            (addressBook.getCcTestResultDate() != null))
 				          {
 				        	  if(!restForm.getCcTestResult().equals("") && restForm.getCcTestResult()!=null){
-				        		 
+				        		  System.out.println("***********************************************************");
+				        		 System.out.println("data base date  -------  "+addressBook.getCcTestResultDate());
+				        		 System.out.println("Requested date  -------  "+restForm.getCcTestResultupdateDate());
 				            int i = addressBook.getCcTestResultDate().compareTo(restForm.getCcTestResultupdateDate());
+				            System.out.println("***********************************************************");
+				            
 				            if (i == -1) {
+				            	
 				              addressBookMaintenance.updatecctestResult(restForm);
 				              addressBook.setCcTestResult(restForm.getCcTestResult());
 				              addressBook.setCcTestResultDate(restForm.getCcTestResultupdateDate());

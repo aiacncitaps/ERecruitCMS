@@ -665,6 +665,7 @@ public class AddressBookMaintenance {
 				logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 			} finally {
 				try {
+					session.flush();
 					HibernateFactory.close(session);
 				} catch (Exception e) {
 					log.log(Level.SEVERE, e.getMessage());
@@ -831,6 +832,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.flush();
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -869,6 +871,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.flush();
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -895,7 +898,7 @@ public class AddressBookMaintenance {
 			query.setParameter("candidateCode",Integer.parseInt(restForm.getCandidateCode().trim()));
 			query.executeUpdate();
 			//tx.commit();
-			//session.flush();
+			
 			
 			
 
@@ -907,6 +910,9 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		} finally {
 			try {
+				session.flush();
+				
+			System.out.println("**********************    Calling update CC Test Result on Get time *********************************");
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
@@ -1184,6 +1190,7 @@ public class AddressBookMaintenance {
 			logsMain.insertLogs("AddressBookMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());

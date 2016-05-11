@@ -449,6 +449,7 @@ public class EopAttendanceMaintenance {
 			logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());
@@ -1253,6 +1254,7 @@ public class EopAttendanceMaintenance {
 		logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 	  }finally{
 	   try{
+		   session.flush();
 	    HibernateFactory.close(session);
 	    
 	   }catch(Exception e){
@@ -1388,6 +1390,7 @@ public class EopAttendanceMaintenance {
 					logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 			}finally{
 				try {
+					session.flush();
 					HibernateFactory.close(session);
 				} catch (Exception e) {
 					log.log(Level.SEVERE, e.getMessage());

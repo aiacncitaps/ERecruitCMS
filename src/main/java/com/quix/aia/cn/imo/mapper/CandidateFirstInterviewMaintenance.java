@@ -153,6 +153,7 @@ public class CandidateFirstInterviewMaintenance {
 			logsMain.insertLogs("CandidateFirstInterviewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());
@@ -285,7 +286,7 @@ public class CandidateFirstInterviewMaintenance {
 			query.executeUpdate();
 			
 			//tx.commit();
-			//session.flush();
+			
 			
 			log.log(Level.INFO,"---update Candidate Training Result Inserted Successfully--- ");
 		}catch(Exception e)
@@ -298,6 +299,7 @@ public class CandidateFirstInterviewMaintenance {
 			logsMain.insertLogs("CandidateFirstInterviewMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				log.log(Level.SEVERE, e.getMessage());

@@ -162,6 +162,7 @@ public class AuditTrailMaintenance
         }
         finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 			}catch(Exception e){
 				
