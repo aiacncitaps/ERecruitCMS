@@ -743,7 +743,7 @@ public class InterviewAttendanceMaintenance {
 		Query query = session.createQuery("UPDATE InterviewCandidate SET status =:st where interviewCode=:interviewCode and interviewCandidateCode=:candidateCode ");
 		query.setParameter("st", false);
 		query.setParameter("interviewCode",interviewCode );
-		query.setParameter("candidateCode",candidateCode);
+		query.setParameter("candidateCode",candidateCode+"");
 		query.executeUpdate();
 		
 		tx.commit();

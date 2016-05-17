@@ -951,6 +951,7 @@ public class EopAttendanceMaintenance {
 			logsMain.insertLogs("EopAttendanceMaintenance",Level.SEVERE+"",errors.toString());
 		}finally{
 			try{
+				session.flush();
 				HibernateFactory.close(session);
 				
 			}catch(Exception e){
@@ -1211,7 +1212,7 @@ public class EopAttendanceMaintenance {
 	   * @param candidateCode  Candidate Code, eventCode Event Code
 	   * @param requestParameters Servlet Request Parameter
 	   */
-	 public void deleteCandidateReg(int candidateCode, int eventCode, HttpServletRequest requestParameters)
+	 public void deleteCandidateReg(String candidateCode, int eventCode, HttpServletRequest requestParameters)
 	 {
 	  log.log(Level.INFO,"inside EopAttendanceMaintenance Delete --");
 	  Session session = null;

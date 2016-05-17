@@ -911,8 +911,6 @@ public class AddressBookMaintenance {
 		} finally {
 			try {
 				session.flush();
-				
-			System.out.println("**********************    Calling update CC Test Result on Get time *********************************");
 				HibernateFactory.close(session);
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());

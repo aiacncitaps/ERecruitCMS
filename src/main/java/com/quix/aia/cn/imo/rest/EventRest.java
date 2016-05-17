@@ -653,7 +653,7 @@ public class EventRest {
 				
 				
 				EopAttendanceMaintenance objMaintenance = new EopAttendanceMaintenance();
-				objMaintenance.deleteCandidateReg(Integer.parseInt(candidateCode), Integer.parseInt(eventCode), request);
+				objMaintenance.deleteCandidateReg(candidateCode, Integer.parseInt(eventCode), request);
 			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_EOP, AuditTrail.FUNCTION_REST, "SUCCESS"));
 			    responseString +=true; 
 			}else{
