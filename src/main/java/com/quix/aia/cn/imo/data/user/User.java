@@ -95,6 +95,8 @@ public class User {
 	
 	private String clientRestUserBranch;
 	private String clientRestUserID;
+	
+	//private int faildLoginCount;
 	/**
 	 * <p>Default Constructor.Setting default values for Holiday fields.</p>
 	 */
@@ -132,6 +134,7 @@ public class User {
 		branchName="";
 		officeCode="";
 		cho=false;
+		//faildLoginCount=0;
 	}
 	
 	/**
@@ -916,6 +919,14 @@ public class User {
 	public void setClientRestUserID(String clientRestUserID) {
 		this.clientRestUserID = clientRestUserID;
 	}
+
+	/*public int getFaildLoginCount() {
+		return faildLoginCount;
+	}
+
+	public void setFaildLoginCount(int faildLoginCount) {
+		this.faildLoginCount = faildLoginCount;
+	}*/
 	
 	
 

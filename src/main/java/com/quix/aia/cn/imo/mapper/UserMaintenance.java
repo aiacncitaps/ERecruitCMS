@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -53,14 +54,19 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.bouncycastle.ocsp.Req;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.json.JSONObject;
 
 import com.archerlogic.aia.cn.helpers.common.JSONHelper;
@@ -70,11 +76,16 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.quix.aia.cn.imo.constants.ApplicationAttribute;
 import com.quix.aia.cn.imo.constants.RequestAttributes;
 import com.quix.aia.cn.imo.constants.SessionAttributes;
 import com.quix.aia.cn.imo.data.auditTrail.AuditTrail;
+import com.quix.aia.cn.imo.data.common.AamData;
+import com.quix.aia.cn.imo.data.common.FailedLoginDetails;
+import com.quix.aia.cn.imo.data.common.RestForm;
 import com.quix.aia.cn.imo.data.downloadDetail.DownloadDetails;
+import com.quix.aia.cn.imo.data.event.Event;
 import com.quix.aia.cn.imo.data.locale.LocaleObject;
 import com.quix.aia.cn.imo.data.logedInDetail.LogedInDetails;
 import com.quix.aia.cn.imo.data.user.User;
@@ -234,7 +245,17 @@ public class UserMaintenance {
 			 log.log(Level.INFO,"authenticateUser Successfully ................. ");
 		 }else
 		        {
-		            user = _authenticateUserISP(userID, password, branch, context);
+			 
+			 		/* Check user failed login count   */
+			 		int count=checkFaildLoginCount(userID,branch);
+			 		
+			 		if(count<5 || count==0){
+			 			user = _authenticateUserISP(userID, password, branch, context);
+			 		}else{
+			 			user=null;
+			 		}
+			 
+		            
 
 		            if (user == null)
 		            {
@@ -258,7 +279,7 @@ public class UserMaintenance {
 		            
 
 		            log.log(Level.INFO, "Updating user last login timestamp.");
-		            _updateUserLastLogin(user.getUser_no(), new Date());
+		            _updateUserLastLogin(user.getUser_no(),user,branch);
 		        }
 		        
 		        return user;
@@ -273,6 +294,7 @@ public class UserMaintenance {
 	       loginDetails.setCo(co);
 	       loginDetails.setLogedInDate(logedInDate);
 	       loginDetails.setUserType(userType);
+	       
 	      
 	        try
 	        {
@@ -507,14 +529,19 @@ public class UserMaintenance {
 			           			 user.setUser_no(0);
 			           			 user.setUserType("AG");
 			           			 user.setCho(false);
-			                        
+			           			 
+			           			 
+			                     
+			                      
 				                    
 		    		            insertUserDetails(userRest.getBRANCH(),userRest.getUSERID().toUpperCase(),new Date(),"AG");
 		                    }
 		                    else
 		                    {
 		                        // user type is not STAFF
+		                    	_updateUserFailedLogin(userID,co);
 		                        log.log(Level.INFO, "Login Failed............");
+		                        
 		                    }
 		                    
 		                    if(null != user){
@@ -526,6 +553,7 @@ public class UserMaintenance {
 		                else
 		                {
 		                    // user auth failed
+		                	_updateUserFailedLogin(userID,co);
 		                    log.log(Level.INFO, "Login Failed............");
 		                }
 		            }
@@ -551,7 +579,7 @@ public class UserMaintenance {
 		    private String _authenticateUserSSO(String userID, String password, String branch, ServletContext context)
 		    {
 		        String sessionId = null;
-
+		        HttpClient httpClient = new DefaultHttpClient();
 		        try
 		        {
 		            Map<String, String> configMap = (Map<String, String>) context.getAttribute(ApplicationAttribute.CONFIGURATION_PROPERTIES_MAP);
@@ -559,10 +587,26 @@ public class UserMaintenance {
 		            // the config is: http://211.144.219.243/SSO/loginAction.do
 		            // full URL sample: http://211.144.219.243/SSO/loginAction.do?companyId=0986&password=11111111&userId=NTRN093&requestFrom=ios&handleSessionTable=&resultFlag=json
 		            String ssoUrl = configMap.get("ssoUserAuthUrl");
-		            ssoUrl += "?companyId=" + branch;
+		          ssoUrl += "?companyId=" + branch;
 		            ssoUrl += "&password=" + password;
 		            ssoUrl += "&userId=" + userID;
 		            ssoUrl += "&requestFrom=ios&handleSessionTable=&resultFlag=json";
+		            
+		         /* ArrayList<NameValuePair> postParameters;
+		            HttpPost getRequest =new HttpPost(ssoUrl);
+		            postParameters = new ArrayList<NameValuePair>();
+		            postParameters.add(new BasicNameValuePair("companyId", branch));
+		            postParameters.add(new BasicNameValuePair("password", password));
+		            postParameters.add(new BasicNameValuePair("userId", userID));
+		            postParameters.add(new BasicNameValuePair("requestFrom", "ios"));
+		            postParameters.add(new BasicNameValuePair("handleSessionTable", ""));
+		            postParameters.add(new BasicNameValuePair("resultFlag", "json"));
+
+		            getRequest.setEntity(new UrlEncodedFormEntity(postParameters));
+		            HttpResponse response = httpClient.execute(getRequest);
+		            //String json =       response.getEntity().getContent()+"";
+		            
+		            */
 		            
 		            JSONObject ssoResult = JSONHelper.readJsonFromUrl(ssoUrl);
 
@@ -607,21 +651,104 @@ public class UserMaintenance {
 		        return sessionId;
 		    }
 
-		    private void _updateUserLastLogin(int userNo, Date date)
+		    private void _updateUserLastLogin(int userNo, User user, String branch)
 		    {
 		        Session session = null;
 
 		        try
 		        {
 		            session = HibernateFactory.openSession();
-		            Transaction tx = session.beginTransaction();
+		            //Transaction tx = session.beginTransaction();
 
 		            Query query = session.createQuery("UPDATE User SET lastLogIn=:lastLogin where status = 1 and user_no=:userno  ");
 		            query.setParameter("lastLogin", new Date());
 		            query.setParameter("userno", userNo);
 		            query.executeUpdate();
-
-		            tx.commit();
+		            
+		            
+		            ArrayList<FailedLoginDetails> list=null;
+		        	Criteria crit = session.createCriteria(FailedLoginDetails.class);
+	    			crit.add(Restrictions.eq("loginId", user.getStaffLoginId()));
+	    			list=(ArrayList<FailedLoginDetails>) crit.list();
+	    			
+	    			if(list.size()>0){
+	    				FailedLoginDetails failLoginDetails=list.get(0);
+	 		            failLoginDetails.setLoginId(user.getStaffLoginId());
+	 		            failLoginDetails.setCo(branch);
+	 		            failLoginDetails.setFailedCount(0);
+	 		            failLoginDetails.setLastLoginDate(new Date());
+	 		            failLoginDetails.setStatus(true);
+	 		            session.update(failLoginDetails);
+	 		            
+	    				
+	    			}/*else{
+	    				FailedLoginDetails failLoginDetails=new FailedLoginDetails();
+			            failLoginDetails.setLoginId(user.getStaffLoginId());
+			            failLoginDetails.setCo(branch);
+			            failLoginDetails.setFailedCount(0);
+			            failLoginDetails.setLastLoginDate(new Date());
+			            failLoginDetails.setStatus(true);
+			            session.save(failLoginDetails);
+	    			}
+		            */
+		            session.flush();
+		            
+		          //  tx.commit();
+		        }
+		        catch (Exception ex)
+		        {
+		            ex.printStackTrace();
+		        }
+		        finally
+		        {
+		            if (session != null)
+		            {
+		            	try{
+		            		session.close();
+		            	}catch(Exception e){
+		            		e.printStackTrace();
+		            	}
+		            }
+		        }
+		    }
+		    
+		    private int checkFaildLoginCount(String LoginId,String co)
+		    {
+		        Session session = null;
+		        int count=0;
+		        try
+		        {
+		        	LoginId=LoginId.replaceFirst("^0+(?!$)", "");
+		        	session = HibernateFactory.openSession();
+		        	Query query = session.createQuery("select failedCount from FailedLoginDetails where  loginId=:LoginId and co=:co");
+		        	query.setParameter("LoginId", LoginId.toUpperCase());
+		        	query.setParameter("co", co);
+		        	List list=query.list();
+		        	
+		        	if(list.size()>0){
+		        		count= Integer.parseInt(list.get(0)+"");
+		        	}
+		        	
+		        	if(count==0){
+		        		ArrayList<FailedLoginDetails> list2=null;
+			        	Criteria crit = session.createCriteria(FailedLoginDetails.class);
+		    			crit.add(Restrictions.eq("loginId",LoginId.toUpperCase()));
+		    			crit.add(Restrictions.eq("co",co));
+		    			list2=(ArrayList<FailedLoginDetails>) crit.list();
+		    			
+		    			if(list2.size()==0){
+		    				FailedLoginDetails failLoginDetails=new FailedLoginDetails();
+				            failLoginDetails.setLoginId(LoginId.toUpperCase());
+				            failLoginDetails.setCo(co);
+				            failLoginDetails.setFailedCount(0);
+				            failLoginDetails.setLastLoginDate(new Date());
+				            failLoginDetails.setStatus(true);
+				            session.save(failLoginDetails);
+		    			}
+		        		
+		        		
+		        	}
+		        	
 		        }
 		        catch (Exception ex)
 		        {
@@ -634,9 +761,235 @@ public class UserMaintenance {
 		                session.close();
 		            }
 		        }
+		        
+		        return count;
+		    }
+	
+		    
+		    
+		    
+		    private void _updateUserFailedLogin(String LoginId,String co)
+		    {
+		        Session session = null;
+
+		        try
+		        {
+		        	LoginId=LoginId.replaceFirst("^0+(?!$)", "");
+		        	session = HibernateFactory.openSession();
+		        	Query query = session.createQuery("select failedCount from FailedLoginDetails where   loginId=:LoginId");
+		        	query.setParameter("LoginId", LoginId.toUpperCase());
+		        	List list=query.list();
+		        	int count=0;
+		        	if(list.size()>0){
+		        		
+		        		count= Integer.parseInt(list.get(0)+"");
+		        		count=count+1;
+		        		
+		        		if(count==5){
+		        			query = session.createQuery("UPDATE FailedLoginDetails SET failedCount=:count,status=0 where   loginId=:LoginId ");
+		        		}else{
+		        			query = session.createQuery("UPDATE FailedLoginDetails SET failedCount=:count where   loginId=:LoginId ");
+		        		}
+		        		 query = session.createQuery("UPDATE FailedLoginDetails SET failedCount=:count where   loginId=:LoginId ");
+				         query.setParameter("count", count);
+				         query.setParameter("LoginId", LoginId.toUpperCase());
+				         query.executeUpdate();
+		        		
+		        	}/*else{
+		        		// when first time login failed and not present in T_AGT_STTAF_LOGIN_DETAILS table
+		        		FailedLoginDetails details=new FailedLoginDetails();
+		        		details.setLoginId(LoginId);
+		        		details.setCo(co);
+		        		details.setLastLoginDate(new Date());
+		        		details.setFailedCount(1);
+		        		details.setStatus(true);
+		        		session.save(details);
+		        	}*/
+		        	
+			       
+		        	
+		        	if(count==5){
+		        		query = session.createQuery("UPDATE User SET faildLogin=:faildLogin,status=0 where status = 1 and staffLoginId=:LoginId  ");
+		        	}else{
+		        		query = session.createQuery("UPDATE User SET faildLogin=:faildLogin where status = 1 and staffLoginId=:LoginId ");
+		        	}
+		            query.setParameter("faildLogin", new Date());
+		            query.setParameter("LoginId", LoginId.toUpperCase());
+		            query.executeUpdate();
+		        	session.flush();
+		        	
+		        	
+		        }
+		        catch (Exception e)
+		        {
+		        	log.log(Level.SEVERE, e.getMessage());
+					e.printStackTrace();
+					LogsMaintenance logsMain=new LogsMaintenance();
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
+		        }
+		        finally
+		        {
+		            if (session != null)
+		            {
+		            	try{
+		            		session.close();
+		            	}catch(Exception e){
+		            		e.printStackTrace();
+		            	}
+		            
+		                
+		            }
+		        }
 		    }
 	
 
+	    public int checkFailedLoginRest(RestForm restForm) {
+			// TODO Auto-generated method stub
+	    	// Return 0=in-active user, 1=active user, 2=user not avilable user in db
+	    	Session session = null;
+	    	Session session2 = null;
+	        ArrayList<User> user=null;
+	        ArrayList<FailedLoginDetails> failUser=null;
+	        SimpleDateFormat formate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	        SimpleDateFormat formate2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        SimpleDateFormat formate3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+	        
+	     
+	        try
+	        {
+	        	if(restForm.getLoginId()!=null && !restForm.getLoginId().equals("")){
+	        		restForm.setLoginId(restForm.getLoginId().replaceFirst("^0+(?!$)", ""));
+	        		int count=checkFaildLoginCount(restForm.getLoginId().toUpperCase(),restForm.getCo());
+	        		if(count>=5){
+	        			return 0;
+	        		}
+	        		
+	        		session = HibernateFactory.openSession();
+	        		session.setDefaultReadOnly(true);
+	    			Criteria crit = session.createCriteria(User.class);
+	    			crit.add(Restrictions.eq("status", true));
+	    			crit.add(Restrictions.eq("staffLoginId", restForm.getLoginId().toUpperCase()));
+	    			user=(ArrayList<User>) crit.list();
+	    			
+	    			if(user.size()>0){
+	    				if(restForm.getIpadFailedCount()>=5){
+	    					crit = session.createCriteria(FailedLoginDetails.class);
+			    			crit.add(Restrictions.eq("loginId", restForm.getLoginId().toUpperCase()));
+			    			failUser=(ArrayList<FailedLoginDetails>) crit.list();
+		    				
+			    			if(failUser.size()>0){
+			    				
+			    		        if ((restForm.getLoginDateStr() != null) && (!restForm.getLoginDateStr().equals("")))
+						        {
+						          Date dt = formate2.parse(restForm.getLoginDateStr());
+						          String str2 = formate.format(dt);
+						          restForm.setLoginDate(formate.parse(str2));
+						        }
+			    		       
+			    		        
+			    		        FailedLoginDetails us=failUser.get(0);
+						        String dt = formate3.format(us.getLastLoginDate());
+						        us.setLastLoginDate(formate2.parse(dt));
+			    		        
+			    		        int i=us.getLastLoginDate().compareTo(restForm.getLoginDate());
+			    		        
+			    		        if(i==1){
+			    		        	return 1;
+			    		        }else{
+			    		        	return 0;
+			    		        }
+			    			}else{
+			    				return 0;
+			    			}
+	    				
+	    				}else{
+	    					return 1;
+	    				}
+	    				
+	    			}else{
+	    				// if user is agent then checked in to agenter table
+	    				
+	    				
+	    				session2 = clientSessionFactory.openSession();
+	    				crit = session2.createCriteria(AamData.class);
+		    			crit.add(Restrictions.eq("agentCode", restForm.getLoginId().toUpperCase()));
+		    			List list=(List) crit.list();
+	    				
+	    				if(list.size()>0){
+	    					//if user exist in agent table
+	    					crit = session.createCriteria(FailedLoginDetails.class);
+			    			crit.add(Restrictions.eq("loginId", restForm.getLoginId().toUpperCase()));
+			    			crit.add(Restrictions.eq("co", restForm.getCo()));
+			    			failUser=(ArrayList<FailedLoginDetails>) crit.list();
+			    			
+			    			if(failUser.size()>0){
+			    				//if agent user exist
+			    				if(restForm.getIpadFailedCount()>=5){
+			    					// if iped count is 5 thne check date only
+			    					FailedLoginDetails us=failUser.get(0);
+							        String dt = formate3.format(us.getLastLoginDate());
+							        us.setLastLoginDate(formate2.parse(dt));
+			    					if ((restForm.getLoginDateStr() != null) && (!restForm.getLoginDateStr().equals("")))
+							        {
+							          Date dt1 = formate2.parse(restForm.getLoginDateStr());
+							          String str2 = formate.format(dt1);
+							          restForm.setLoginDate(formate.parse(str2));
+							        }
+				    		      
+				    		        
+				    		        int i=us.getLastLoginDate().compareTo(restForm.getLoginDate());
+				    		        
+				    		        if(i==1){
+				    		        	return 1;
+				    		        }else{
+				    		        	return 0;
+				    		        }
+			    					
+			    				}else{
+			    					
+			    					return 1;
+			    				}
+			    				
+			    			}//faild list if condition close
+			    			/*else{
+			    				FailedLoginDetails failLoginDetails=new FailedLoginDetails();
+					            failLoginDetails.setLoginId(restForm.getLoginId());
+					            failLoginDetails.setCo(restForm.getCo());
+					            failLoginDetails.setFailedCount(0);
+					            failLoginDetails.setLastLoginDate(new Date());
+					            failLoginDetails.setStatus(true);
+					            session.save(failLoginDetails);
+			    				return 1;
+			    			}*/
+			    			
+			    			
+	    				}else{
+	    					return 2;
+	    				}
+	    				
+	    			}
+	        	}
+	        	return 0;
+	        	
+	        }
+	        catch (Exception e)
+	        {
+	        	log.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+				LogsMaintenance logsMain=new LogsMaintenance();
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				logsMain.insertLogs("UserMaintenance",Level.SEVERE+"",errors.toString());
+				return 0;
+	        }
+	        finally
+	        {
+	        	HibernateFactory.close(session);
+	        }
+	        
+		}
 
 	/**
      * <p>This method checks all validations & sets values to bean</p>
@@ -1986,7 +2339,9 @@ public class UserMaintenance {
 		req.getSession().setAttribute("formObj",new PathDetail().getFormObj("userUploadCsv"));
   		return new ErrorObject("Please choose the document", " ",localeObj);
 	}
+
 	
+	public static final SessionFactory clientSessionFactory = new Configuration().configure("client_hibernate.cfg.xml").buildSessionFactory();
 	
 	
 }

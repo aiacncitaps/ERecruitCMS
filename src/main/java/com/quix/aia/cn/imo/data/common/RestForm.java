@@ -32,10 +32,10 @@ public class RestForm {
 	private Date passTime;
 	private Date ccTestResultupdateDate;
 	private int addressCode;
-	
-	
-
-	
+	private String loginId;
+	private String loginDateStr;
+	private Date loginDate;
+	private int ipadFailedCount;
 	
 	
 	public RestForm(){
@@ -67,6 +67,8 @@ public class RestForm {
 		passTime=null;
 		ccTestResultupdateDate=null;
 		addressCode=0;
+		loginId="";
+		loginDateStr="";
 		
 		
 		
@@ -302,5 +304,48 @@ public class RestForm {
 	public void setAddressCode(int addressCode) {
 		this.addressCode = addressCode;
 	}
+
+
+	public String getLoginId() {
+		return loginId;
+	}
+
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
+
+	public String getLoginDateStr() {
+		return loginDateStr;
+	}
+
+
+	public void setLoginDateStr(String loginDateStr) {
+		this.loginDateStr = loginDateStr;
+	}
+
+
+	public Date getLoginDate() {
+		return loginDate;
+	}
+
+
+	public void setLoginDate(Date loginDate) {
+		this.loginDate = loginDate;
+	}
+
+
+	public int getIpadFailedCount() {
+		return ipadFailedCount;
+	}
+
+
+	public void setIpadFailedCount(int ipadFailedCount) {
+		this.ipadFailedCount = ipadFailedCount;
+	}
+
+
+	
 
 }

@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -260,6 +261,57 @@ public class UserAuthRest {
 			logsMain.insertLogs("UserAuthRest", Level.SEVERE + "",errors.toString());
 			
 			json="{\"isValidVersion\":"+false+",\"webAppURL\":\""+appURL+"\",\"currentAppVersion\":\""+currentAppVersion+"\"}";
+			return Response.status(500).entity(json).build();
+		}
+
+	}
+	
+	
+	
+	@POST
+	@Path("/failedLoginStatus")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response failedLoginStatus(@Context HttpServletRequest request,
+			@Context ServletContext context,String jsonString) {
+
+		log.log(Level.INFO, "UserAuthRest --> failedLoginStatus ");
+		boolean flag=LMSUtil.isJSONValid(jsonString);
+		MsgBeans beans = new MsgBeans();
+		String json = "";
+		boolean status=false;
+		AuditTrailMaintenance auditTrailMaint = new AuditTrailMaintenance();
+		 int countFlag=0;
+		try {
+			
+			GsonBuilder builder = new GsonBuilder();
+			 Gson googleJson  = builder.create();
+			 
+			 if(flag==true){
+				
+				 RestForm restForm= googleJson.fromJson(jsonString, RestForm.class);
+				 UserMaintenance userMain=new UserMaintenance();
+				 countFlag= userMain.checkFailedLoginRest(restForm);
+				 		
+				// If true then user validation is true. if false then user authentication is false	
+				 json="{\"status\":\""+countFlag+"\"}";
+			    auditTrailMaint.insertAuditTrail(new AuditTrail("Rest", AuditTrail.MODULE_USER, AuditTrail.FUNCTION_REST, "SUCCESS"));
+				return Response.status(200).entity(json).build();
+			 }else{
+				 beans.setCode("500");
+					beans.setMassage("Json not valid");
+					return Response.status(500).entity(googleJson.toJson(beans)).build();
+			 }
+		} catch (Exception e) {
+			log.log(Level.INFO, "UserAuthRest --> validateVersion --> Exception..... ");
+			log.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			LogsMaintenance logsMain = new LogsMaintenance();
+			logsMain.insertLogs("UserAuthRest", Level.SEVERE + "",errors.toString());
+			
+			json="{\"status\":\""+countFlag+"\"}";
 			return Response.status(500).entity(json).build();
 		}
 
