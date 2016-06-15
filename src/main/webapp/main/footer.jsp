@@ -11,7 +11,7 @@ LocaleObject localeObj = (LocaleObject)session.getAttribute(SessionAttributes.LO
  <div class="site-footer">
 	<div class="container_12">
 			<div class="grid_12 MT25" style="margin-left: -2%;" >
-			 Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. <div style="float:right;"> <a  style="color: white; font-size: 12px; text-decoration: none; " href="Terms&Condition/Tearms.docx"><%=  localeObj!=null?localeObj.getTranslatedText("Terms & Condition") : "Terms & Condition"%> </a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color: white; font-size: 12px; text-decoration: none;" href="Terms&Condition/Preivacy.docx"><%=  localeObj!=null ? localeObj.getTranslatedText("Privacy Statement") : "Privacy Statement" %>    </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      Version : 1.44 <%-- <%=version %> --%></div>
+			 Copyright @ 2015, AIA Group Limited and its subsidiaries. All rights reserved. <div style="float:right;"> <a  style="color: white; font-size: 12px; text-decoration: none; " href="Terms&Condition/Tearms.docx"><%=  localeObj!=null?localeObj.getTranslatedText("Terms & Condition") : "Terms & Condition"%> </a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color: white; font-size: 12px; text-decoration: none;" href="Terms&Condition/Preivacy.docx"><%=  localeObj!=null ? localeObj.getTranslatedText("Privacy Statement") : "Privacy Statement" %>    </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      Version : 1.45 <%-- <%=version %> --%></div>
 		</div>
 	</div>
  </div>

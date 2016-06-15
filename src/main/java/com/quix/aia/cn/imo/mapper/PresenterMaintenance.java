@@ -746,6 +746,7 @@ public class PresenterMaintenance
 					crit.add(Restrictions.sqlRestriction("YEAR(START_DATE)=?", year,IntegerType.INSTANCE));
 					crit.add(Restrictions.eq("status", true));
 					
+					  if(userObj.isCho()!=true){
 					if(userObj.isBuLevel() && userObj.getBuCode()!=0){
 						crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
 					}
@@ -764,7 +765,7 @@ public class PresenterMaintenance
 					if(userObj.isOfficeLevel()){
 						crit.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
 					}
-					
+					  }
 					
 					
 					arrActivity = (ArrayList) crit.list();

@@ -620,25 +620,27 @@ public  ArrayList getInterview(HttpServletRequest req) {
                     Restrictions.gt("calendarServiceError", 0))
             );
 			
-			if(userObj.isBuLevel() && userObj.getBuCode()!=0){
-				criteria.add(Restrictions.eq("buCode", userObj.getBuCode()));
-			}
-			if(userObj.isDistrictLevel()){
-				criteria.add(Restrictions.eq("district", userObj.getDistrict()));
-			}
-			if(userObj.isBranchLevel()){
-				criteria.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
-			}
-			if(userObj.isCityLevel()){
-				criteria.add(Restrictions.eq("cityCode", userObj.getCityCode()));
-			}
-			if(userObj.isSscLevel()){
-				criteria.add(Restrictions.eq("sscCode", userObj.getSscCode()));
-			}
-			if(userObj.isOfficeLevel()){
-				criteria.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
-			}
-			
+            if(userObj.isCho()!=true){
+				if(userObj.isBuLevel() && userObj.getBuCode()!=0){
+					criteria.add(Restrictions.eq("buCode", userObj.getBuCode()));
+				}
+				if(userObj.isDistrictLevel()){
+					criteria.add(Restrictions.eq("district", userObj.getDistrict()));
+				}
+				if(userObj.isBranchLevel()){
+					
+					criteria.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
+				}
+				if(userObj.isCityLevel()){
+					criteria.add(Restrictions.eq("cityCode", userObj.getCityCode()));
+				}
+				if(userObj.isSscLevel()){
+					criteria.add(Restrictions.eq("sscCode", userObj.getSscCode()));
+				}
+				if(userObj.isOfficeLevel()){
+					criteria.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
+				}
+            }
 			listData = (ArrayList) criteria.list();
 
 		}
@@ -2356,49 +2358,49 @@ public String createCsv(ArrayList  regList,HttpServletRequest request)
 	    int cellnum = 0;
 	    HSSFCell cell = row.createCell((short) cellnum++);
 	    
-         cell.setCellValue("é�¢è¯• ä¼šè¯�");
+         cell.setCellValue("Ã©ï¿½Â¢Ã¨Â¯â€¢ Ã¤Â¼Å¡Ã¨Â¯ï¿½");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("é�¢è¯• æ—¥æœŸ");
+         cell.setCellValue("Ã©ï¿½Â¢Ã¨Â¯â€¢ Ã¦â€”Â¥Ã¦Å“Å¸");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("å¼€å§‹  æ—¶é—´");
+         cell.setCellValue("Ã¥Â¼â‚¬Ã¥Â§â€¹  Ã¦â€”Â¶Ã©â€”Â´");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("ç»“æ�Ÿ  æ—¶é—´");
+         cell.setCellValue("Ã§Â»â€œÃ¦ï¿½Å¸  Ã¦â€”Â¶Ã©â€”Â´");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("å€™é€‰äºº  å��å­—");
+         cell.setCellValue("Ã¥â‚¬â„¢Ã©â‚¬â€°Ã¤ÂºÂº  Ã¥ï¿½ï¿½Ã¥Â­â€”");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("å¼•è��äºº");
+         cell.setCellValue("Ã¥Â¼â€¢Ã¨ï¿½ï¿½Ã¤ÂºÂº");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("å¼•è��äººå��å­—");
+         cell.setCellValue("Ã¥Â¼â€¢Ã¨ï¿½ï¿½Ã¤ÂºÂºÃ¥ï¿½ï¿½Ã¥Â­â€”");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("åˆ†å…¬å�¸");
+         cell.setCellValue("Ã¥Ë†â€ Ã¥â€¦Â¬Ã¥ï¿½Â¸");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("åœ°åŒº");
+         cell.setCellValue("Ã¥Å“Â°Ã¥Å’Âº");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("æ”¯å…¬å�¸");
+         cell.setCellValue("Ã¦â€�Â¯Ã¥â€¦Â¬Ã¥ï¿½Â¸");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("åŸŽå¸‚");
+         cell.setCellValue("Ã¥Å¸Å½Ã¥Â¸â€š");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("è�¥ç®¡å¤„");
+         cell.setCellValue("Ã¨ï¿½Â¥Ã§Â®Â¡Ã¥Â¤â€ž");
          cell = row.createCell((short) cellnum++);
          cell.setCellValue("SSC");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("æ‰€å±žä¸šåŠ¡ç»„");
+         cell.setCellValue("Ã¦â€°â‚¬Ã¥Â±Å¾Ã¤Â¸Å¡Ã¥Å Â¡Ã§Â»â€ž");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("ä¸»ç®¡å§“å��");
+         cell.setCellValue("Ã¤Â¸Â»Ã§Â®Â¡Ã¥Â§â€œÃ¥ï¿½ï¿½");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("æ�¥æº�  æ¸ é�“");
+         cell.setCellValue("Ã¦ï¿½Â¥Ã¦Âºï¿½  Ã¦Â¸Â Ã©ï¿½â€œ");
          cell = row.createCell((short) cellnum++);
          cell.setCellValue("Age");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("ç”Ÿæ—¥");
+         cell.setCellValue("Ã§â€�Å¸Ã¦â€”Â¥");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("æ€§åˆ«");
+         cell.setCellValue("Ã¦â‚¬Â§Ã¥Ë†Â«");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("è�”ç»œ  å�·ç �");
+         cell.setCellValue("Ã¨ï¿½â€�Ã§Â»Å“  Ã¥ï¿½Â·Ã§Â ï¿½");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("CC æµ‹è¯•  ç»“æžœ");
+         cell.setCellValue("CC Ã¦Âµâ€¹Ã¨Â¯â€¢  Ã§Â»â€œÃ¦Å¾Å“");
          cell = row.createCell((short) cellnum++);
-         cell.setCellValue("äººæ‰�è®¡åˆ’");
+         cell.setCellValue("Ã¤ÂºÂºÃ¦â€°ï¿½Ã¨Â®Â¡Ã¥Ë†â€™");
          cell = row.createCell((short) cellnum++);
          
          

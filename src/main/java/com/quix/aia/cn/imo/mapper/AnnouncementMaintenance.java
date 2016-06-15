@@ -443,26 +443,26 @@ public class AnnouncementMaintenance {
 			crit.add(Restrictions.sqlRestriction("MONTH(PUBLISHED_DATE)=?",month,IntegerType.INSTANCE));
 			crit.add(Restrictions.sqlRestriction("YEAR(PUBLISHED_DATE)=?",year,IntegerType.INSTANCE));
 			
-			
-			if(userObj.isBuLevel() && userObj.getBuCode()!=0){
-				crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
-			}
-			if(userObj.isDistrictLevel()){
-				crit.add(Restrictions.eq("district", userObj.getDistrict()));
-			}
-			if(userObj.isBranchLevel()){
-				crit.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
-			}
-			if(userObj.isCityLevel()){
-				crit.add(Restrictions.eq("cityCode", userObj.getCityCode()));
-			}
-			if(userObj.isSscLevel()){
-				crit.add(Restrictions.eq("sscCode", userObj.getSscCode()));
-			}
-			if(userObj.isOfficeLevel()){
-				crit.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
-			}
-			
+			  if(userObj.isCho()!=true){
+					if(userObj.isBuLevel() && userObj.getBuCode()!=0){
+						crit.add(Restrictions.eq("buCode", userObj.getBuCode()));
+					}
+					if(userObj.isDistrictLevel()){
+						crit.add(Restrictions.eq("district", userObj.getDistrict()));
+					}
+					if(userObj.isBranchLevel()){
+						crit.add(Restrictions.eq("branchCode", userObj.getBranchCode()));
+					}
+					if(userObj.isCityLevel()){
+						crit.add(Restrictions.eq("cityCode", userObj.getCityCode()));
+					}
+					if(userObj.isSscLevel()){
+						crit.add(Restrictions.eq("sscCode", userObj.getSscCode()));
+					}
+					if(userObj.isOfficeLevel()){
+						crit.add(Restrictions.eq("officeCode", userObj.getOfficeCode()));
+					}
+			  }
 			
 			announcementList = (ArrayList)crit.list();
 			

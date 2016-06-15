@@ -583,7 +583,38 @@ $(function() {
 				getOffice('<%=ssc %>','<%=office %>');
 			<% }%>
 
-
+<% if(modifyFlag = true)%>
+	$("#cho").change(function() {
+	    if( $("#cho").val()=='Y'){
+	  	 
+	  	  $("#bu")[0].selectedIndex=0;
+	  	  $("#district")[0].selectedIndex=0;
+	  	  $("#branch")[0].selectedIndex=0;
+	  	  $("#city")[0].selectedIndex=0;
+	  	  $("#ssc")[0].selectedIndex=0;
+	  	  $("#office")[0].selectedIndex=0;
+	  	  
+	  	  
+	  	  $("#bu").prop("disabled", true);
+	  	  $("#district").prop("disabled", true);
+	  	  $("#branch").prop("disabled", true);
+	  	  $("#city").prop("disabled", true);
+	  	  $("#ssc").prop("disabled", true);
+	  	  $("#office").prop("disabled", true);
+	  	
+	    }else{
+	    	getBU('<%=bu %>','L');
+	  	  $("#bu").prop("disabled", false);
+	  	  $("#district").prop("disabled", false);
+	  	  $("#branch").prop("disabled", false);
+	  	  $("#city").prop("disabled", false);
+	  	  $("#ssc").prop("disabled", false);
+	  	  $("#office").prop("disabled", false);
+	    }
+	 });
+ 
+<%%>
+			
 		$("#progress").hide();
 		$("#progress1").hide();
 	   $('#insertButton').click(function(){
